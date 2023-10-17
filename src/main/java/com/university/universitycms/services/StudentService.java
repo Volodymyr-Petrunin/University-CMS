@@ -1,9 +1,7 @@
 package com.university.universitycms.services;
 
-import com.university.universitycms.domains.Group;
-import com.university.universitycms.domains.Lesson;
-import com.university.universitycms.domains.Student;
-import com.university.universitycms.repositories.StudentRepo;
+import com.university.universitycms.domain.Student;
+import com.university.universitycms.repositories.StudentRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +12,10 @@ import java.util.List;
 @Transactional
 public class StudentService {
 
-    private final StudentRepo repository;
+    private final StudentRepository repository;
 
     @Autowired
-    public StudentService(StudentRepo repository) {
+    public StudentService(StudentRepository repository) {
         this.repository = repository;
     }
 
@@ -41,13 +39,4 @@ public class StudentService {
         repository.delete(student);
     }
 
-    public List<Lesson> findAllLessonsByStudent(Student student) {
-        Group group = student.getGroup();
-
-        if (group == null){
-            throw new IllegalArgumentException("Student don't have group");
-        }
-
-        return repository.findAllLessonByStudentGroup(group);
-    }
 }

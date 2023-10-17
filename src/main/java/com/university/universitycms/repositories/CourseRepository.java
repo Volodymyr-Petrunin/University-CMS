@@ -1,10 +1,12 @@
 package com.university.universitycms.repositories;
 
-import com.university.universitycms.domains.Department;
+import com.university.universitycms.domain.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface DepartmentRepo extends JpaRepository<Department, Long> {
+public interface CourseRepository extends JpaRepository<Course, Long> {
 
 }

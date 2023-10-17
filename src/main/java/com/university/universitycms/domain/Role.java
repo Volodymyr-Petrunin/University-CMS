@@ -1,4 +1,4 @@
-package com.university.universitycms.enams;
+package com.university.universitycms.domain;
 
 public enum Role {
     STUDENT,

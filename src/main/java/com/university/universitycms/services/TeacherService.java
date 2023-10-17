@@ -1,9 +1,8 @@
 package com.university.universitycms.services;
 
-import com.university.universitycms.domains.Course;
-import com.university.universitycms.domains.Lesson;
-import com.university.universitycms.domains.Teacher;
-import com.university.universitycms.repositories.TeacherRepo;
+import com.university.universitycms.domain.Course;
+import com.university.universitycms.domain.Teacher;
+import com.university.universitycms.repositories.TeacherRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,10 +12,10 @@ import java.util.List;
 @Service
 @Transactional
 public class TeacherService {
-    private final TeacherRepo repository;
+    private final TeacherRepository repository;
 
     @Autowired
-    public TeacherService(TeacherRepo repository) {
+    public TeacherService(TeacherRepository repository) {
         this.repository = repository;
     }
 
@@ -40,13 +39,7 @@ public class TeacherService {
         repository.delete(teacher);
     }
 
-    public List<Lesson> findAllLessonsByTeacher(Teacher teacher){
-        List<Course> courses = teacher.getCourses();
-
-        if (courses.isEmpty()) {
-            throw new IllegalArgumentException("Teacher don't have lessons");
-        }
-
-        return repository.findLessonsByTeacherCourses(courses);
+    public List<Teacher> findAllTeacherRelativeToCourse(Course course){
+        return repository.findAllByCoursesContaining(course);
     }
 }

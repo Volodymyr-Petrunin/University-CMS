@@ -1,9 +1,13 @@
-package com.university.universitycms.domains;
+package com.university.universitycms.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "courses")
+@Getter
+@Setter
 public class Course {
     @Id
     @Column(name = "course_id")
@@ -12,21 +16,5 @@ public class Course {
     private Long id;
 
     @Column(name = "course_name")
-    private String courseName;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getCourseName() {
-        return courseName;
-    }
-
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
+    private String name;
 }

@@ -1,9 +1,13 @@
-package com.university.universitycms.domains;
+package com.university.universitycms.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "groups")
+@Getter
+@Setter
 public class Group {
     @Id
     @Column(name = "group_id")
@@ -11,21 +15,5 @@ public class Group {
     @SequenceGenerator(name = "group_seq", sequenceName = "group_seq", allocationSize = 100)
     private Long id;
     @Column(name = "group_name")
-    private String groupName;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
+    private String name;
 }

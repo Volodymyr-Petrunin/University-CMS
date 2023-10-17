@@ -1,9 +1,7 @@
 package com.university.universitycms.services;
 
-import com.university.universitycms.domains.Course;
-import com.university.universitycms.domains.Lesson;
-import com.university.universitycms.domains.Teacher;
-import com.university.universitycms.repositories.LessonRepo;
+import com.university.universitycms.domain.*;
+import com.university.universitycms.repositories.LessonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +9,10 @@ import java.util.List;
 
 @Service
 public class LessonService {
-    private final LessonRepo repository;
+    private final LessonRepository repository;
 
     @Autowired
-    public LessonService(LessonRepo repository) {
+    public LessonService(LessonRepository repository) {
         this.repository = repository;
     }
 
@@ -38,13 +36,23 @@ public class LessonService {
         repository.delete(lesson);
     }
 
-    public List<Teacher> findAllTeachersByCourse(Lesson lesson){
-        Course course = lesson.getCourse();
+    public List<Lesson> findAllLessonsByTeacher(Teacher teacher){
+        List<Course> courses = teacher.getCourses();
 
-        if (course == null){
-            throw new IllegalArgumentException("Lesson have not course");
+        if (courses.isEmpty()) {
+            throw new IllegalArgumentException("Teacher don't have lessons");
         }
 
-        return repository.findAllTeachersByCourse(course);
+        return repository.findLessonsByTeacherCourses(courses);
+    }
+
+    public List<Lesson> findAllLessonsByStudent(Student student) {
+        Group group = student.getGroup();
+
+        if (group == null){
+            throw new IllegalArgumentException("Student don't have group");
+        }
+
+        return repository.findAllLessonByStudentGroup(group);
     }
 }

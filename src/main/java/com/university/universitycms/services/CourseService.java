@@ -1,8 +1,7 @@
 package com.university.universitycms.services;
 
-import com.university.universitycms.domains.Course;
-import com.university.universitycms.domains.Teacher;
-import com.university.universitycms.repositories.CourseRepo;
+import com.university.universitycms.domain.Course;
+import com.university.universitycms.repositories.CourseRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,10 +11,10 @@ import java.util.List;
 @Service
 @Transactional
 public class CourseService {
-    private final CourseRepo repository;
+    private final CourseRepository repository;
 
     @Autowired
-    public CourseService(CourseRepo repository) {
+    public CourseService(CourseRepository repository) {
         this.repository = repository;
     }
 
@@ -27,7 +26,7 @@ public class CourseService {
         repository.save(course);
     }
 
-    public void createSerialCourses(List<Course> courses){
+    public void createSeveralCourses(List<Course> courses){
         repository.saveAll(courses);
     }
 
@@ -39,7 +38,4 @@ public class CourseService {
         repository.delete(course);
     }
 
-    public List<Teacher> findAllTeacherRelativeToCourse(Course course){
-        return repository.findAllTeacherRelativeToCourse(course);
-    }
 }
