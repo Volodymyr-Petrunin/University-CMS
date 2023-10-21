@@ -1,5 +1,6 @@
 package com.university.universitycms.services;
 
+import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Department;
 import com.university.universitycms.repositories.DepartmentRepository;
 import jakarta.transaction.Transactional;
@@ -37,5 +38,8 @@ public class DepartmentService {
 
     public void deleteDepartment(Department department){
         repository.delete(department);
+    }
+    public Department getDepartmentByCourse(Course course){
+        return repository.findByCoursesContaining(course);
     }
 }
