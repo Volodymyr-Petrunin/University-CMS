@@ -23,7 +23,7 @@ CREATE TABLE courses
 
 CREATE TABLE groups
 (
-    group_id   BIGINT NOT NULL PRIMARY KEY ,
+    group_id   BIGINT NOT NULL PRIMARY KEY,
     group_name VARCHAR(100)
 );
 
@@ -32,11 +32,12 @@ CREATE TABLE users
     user_id        BIGINT NOT NULL PRIMARY KEY,
     user_name      VARCHAR(255),
     user_surname   VARCHAR(255),
-    user_password  VARCHAR(255)
+    user_password  VARCHAR(255),
+    user_type      VARCHAR(100)
 );
 
 CREATE TABLE departments
 (
-    department_id   BIGINT NOT NULL PRIMARY KEY ,
+    department_id   BIGINT NOT NULL PRIMARY KEY,
     department_name VARCHAR(255)
 );
