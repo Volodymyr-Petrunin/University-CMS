@@ -23,11 +23,12 @@ public class Lesson {
     private String name;
     @Column(name = "lesson_audience")
     private String audience;
-    @Transient
+    @Column(name = "lesson_day_of_week")
+    @Enumerated(EnumType.STRING)
     private DayOfWeek dayOfWeek;
-    @Transient
+    @Column(name = "lesson_start_time")
     private LocalTime startTime;
-    @Transient
+    @Column(name = "lesson_end_time")
     private LocalTime endTime;
 
     @OneToOne

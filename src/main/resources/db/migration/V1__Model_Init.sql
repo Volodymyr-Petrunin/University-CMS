@@ -22,11 +22,14 @@ CREATE TABLE IF NOT EXISTS groups
 
 CREATE TABLE IF NOT EXISTS lessons
 (
-    lesson_id         BIGINT NOT NULL PRIMARY KEY,
-    lesson_name       VARCHAR(100),
-    lesson_audience   VARCHAR(50),
-    lesson_course_id  BIGINT REFERENCES courses(course_id),
-    lesson_group_id   BIGINT REFERENCES groups(group_id)
+    lesson_id           BIGINT NOT NULL PRIMARY KEY,
+    lesson_name         VARCHAR(100),
+    lesson_audience     VARCHAR(50),
+    lesson_day_of_week  VARCHAR(10),
+    lesson_start_time   TIME,
+    lesson_end_time     TIME,
+    lesson_course_id    BIGINT REFERENCES courses(course_id),
+    lesson_group_id     BIGINT REFERENCES groups(group_id)
 );
 
 CREATE TABLE IF NOT EXISTS users

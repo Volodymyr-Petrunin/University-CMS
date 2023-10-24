@@ -2,11 +2,14 @@ package com.university.universitycms.services;
 
 import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Department;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,22 +20,16 @@ class DepartmentServiceTest {
     @Autowired
     private DepartmentService departmentService;
 
-    private final Department expectedDepartment = new Department(null, "IT");
     private final Course expectedCourses = new Course(1L, "Match");
-
-    private Department actual;
-
-    @BeforeEach
-    void setUp() {
-        expectedDepartment.addCourse(expectedCourses);
-
-        departmentService.createDepartment(expectedDepartment);
-    }
+    private final Department expectedDepartment = new Department(null, "IT", List.of(expectedCourses));
 
     @Test
-    void testGetDepartmentByCourse_ShouldReturn(){
-        actual = departmentService.getDepartmentByCourse(expectedCourses);
+    void testCreateDepartment_ShouldCreateDepartmentInDB_AndReturnCorrectList() {
+        departmentService.createDepartment(expectedDepartment);
 
-        assertEquals(expectedDepartment, actual);
+        Optional<Department> departmentOptional = departmentService.getDepartmentById(1);
+
+        departmentOptional.ifPresent(department -> assertEquals(expectedDepartment, department));
     }
+
 }

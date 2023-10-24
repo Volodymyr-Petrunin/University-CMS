@@ -4,9 +4,11 @@ import com.university.universitycms.domain.Course;
 import com.university.universitycms.repositories.CourseRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -19,7 +21,11 @@ public class CourseService {
     }
 
     public List<Course> getAllCourse(){
-        return repository.findAll();
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    }
+
+    public Optional<Course> getCourseById(long courseId){
+        return repository.findById(courseId);
     }
 
     public void createCourse(Course course){

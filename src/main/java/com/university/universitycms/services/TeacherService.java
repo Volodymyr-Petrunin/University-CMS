@@ -1,13 +1,14 @@
 package com.university.universitycms.services;
 
-import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Teacher;
 import com.university.universitycms.repositories.TeacherRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -20,7 +21,11 @@ public class TeacherService {
     }
 
     public List<Teacher> getAllTeachers(){
-        return repository.findAll();
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    }
+
+    public Optional<Teacher> getTeacherById(long teacherId){
+        return repository.findById(teacherId);
     }
 
     public void createTeacher(Teacher teacher){
@@ -37,9 +42,5 @@ public class TeacherService {
 
     public void deleteTeacher(Teacher teacher){
         repository.delete(teacher);
-    }
-
-    public List<Teacher> findAllTeacherRelativeToCourse(Course course){
-        return repository.findAllByCoursesContaining(course);
     }
 }

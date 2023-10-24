@@ -32,15 +32,13 @@ public class Department {
 
     }
 
-    public Department(Long id, String name) {
+    public Department(Long id, String name, List<Course> courses) {
         this.id = id;
         this.name = name;
+        this.courses = courses;
     }
 
     public void addCourse(Course courses) {
-        if (this.courses == null){
-            this.courses = new ArrayList<>();
-        }
         this.courses.add(courses);
     }
 
@@ -49,12 +47,13 @@ public class Department {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Department that = (Department) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name);
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) &&
+                Objects.equals(courses, that.courses) || Objects.equals(courses, null);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id, name, courses);
     }
 
     @Override

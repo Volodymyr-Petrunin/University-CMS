@@ -1,13 +1,14 @@
 package com.university.universitycms.services;
 
-import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Department;
 import com.university.universitycms.repositories.DepartmentRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -21,7 +22,11 @@ public class DepartmentService {
     }
 
     public List<Department> getAllDepartment(){
-        return repository.findAll();
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    }
+
+    public Optional<Department> getDepartmentById(long departmentId){
+        return repository.findById(departmentId);
     }
 
     public void createDepartment(Department department){
@@ -38,8 +43,5 @@ public class DepartmentService {
 
     public void deleteDepartment(Department department){
         repository.delete(department);
-    }
-    public Department getDepartmentByCourse(Course course){
-        return repository.findByCoursesContaining(course);
     }
 }

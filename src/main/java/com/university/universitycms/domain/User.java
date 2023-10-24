@@ -45,7 +45,8 @@ public abstract class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && role == user.role && Objects.equals(name, user.name) && Objects.equals(surname, user.surname) && Objects.equals(password, user.password);
+        return Objects.equals(id, user.id) && role == user.role && Objects.equals(name, user.name)
+                && Objects.equals(surname, user.surname) && Objects.equals(password, user.password);
     }
 
     @Override
