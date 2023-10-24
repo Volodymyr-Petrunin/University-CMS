@@ -1,5 +1,6 @@
 package com.university.universitycms.services;
 
+import com.university.universitycms.LessonService;
 import com.university.universitycms.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

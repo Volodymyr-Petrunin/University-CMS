@@ -1,5 +1,6 @@
 package com.university.universitycms.services;
 
+import com.university.universitycms.DepartmentService;
 import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Department;
 import org.junit.jupiter.api.Test;
@@ -7,9 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,7 +21,7 @@ class DepartmentServiceTest {
     private DepartmentService departmentService;
 
     private final Course expectedCourses = new Course(1L, "Match");
-    private final Department expectedDepartment = new Department(null, "IT", List.of(expectedCourses));
+    private final Department expectedDepartment = new Department(null, "IT", Set.of(expectedCourses));
 
     @Test
     void testCreateDepartment_ShouldCreateDepartmentInDB_AndReturnCorrectList() {

@@ -4,9 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity(name = "departments")
 @Getter
@@ -26,13 +25,13 @@ public class Department {
             joinColumns = @JoinColumn(name = "department_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id")
     )
-    private List<Course> courses;
+    private Set<Course> courses;
 
     public Department() {
 
     }
 
-    public Department(Long id, String name, List<Course> courses) {
+    public Department(Long id, String name, Set<Course> courses) {
         this.id = id;
         this.name = name;
         this.courses = courses;

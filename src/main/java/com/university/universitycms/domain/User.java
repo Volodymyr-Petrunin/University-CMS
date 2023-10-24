@@ -19,7 +19,8 @@ public abstract class User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
     @SequenceGenerator(name = "user_seq", sequenceName = "user_seq", allocationSize = 100)
     private Long id;
-    @Transient
+    @Column(name = "user_role")
+    @Enumerated(value = EnumType.STRING)
     private Role role;
     @Column(name = "user_name")
     private String name;

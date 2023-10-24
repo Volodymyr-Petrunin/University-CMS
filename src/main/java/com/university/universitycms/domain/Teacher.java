@@ -3,9 +3,8 @@ package com.university.universitycms.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -18,7 +17,7 @@ public class Teacher extends User {
             joinColumns = @JoinColumn(name = "teacher_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id")
     )
-    private List<Course> courses;
+    private Set<Course> courses;
 
     public void addCourses(Course course) {
         this.courses.add(course);
@@ -28,7 +27,7 @@ public class Teacher extends User {
 
     }
 
-    public Teacher(Long id, Role role, String name, String surname, String password, List<Course> courses) {
+    public Teacher(Long id, Role role, String name, String surname, String password, Set<Course> courses) {
         super(id, role, name, surname, password);
         this.courses = courses;
     }

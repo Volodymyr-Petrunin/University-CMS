@@ -1,4 +1,4 @@
-package com.university.universitycms.services;
+package com.university.universitycms;
 
 import com.university.universitycms.domain.Group;
 import com.university.universitycms.repositories.GroupRepository;

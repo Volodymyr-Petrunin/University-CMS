@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS lessons
 CREATE TABLE IF NOT EXISTS users
 (
     user_id           BIGINT NOT NULL PRIMARY KEY,
+    user_role         VARCHAR(10),
     user_name         VARCHAR(255),
     user_surname      VARCHAR(255),
     user_password     VARCHAR(255),
