@@ -1,6 +1,5 @@
 package com.university.universitycms.services;
 
-import com.university.universitycms.TeacherService;
 import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Role;
 import com.university.universitycms.domain.Teacher;
@@ -32,7 +31,7 @@ class TeacherServiceTest {
     private List<Teacher> expected;
 
     @Test
-    void testCreateTeacher_ShouldInsertTeacherInDB_AndReturnCorrectList() {
+    void testCreateTeachers_ShouldInsertTeachersInDB_AndReturnCorrectList() {
         teacherService.createSeveralTeachers(expectedTeacher);
 
         actual = teacherService.getAllTeachers();

@@ -1,6 +1,5 @@
 package com.university.universitycms.services;
 
-import com.university.universitycms.DepartmentService;
 import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Department;
 import org.junit.jupiter.api.Test;

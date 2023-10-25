@@ -1,4 +1,4 @@
-package com.university.universitycms;
+package com.university.universitycms.services;
 
 import com.university.universitycms.domain.Department;
 import com.university.universitycms.repositories.DepartmentRepository;
