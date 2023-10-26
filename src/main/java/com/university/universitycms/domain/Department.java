@@ -19,7 +19,7 @@ public class Department {
     @Column(name = "department_name")
     private String name;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany
     @JoinTable(
             name = "department_course",
             joinColumns = @JoinColumn(name = "department_id"),
@@ -46,13 +46,12 @@ public class Department {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Department that = (Department) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) &&
-                Objects.equals(courses, that.courses) || Objects.equals(courses, null);
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, courses);
+        return Objects.hash(id, name);
     }
 
     @Override

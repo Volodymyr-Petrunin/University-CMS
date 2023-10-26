@@ -18,9 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class DepartmentServiceTest {
     @Autowired
     private DepartmentService departmentService;
-
-    private final Course expectedCourses = new Course(1L, "Match");
-    private final Department expectedDepartment = new Department(null, "IT", Set.of(expectedCourses));
+    private final Department expectedDepartment = new Department(null, "IT", Set.of());
 
     @Test
     void testCreateDepartment_ShouldCreateDepartmentInDB_AndReturnCorrectList() {
@@ -28,7 +26,8 @@ class DepartmentServiceTest {
 
         Optional<Department> departmentOptional = departmentService.getDepartmentById(1);
 
-        departmentOptional.ifPresent(department -> assertEquals(expectedDepartment, department));
+        assertTrue(departmentOptional.isPresent());
+        assertEquals(expectedDepartment, departmentOptional.get());
     }
 
 }
