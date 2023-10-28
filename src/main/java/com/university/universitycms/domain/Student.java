@@ -40,4 +40,16 @@ public class Student extends User {
     public int hashCode() {
         return Objects.hash(super.hashCode(), group);
     }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + getId() +
+                ", role=" + getRole() +
+                ", name='" + getName() + '\'' +
+                ", surname='" + getSurname() + '\'' +
+                ", password='" + getPassword() + '\'' +
+                "} group=" + group +
+                '}';
+    }
 }
