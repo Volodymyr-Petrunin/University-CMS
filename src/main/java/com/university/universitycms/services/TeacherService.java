@@ -1,7 +1,9 @@
 package com.university.universitycms.services;
 
 import com.university.universitycms.domain.Teacher;
+import com.university.universitycms.generations.impl.TeacherGenerationData;
 import com.university.universitycms.repositories.TeacherRepository;
+import com.university.universitycms.services.datafilling.DataFiller;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -12,12 +14,14 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class TeacherService {
+public class TeacherService implements DataFiller {
     private final TeacherRepository repository;
+    private final TeacherGenerationData teacherGenerationData;
 
     @Autowired
-    public TeacherService(TeacherRepository repository) {
+    public TeacherService(TeacherRepository repository, TeacherGenerationData teacherGenerationData) {
         this.repository = repository;
+        this.teacherGenerationData = teacherGenerationData;
     }
 
     public List<Teacher> getAllTeachers(){
@@ -42,5 +46,10 @@ public class TeacherService {
 
     public void deleteTeacher(Teacher teacher){
         repository.delete(teacher);
+    }
+
+    @Override
+    public void fillData() {
+        createSeveralTeachers(teacherGenerationData.generateData());
     }
 }

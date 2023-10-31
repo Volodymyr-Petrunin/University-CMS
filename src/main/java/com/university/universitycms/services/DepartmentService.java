@@ -1,7 +1,9 @@
 package com.university.universitycms.services;
 
 import com.university.universitycms.domain.Department;
+import com.university.universitycms.generations.impl.DepartmentGenerationData;
 import com.university.universitycms.repositories.DepartmentRepository;
+import com.university.universitycms.services.datafilling.DataFiller;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -12,13 +14,15 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class DepartmentService {
+public class DepartmentService implements DataFiller {
 
     private final DepartmentRepository repository;
+    private final DepartmentGenerationData departmentGenerationData;
 
     @Autowired
-    public DepartmentService(DepartmentRepository repository) {
+    public DepartmentService(DepartmentRepository repository, DepartmentGenerationData departmentGenerationData) {
         this.repository = repository;
+        this.departmentGenerationData = departmentGenerationData;
     }
 
     public List<Department> getAllDepartment(){
@@ -43,5 +47,10 @@ public class DepartmentService {
 
     public void deleteDepartment(Department department){
         repository.delete(department);
+    }
+
+    @Override
+    public void fillData() {
+        createSeveralDepartment(departmentGenerationData.generateData());
     }
 }

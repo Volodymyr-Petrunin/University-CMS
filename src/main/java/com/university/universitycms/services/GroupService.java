@@ -1,7 +1,9 @@
 package com.university.universitycms.services;
 
 import com.university.universitycms.domain.Group;
+import com.university.universitycms.generations.impl.GroupGenerationData;
 import com.university.universitycms.repositories.GroupRepository;
+import com.university.universitycms.services.datafilling.DataFiller;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -12,12 +14,14 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class GroupService {
+public class GroupService implements DataFiller {
     private final GroupRepository repository;
+    private final GroupGenerationData groupGenerationData;
 
     @Autowired
-    public GroupService(GroupRepository repository) {
+    public GroupService(GroupRepository repository, GroupGenerationData groupGenerationData) {
         this.repository = repository;
+        this.groupGenerationData = groupGenerationData;
     }
 
     public List<Group> getAllGroups() {
@@ -44,4 +48,8 @@ public class GroupService {
         repository.delete(group);
     }
 
+    @Override
+    public void fillData() {
+        createSeveralGroups(groupGenerationData.generateData());
+    }
 }

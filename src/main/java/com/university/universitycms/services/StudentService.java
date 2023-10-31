@@ -1,7 +1,9 @@
 package com.university.universitycms.services;
 
 import com.university.universitycms.domain.Student;
+import com.university.universitycms.generations.impl.StudentGenerationData;
 import com.university.universitycms.repositories.StudentRepository;
+import com.university.universitycms.services.datafilling.DataFiller;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -12,13 +14,15 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class StudentService {
+public class StudentService implements DataFiller {
 
     private final StudentRepository repository;
+    private final StudentGenerationData studentGenerationData;
 
     @Autowired
-    public StudentService(StudentRepository repository) {
+    public StudentService(StudentRepository repository, StudentGenerationData studentGenerationData) {
         this.repository = repository;
+        this.studentGenerationData = studentGenerationData;
     }
 
     public List<Student> getAllStudents(){
@@ -45,4 +49,8 @@ public class StudentService {
         repository.delete(student);
     }
 
+    @Override
+    public void fillData() {
+        createSeveralStudents(studentGenerationData.generateData());
+    }
 }
