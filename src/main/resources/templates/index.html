@@ -4,17 +4,36 @@
         <title>Main page</title>
 
         <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
-        <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
         <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
     </head>
-    <body>
-        <div th:replace="layouts/header :: header"></div>
-        <div class="container"><br/>
-            <div class="alert alert-success">
-                <a href="#" class="close" data-dismiss="alert"
-                   aria-label="close">×</a>
-                <strong>Success!</strong> It is working as we expected.
+    <body class="m-0 border-0 bd-example m-0 border-0 bd-example-flex overflow-x-hidden">
+        <div th:replace="~{layouts/header :: header}"></div>
+
+        <div class="block">
+
+            <div class="row">
+
+                <div class="col-md-3" style="background-color: #252d36; min-height: 100vh; text-align: center;">
+
+                    <h4 class="mt-4 mb-4" style="font-family: 'Arial', sans-serif; color: snow">News</h4>
+
+                    <div th:each="news : ${newsList}" class="mb-4 p-3" style="background-color: white; border: 1px solid #ccc; border-radius: 8px; color: #252d36;">
+                        <h5 class="mb-2" th:text="${news}"></h5>
+                        <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci atque commodi corporis earum eligendi, id inventore neque obcaecati officiis qui quisquam unde veniam?
+                            Accusamus at aut consequuntur culpa doloremque eius error inventore, maxime neque nobis non officiis omnis optio pariatur porro praesentium provident quibusdam quisquam quo saepe unde vel velit.
+                        </p>
+                        <button class="btn btn-primary mt-2 toggle-button">More details</button>
+                    </div>
+
+                </div>
+
             </div>
+
+        </div>
+
+        <div class="col-md-9">
+
         </div>
     </body>
 </html>

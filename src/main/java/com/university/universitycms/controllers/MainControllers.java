@@ -13,6 +13,8 @@ public class MainControllers {
 
     @GetMapping
     public String index(Model model){
+        List<String> title = List.of("Halloween", "New food in the school canteen", "IDK");
+        model.addAttribute("newsList", title);
         return "index";
     }
 }
