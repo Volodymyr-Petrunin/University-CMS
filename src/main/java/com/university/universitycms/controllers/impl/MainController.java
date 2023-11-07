@@ -1,17 +1,15 @@
-package com.university.universitycms.controllers;
+package com.university.universitycms.controllers.impl;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("/")
-public class MainControllers {
+public class MainController {
 
-    @GetMapping
+    @GetMapping("/")
     public String index(Model model){
         List<String> title = List.of("Halloween", "New food in the school canteen", "IDK");
         model.addAttribute("newsList", title);

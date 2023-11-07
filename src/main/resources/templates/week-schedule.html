@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Your week schedule</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+</head>
+<body>
+
+<div th:replace="~{layouts/header :: header}"></div>
+
+<div class="container mt-5">
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th th:each="day : ${dateFormatter}" class="text-center"><span th:text="${day}"></span></th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td th:each="day : ${daysOfWeek}">
+                    <div class="card my-2" th:each="lesson : ${lessons.get(day)}">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${lesson.getCourse().getName()}"></h5>
+                            <p class="card-text">
+                                Time: <span th:text="${lesson.getStartTime() + ' - ' + lesson.getEndTime()}"></span><br>
+                                Audience: <span th:text="${lesson.getAudience()}"></span><br>
+                                Group: <span th:text="${lesson.getGroup().getName()}"></span><br>
+                                DAY: <span th:text="${lesson.getDayOfWeek()}"></span>
+                            </p>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

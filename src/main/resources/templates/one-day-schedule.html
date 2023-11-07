@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Your one day schedule</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+</head>
+<body>
+    <div th:replace="~{layouts/header :: header}"></div>
+
+    <div class="container mt-5">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th th:text="${dateFormatter}"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="card my-2" th:each="lesson : ${lessons}">
+                            <div class="card-body">
+                            <h5 class="card-title" th:text="${lesson.getCourse().getName()}"></h5>
+                            <p class="card-text">
+                                Time: <span th:text="${lesson.getStartTime() + ' - ' + lesson.getEndTime()}"></span><br>
+                                Audience: <span th:text="${lesson.getAudience()}"></span><br>
+                                Group: <span th:text="${lesson.getGroup().getName()}"></span><br>
+                            </p>
+                        </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
