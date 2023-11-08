@@ -4,7 +4,6 @@ import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Group;
 import com.university.universitycms.domain.Lesson;
 import com.university.universitycms.generations.GenerationData;
-import com.university.universitycms.readers.ResourcesFileReader;
 import com.university.universitycms.services.CourseService;
 import com.university.universitycms.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -6,7 +6,6 @@ import com.university.universitycms.generations.GenerationData;
 import com.university.universitycms.readers.ResourcesFileReader;
 import com.university.universitycms.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
