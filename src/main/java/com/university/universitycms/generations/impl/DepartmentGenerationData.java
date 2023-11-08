@@ -17,13 +17,18 @@ public class DepartmentGenerationData implements GenerationData<Department> {
     private final Random random = new Random();
     private final ResourcesFileReader resourcesFileReader;
     private final CourseService courseService;
-
-    @Value("${courseInDepartment}") private int courseInDepartment;
+    private final int courseInDepartment;
+    private final String fileName;
 
     @Autowired
-    public DepartmentGenerationData(@Qualifier("readerDepartmentFile") ResourcesFileReader resourcesFileReader, CourseService courseService) {
+    public DepartmentGenerationData(ResourcesFileReader resourcesFileReader,
+                                    CourseService courseService,
+                                    @Value("${quantity.max.courseInDepartment}") int courseInDepartment,
+                                    @Value("${generation.file.departments}") String fileName) {
         this.resourcesFileReader = resourcesFileReader;
         this.courseService = courseService;
+        this.courseInDepartment = courseInDepartment;
+        this.fileName = fileName;
     }
 
     @Override
@@ -34,7 +39,7 @@ public class DepartmentGenerationData implements GenerationData<Department> {
             throw new IllegalArgumentException("Courses list is empty");
         }
 
-        return resourcesFileReader.read().stream()
+        return resourcesFileReader.read(fileName).stream()
                 .map(line -> new Department(null, line, getRandomCoursesFromList(courses)))
                 .toList();
     }

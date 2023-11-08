@@ -2,6 +2,7 @@ package com.university.universitycms.generations.impl;
 
 import com.university.universitycms.domain.Group;
 import com.university.universitycms.generations.GenerationData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
@@ -11,15 +12,21 @@ import java.util.List;
 import java.util.Random;
 
 @Component
-@PropertySource("classpath:generationConfigurations/groupGenerationConfiguration.properties")
 public class GroupGenerationData implements GenerationData<Group> {
     private final Random random = new Random();
     private static final int ALPHABET_SIZE = 26;
     private static final int DIGITS_SIZE = 10;
+    private final int quantity;
+    private final int amountOfLetters;
+    private final int amountOfNumbers;
 
-    @Value("${quantityGenerations}") private int quantity;
-    @Value("${amountOfLetters}") private int amountOfLetters;
-    @Value("${amountOfDigits}") private int amountOfNumbers;
+    @Autowired
+    public GroupGenerationData(@Value("${quantity.max.group}") int quantity, @Value("${amountOfLetters}") int amountOfLetters,
+                               @Value("${amountOfDigits}") int amountOfNumbers) {
+        this.quantity = quantity;
+        this.amountOfLetters = amountOfLetters;
+        this.amountOfNumbers = amountOfNumbers;
+    }
 
     @Override
     public List<Group> generateData() {

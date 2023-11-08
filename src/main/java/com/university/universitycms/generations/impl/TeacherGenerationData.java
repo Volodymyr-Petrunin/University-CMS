@@ -17,17 +17,18 @@ import java.util.Set;
 @Component
 public class TeacherGenerationData implements GenerationData<Teacher> {
     private final Random random = new Random();
-
-    @Value("${teachersInitialQuantityGenerations}") private int quantity;
+    private final int quantity;
     private final List<String> firstNames;
     private final List<String> secondNames;
     private final CourseService courseService;
 
-    public TeacherGenerationData(@Qualifier("teacherFirstNames") List<String> firstNames,
-                                 @Qualifier("teacherSecondNames") List<String> secondNames, CourseService courseService) {
+    public TeacherGenerationData(@Qualifier("firstNameOfTeachers") List<String> firstNames,
+                                 @Qualifier("secondNameOfTeachers") List<String> secondNames, CourseService courseService,
+                                 @Value("${quantity.max.teachers}") int quantity) {
         this.firstNames = firstNames;
         this.secondNames = secondNames;
         this.courseService = courseService;
+        this.quantity = quantity;
     }
 
     @Override

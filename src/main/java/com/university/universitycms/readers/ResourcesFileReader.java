@@ -1,17 +1,15 @@
 package com.university.universitycms.readers;
 
+import org.springframework.stereotype.Component;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-
+@Component
 public class ResourcesFileReader implements Reader {
-    private final String fileName;
-    public ResourcesFileReader(String fileName) {
-        this.fileName = fileName;
-    }
 
     @Override
-    public List<String> read() {
+    public List<String> read(String fileName) {
         try (InputStream inputStream = getClass().getResourceAsStream("/" +  fileName);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))){
 

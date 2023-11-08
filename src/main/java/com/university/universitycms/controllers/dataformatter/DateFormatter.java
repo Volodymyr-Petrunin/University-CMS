@@ -55,13 +55,15 @@ public class DateFormatter {
     public LocalDate getLocalDay(){
         LocalDate today = LocalDate.now();
 
-        if (today.getDayOfWeek() == DayOfWeek.SATURDAY) {
-            today = today.plusDays(2); // move to Monday
-        } else if (today.getDayOfWeek() == DayOfWeek.SUNDAY) {
-            today = today.plusDays(1); // move to Monday
+        if (isWeekend(today)) {
+            today = today.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
         }
 
         return today;
+    }
+
+    private boolean isWeekend(LocalDate date){
+        return date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY;
     }
 
     private String getFirstLettersFromDayName(int dayIndex){

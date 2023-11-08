@@ -4,6 +4,7 @@ import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Group;
 import com.university.universitycms.domain.Lesson;
 import com.university.universitycms.generations.GenerationData;
+import com.university.universitycms.readers.ResourcesFileReader;
 import com.university.universitycms.services.CourseService;
 import com.university.universitycms.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,16 +25,17 @@ public class LessonGenerationData implements GenerationData<Lesson> {
     private final GroupService groupService;
     private final CourseService courseService;
     private final List<String> audiences;
-    private DayOfWeek currentDayOfWeek = DayOfWeek.MONDAY;
-
-    @Value("${lessonQuantityInWeek}") int quantity;
+    private final int quantity;
+    private DayOfWeek currentDayOfWeek = LocalDate.now().getDayOfWeek();
 
     @Autowired
     public LessonGenerationData(GroupService groupService, CourseService courseService,
-                                @Qualifier("audiencesList") List<String> audiences) {
+                                @Qualifier("audiences") List<String> audiences,
+                                @Value("${quantity.max.lessonInWeek}") int quantity) {
         this.groupService = groupService;
         this.courseService = courseService;
         this.audiences = audiences;
+        this.quantity = quantity;
     }
 
     @Override

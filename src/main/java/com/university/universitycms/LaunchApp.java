@@ -17,8 +17,8 @@ public class LaunchApp {
         this.dataFillers = dataFillers;
     }
 
-//    @PostConstruct
-    public void launch(){
+    @PostConstruct
+    public void fill(){
         dataFillers.forEach(DataFiller::fillData);
     }
 }
