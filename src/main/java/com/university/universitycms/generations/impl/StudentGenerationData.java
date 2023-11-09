@@ -4,9 +4,9 @@ import com.university.universitycms.domain.Group;
 import com.university.universitycms.domain.Role;
 import com.university.universitycms.domain.Student;
 import com.university.universitycms.generations.GenerationData;
+import com.university.universitycms.readers.ResourcesFileReader;
 import com.university.universitycms.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -16,24 +16,31 @@ import java.util.Random;
 
 @Component
 public class StudentGenerationData implements GenerationData<Student> {
-    private final Random random = new Random();
+    private final Random random;
     private final int quantity;
-    private final List<String> firstNames;
-    private final List<String> secondNames;
+    private final ResourcesFileReader resourcesFileReader;
+    private final String firstNameFile;
+    private final String secondNameFile;
     private final GroupService groupService;
 
     @Autowired
-    public StudentGenerationData(GroupService groupService, @Value("${quantity.max.students}") int quantity,
-                                 @Qualifier("firstNameOfStudents") List<String> firstNames,
-                                 @Qualifier("secondNameOfStudents") List<String> secondNames) {
+    public StudentGenerationData(Random random, GroupService groupService, ResourcesFileReader resourcesFileReader,
+                                 @Value("${quantity.max.students}") int quantity,
+                                 @Value("${generation.file.studentsName}") String firstNameFile,
+                                 @Value("${generation.file.studentsSurname}") String secondNameFile) {
+        this.random = random;
         this.groupService = groupService;
-        this.firstNames = firstNames;
-        this.secondNames = secondNames;
+        this.resourcesFileReader = resourcesFileReader;
         this.quantity = quantity;
+        this.firstNameFile = firstNameFile;
+        this.secondNameFile = secondNameFile;
     }
 
     @Override
     public List<Student> generateData() {
+        List<String> firstNames = resourcesFileReader.read(firstNameFile);
+        List<String> secondNames = resourcesFileReader.read(secondNameFile);
+
         List<Student> result = new ArrayList<>();
         List<Group> groups = groupService.getAllGroups();
 

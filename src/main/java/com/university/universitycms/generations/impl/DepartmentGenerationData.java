@@ -13,17 +13,18 @@ import java.util.*;
 
 @Component
 public class DepartmentGenerationData implements GenerationData<Department> {
-    private final Random random = new Random();
+    private final Random random;
     private final ResourcesFileReader resourcesFileReader;
     private final CourseService courseService;
     private final int courseInDepartment;
     private final String fileName;
 
     @Autowired
-    public DepartmentGenerationData(ResourcesFileReader resourcesFileReader,
+    public DepartmentGenerationData(Random random, ResourcesFileReader resourcesFileReader,
                                     CourseService courseService,
                                     @Value("${quantity.max.courseInDepartment}") int courseInDepartment,
                                     @Value("${generation.file.departments}") String fileName) {
+        this.random = random;
         this.resourcesFileReader = resourcesFileReader;
         this.courseService = courseService;
         this.courseInDepartment = courseInDepartment;

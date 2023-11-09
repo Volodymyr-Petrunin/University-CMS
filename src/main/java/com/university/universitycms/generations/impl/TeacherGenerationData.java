@@ -4,8 +4,8 @@ import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Role;
 import com.university.universitycms.domain.Teacher;
 import com.university.universitycms.generations.GenerationData;
+import com.university.universitycms.readers.ResourcesFileReader;
 import com.university.universitycms.services.CourseService;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -16,25 +16,33 @@ import java.util.Set;
 
 @Component
 public class TeacherGenerationData implements GenerationData<Teacher> {
-    private final Random random = new Random();
+    private final Random random;
     private final int quantity;
-    private final List<String> firstNames;
-    private final List<String> secondNames;
+    private final ResourcesFileReader resourcesFileReader;
+    private final String firstNameFile;
+    private final String secondNameFile;
     private final CourseService courseService;
 
-    public TeacherGenerationData(@Qualifier("firstNameOfTeachers") List<String> firstNames,
-                                 @Qualifier("secondNameOfTeachers") List<String> secondNames, CourseService courseService,
-                                 @Value("${quantity.max.teachers}") int quantity) {
-        this.firstNames = firstNames;
-        this.secondNames = secondNames;
-        this.courseService = courseService;
+    public TeacherGenerationData(Random random, ResourcesFileReader resourcesFileReader,
+                                 @Value("${quantity.max.teachers}") int quantity,
+                                 @Value("${generation.file.teachersName}") String firstNameFile,
+                                 @Value("${generation.file.teachersSurname}") String secondNameFile,
+                                 CourseService courseService) {
+        this.random = random;
         this.quantity = quantity;
+        this.resourcesFileReader = resourcesFileReader;
+        this.firstNameFile = firstNameFile;
+        this.secondNameFile = secondNameFile;
+        this.courseService = courseService;
     }
 
     @Override
     public List<Teacher> generateData() {
-        List<Teacher> result = new ArrayList<>();
+        List<String> firstNames = resourcesFileReader.read(firstNameFile);
+        List<String> secondNames = resourcesFileReader.read(secondNameFile);
         List<Course> courses = courseService.getAllCourse();
+
+        List<Teacher> result = new ArrayList<>();
 
         for (int index = 0; index < quantity; index++) {
             String name = getRandomElement(firstNames);

@@ -4,13 +4,14 @@ import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Group;
 import com.university.universitycms.domain.Lesson;
 import com.university.universitycms.generations.GenerationData;
+import com.university.universitycms.readers.ResourcesFileReader;
 import com.university.universitycms.services.CourseService;
 import com.university.universitycms.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.time.Clock;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,25 +21,31 @@ import java.util.Random;
 
 @Component
 public class LessonGenerationData implements GenerationData<Lesson> {
-    private final Random random = new Random();
+    private final Random random;
     private final GroupService groupService;
     private final CourseService courseService;
-    private final List<String> audiences;
+    private final ResourcesFileReader resourcesFileReader;
+    private final String audienceFile;
     private final int quantity;
-    private DayOfWeek currentDayOfWeek = LocalDate.now().getDayOfWeek();
+    private DayOfWeek currentDayOfWeek;
 
     @Autowired
-    public LessonGenerationData(GroupService groupService, CourseService courseService,
-                                @Qualifier("audiences") List<String> audiences,
+    public LessonGenerationData(Random random, Clock clock, GroupService groupService, CourseService courseService,
+                                ResourcesFileReader resourcesFileReader,
+                                @Value("${generation.file.audiences}") String audienceFile,
                                 @Value("${quantity.max.lessonInWeek}") int quantity) {
+        this.random = random;
         this.groupService = groupService;
         this.courseService = courseService;
-        this.audiences = audiences;
+        this.resourcesFileReader = resourcesFileReader;
+        this.audienceFile = audienceFile;
         this.quantity = quantity;
+        this.currentDayOfWeek = LocalDate.now(clock).getDayOfWeek();
     }
 
     @Override
     public List<Lesson> generateData() {
+        List<String> audiences = resourcesFileReader.read(audienceFile);
         List<Group> groups = groupService.getAllGroups();
         List<Course> courses = courseService.getAllCourse();
 

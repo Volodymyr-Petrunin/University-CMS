@@ -12,16 +12,15 @@ import java.util.Random;
 
 @Component
 public class GroupGenerationData implements GenerationData<Group> {
-    private final Random random = new Random();
-    private static final int ALPHABET_SIZE = 26;
-    private static final int DIGITS_SIZE = 10;
+    private final Random random;
     private final int quantity;
     private final int amountOfLetters;
     private final int amountOfNumbers;
 
     @Autowired
-    public GroupGenerationData(@Value("${quantity.max.group}") int quantity, @Value("${amountOfLetters}") int amountOfLetters,
+    public GroupGenerationData(Random random, @Value("${quantity.max.group}") int quantity, @Value("${amountOfLetters}") int amountOfLetters,
                                @Value("${amountOfDigits}") int amountOfNumbers) {
+        this.random = random;
         this.quantity = quantity;
         this.amountOfLetters = amountOfLetters;
         this.amountOfNumbers = amountOfNumbers;
@@ -32,7 +31,8 @@ public class GroupGenerationData implements GenerationData<Group> {
         List<Group> result = new ArrayList<>();
 
         for (int index = 0; index < quantity; index++){
-            String name = generateRandomChars(amountOfLetters, true) + "-" + generateRandomChars(amountOfNumbers, false);
+            String name = generateRandomChars('A','Z', amountOfLetters) + "-"
+                    + generateRandomChars('1', '9', amountOfNumbers);
 
             result.add(new Group(null, name));
         }
@@ -40,16 +40,11 @@ public class GroupGenerationData implements GenerationData<Group> {
         return result;
     }
 
-    private String generateRandomChars(int count, boolean isLetter) {
+    private String generateRandomChars(char startChar, char endChar, int count) {
         StringBuilder stringBuilder = new StringBuilder();
 
         for (int index = 0; index < count; index++) {
-            char currentChar;
-            if (isLetter) {
-                currentChar = (char) (random.nextInt(ALPHABET_SIZE) + 'A');
-            } else {
-                currentChar = (char) (random.nextInt(DIGITS_SIZE) + '0');
-            }
+            char currentChar = (char) (random.nextInt(endChar - startChar + 1) + startChar);
             stringBuilder.append(currentChar);
         }
 
