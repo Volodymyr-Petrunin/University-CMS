@@ -11,29 +11,29 @@
 
 <div class="container mt-5">
 
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th th:each="day : ${dateFormatter}" class="text-center"><span th:text="${day}"></span></th>
-        </tr>
-        </thead>
-        <tbody>
+    <div th:each="entry : ${weekSchedule}">
+        <h3 th:text="${entry.key}"></h3>
+        <table class="table table-bordered">
+            <thead>
             <tr>
-                <td th:each="day : ${daysOfWeek}">
-                    <div class="card my-2" th:each="lesson : ${lessons.get(day)}">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${lesson.getCourse().getName()}"></h5>
-                            <p class="card-text">
-                                Time: <span th:text="${lesson.getStartTime() + ' - ' + lesson.getEndTime()}"></span><br>
-                                Audience: <span th:text="${lesson.getAudience()}"></span><br>
-                                Group: <span th:text="${lesson.getGroup().getName()}"></span><br>
-                            </p>
-                        </div>
-                    </div>
-                </td>
+                <th>Course</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Audience</th>
+                <th>Group</th>
             </tr>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            <tr th:each="lesson : ${entry.value}">
+                <td th:text="${lesson.getCourse().getName()}"></td>
+                <td th:text="${lesson.getStartTime()}"></td>
+                <td th:text="${lesson.getEndTime()}"></td>
+                <td th:text="${lesson.getAudience()}"></td>
+                <td th:text="${lesson.getGroup().getName()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 </body>
 </html>

@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import java.time.Clock;
+import java.time.DayOfWeek;
+import java.util.EnumSet;
 import java.util.Random;
 
 @Configuration

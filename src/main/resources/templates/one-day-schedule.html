@@ -9,16 +9,16 @@
     <div th:replace="~{layouts/header :: header}"></div>
 
     <div class="container mt-5">
-        <table class="table table-bordered">
+        <table class="table table-bordered" th:each="entry : ${oneDaySchedule}">
             <thead>
                 <tr>
-                    <th th:text="${dateFormatter}"></th>
+                    <th th:text="${entry.key}"></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>
-                        <div class="card my-2" th:each="lesson : ${lessons}">
+                        <div class="card my-2" th:each="lesson : ${entry.value}">
                             <div class="card-body">
                             <h5 class="card-title" th:text="${lesson.getCourse().getName()}"></h5>
                             <p class="card-text">

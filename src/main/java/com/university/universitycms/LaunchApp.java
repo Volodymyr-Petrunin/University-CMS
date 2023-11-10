@@ -1,7 +1,6 @@
 package com.university.universitycms;
 
 import com.university.universitycms.services.datafilling.DataFiller;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,7 @@ public class LaunchApp {
         this.dataFillers = dataFillers;
     }
 
-    @PostConstruct
+//    @PostConstruct
     public void fill(){
         dataFillers.forEach(DataFiller::fillData);
     }
