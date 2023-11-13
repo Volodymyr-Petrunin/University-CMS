@@ -69,10 +69,10 @@ public class LessonService implements DataFiller {
     }
 
     public Map<String, List<Lesson>> getLessonForMonth(){
-        List<Lesson> weekLesson = repository.findLessonByOrderByDayOfWeekAscStartTimeAsc();
-
         LocalDate firstDay = LocalDate.now(clock).withDayOfMonth(1);
-        LocalDate lastDay = firstDay.withDayOfMonth(firstDay.lengthOfMonth());
+        LocalDate lastDay = LocalDate.now(clock).with(TemporalAdjusters.lastDayOfMonth());
+
+        List<Lesson> weekLesson = repository.findLessonByOrderByDayOfWeekAscStartTimeAsc();
 
         return createResultMap(firstDay, lastDay, weekLesson);
     }

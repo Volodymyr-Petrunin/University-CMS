@@ -1,6 +1,5 @@
 package com.university.universitycms.controllers.impl;
 
-import com.university.universitycms.controllers.dataformatter.DateFormatter;
 import com.university.universitycms.domain.Lesson;
 import com.university.universitycms.services.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
