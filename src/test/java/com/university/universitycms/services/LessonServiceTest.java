@@ -1,8 +1,10 @@
 package com.university.universitycms.services;
 
 import com.university.universitycms.domain.*;
+import com.university.universitycms.repositories.LessonRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
@@ -15,37 +17,35 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Sql(scripts = "classpath:db/migration/V1__Model_Init.sql" )
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Sql(value = "classpath:db/migration/V1__Model_Init.sql")
 @Sql(scripts = "classpath:scripts/lesson_service.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class LessonServiceTest {
     @Autowired
-    private LessonService lessonService;
+    private LessonRepository lessonRepository;
     private final Course expectedCourse = new Course(1L, "IT");
     private final Group expectedGroup = new Group(1L, "A12");
+    private List<Lesson> actual;
+    private List<Lesson> expected;
 
     private final List<Lesson> expectedLessons = List.of(
             new Lesson(null, "ENG group 1", "A105", DayOfWeek.FRIDAY, LocalTime.of(11, 0), LocalTime.of(12, 0), expectedCourse, expectedGroup),
             new Lesson(null, "ENG group 2", "A106", DayOfWeek.THURSDAY, LocalTime.of(9, 30), LocalTime.of(11, 30), expectedCourse, null),
             new Lesson(null, "ENG group 3", "A107", DayOfWeek.SUNDAY, LocalTime.of(15, 0), LocalTime.of(17, 0), null, expectedGroup)
     );
-    private List<Lesson> actual;
-    private List<Lesson> expected;
 
     @BeforeEach
     void setUp() {
-        for (Lesson lesson : expectedLessons) {
-            lessonService.createLesson(lesson);
-        }
-
+        lessonRepository.saveAll(expectedLessons);
     }
 
     @Test
     void testSaveLesson_ShouldCreateNewLessonInDB_AndReturnCorrectList(){
         Lesson newLesson = new Lesson(null, "NewLesson", "B12", DayOfWeek.MONDAY, null, null, null, null);
 
-        lessonService.createLesson(newLesson);
+        lessonRepository.save(newLesson);
 
-        actual = lessonService.getAllLessons();
+        actual = lessonRepository.findAll();
 
         expected = new ArrayList<>(expectedLessons);
         expected.add(newLesson);
@@ -61,9 +61,9 @@ class LessonServiceTest {
         lessonForUpdate.setAudience("ABC");
         lessonForUpdate.setName("UA Language");
 
-        lessonService.updateLesson(lessonForUpdate);
+        lessonRepository.save(lessonForUpdate);
 
-        actual = lessonService.getAllLessons();
+        actual = lessonRepository.findAll();
 
         expected = new ArrayList<>(expectedLessons);
         expected.set(0, lessonForUpdate);

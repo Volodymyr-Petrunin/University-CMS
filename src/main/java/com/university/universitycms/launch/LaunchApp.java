@@ -1,4 +1,4 @@
-package com.university.universitycms;
+package com.university.universitycms.launch;
 
 import com.university.universitycms.services.datafilling.DataFiller;
 import jakarta.annotation.PostConstruct;

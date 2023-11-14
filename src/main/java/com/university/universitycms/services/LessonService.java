@@ -29,7 +29,7 @@ public class LessonService implements DataFiller {
     }
 
     public List<Lesson> getAllLessons(){
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        return repository.findAll();
     }
 
     public Optional<Lesson> getLessonById(long lessonId){

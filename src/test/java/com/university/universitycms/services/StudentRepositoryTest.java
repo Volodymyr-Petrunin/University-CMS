@@ -3,6 +3,7 @@ package com.university.universitycms.services;
 import com.university.universitycms.domain.Group;
 import com.university.universitycms.domain.Role;
 import com.university.universitycms.domain.Student;
+import com.university.universitycms.repositories.StudentRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,10 +17,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Sql(scripts = "classpath:db/migration/V1__Model_Init.sql")
 @Sql(scripts = "classpath:scripts/students_service.sql")
-class StudentServiceTest {
+class StudentRepositoryTest {
 
     @Autowired
-    private StudentService studentService;
+    private StudentRepository studentRepository;
 
     private final Group expectedGroup = new Group(1L, "ABC");
 
@@ -34,9 +35,9 @@ class StudentServiceTest {
 
     @Test
     void testCreateStudents_ShouldInsertStudentsInDB_AndReturnCorrectList(){
-        studentService.createSeveralStudents(expectedStudents);
+        studentRepository.saveAll(expectedStudents);
 
-        actual = studentService.getAllStudents();
+        actual = studentRepository.findAll();
 
         expected = new ArrayList<>(expectedStudents);
 
