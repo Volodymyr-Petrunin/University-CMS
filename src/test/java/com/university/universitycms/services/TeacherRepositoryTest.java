@@ -16,7 +16,6 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Sql(scripts = "classpath:db/migration/V1__Model_Init.sql")
 @Sql(scripts = "classpath:scripts/teacher_service.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class TeacherRepositoryTest {
     @Autowired

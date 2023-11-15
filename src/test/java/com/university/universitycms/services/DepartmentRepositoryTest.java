@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Sql(scripts = "classpath:db/migration/V1__Model_Init.sql")
 @Sql(value = "classpath:scripts/department_service.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class DepartmentRepositoryTest {
     @Autowired

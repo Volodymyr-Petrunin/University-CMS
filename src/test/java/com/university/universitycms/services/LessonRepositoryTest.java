@@ -2,6 +2,7 @@ package com.university.universitycms.services;
 
 import com.university.universitycms.domain.*;
 import com.university.universitycms.repositories.LessonRepository;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -18,9 +19,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Sql(value = "classpath:db/migration/V1__Model_Init.sql")
-@Sql(scripts = "classpath:scripts/lesson_service.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-class LessonServiceTest {
+@Sql(value = "classpath:scripts/lesson_service.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+class LessonRepositoryTest {
     @Autowired
     private LessonRepository lessonRepository;
     private final Course expectedCourse = new Course(1L, "IT");

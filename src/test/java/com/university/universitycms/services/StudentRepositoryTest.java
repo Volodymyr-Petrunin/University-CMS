@@ -15,7 +15,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Sql(scripts = "classpath:db/migration/V1__Model_Init.sql")
 @Sql(scripts = "classpath:scripts/students_service.sql")
 class StudentRepositoryTest {
 
