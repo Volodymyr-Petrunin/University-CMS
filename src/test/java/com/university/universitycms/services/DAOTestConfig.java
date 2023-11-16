@@ -11,5 +11,5 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScan(basePackages = "com.university.universitycms.repositories")
 @EnableJpaRepositories("com.university.universitycms.repositories")
 @EnableAutoConfiguration
-public class TestConfig {
+public class DAOTestConfig {
 }

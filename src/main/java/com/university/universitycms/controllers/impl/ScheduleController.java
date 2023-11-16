@@ -15,17 +15,15 @@ import java.util.Map;
 @Controller
 public class ScheduleController {
     private final LessonService lessonService;
-    private final LocalDate localDate;
 
     @Autowired
-    public ScheduleController(LessonService lessonService, Clock clock) {
+    public ScheduleController(LessonService lessonService) {
         this.lessonService = lessonService;
-        this.localDate = LocalDate.now(clock);
     }
 
     @GetMapping("/one-day-schedule")
     public String daySchedule(Model model){
-        Map<String, List<Lesson>> lessons = lessonService.getLessonsByDayOfWeek(localDate);
+        Map<String, List<Lesson>> lessons = lessonService.getLessonsByDayOfWeek();
 
         model.addAttribute("oneDaySchedule", lessons);
 
@@ -43,7 +41,7 @@ public class ScheduleController {
 
     @GetMapping("/month-schedule")
     public String monthSchedule(Model model){
-        Map<String, List<Lesson>> lessonForMonth = lessonService.getLessonForMonth();
+        Map<String, List<Lesson>> lessonForMonth = lessonService.getLessonsForMonth();
 
         model.addAttribute("monthSchedule", lessonForMonth);
 

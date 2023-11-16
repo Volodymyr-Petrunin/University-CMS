@@ -9,7 +9,6 @@ import java.util.List;
 
 @Service
 public class LaunchApp {
-
     private final List<DataFiller> dataFillers;
 
     @Autowired

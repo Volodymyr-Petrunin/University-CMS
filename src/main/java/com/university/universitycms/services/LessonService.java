@@ -52,9 +52,11 @@ public class LessonService implements DataFiller {
         repository.delete(lesson);
     }
 
-    public Map<String, List<Lesson>> getLessonsByDayOfWeek(LocalDate localDate){
-        List<Lesson> oneDayLesson = repository.findLessonByDayOfWeekOrderByStartTimeAsc(localDate.getDayOfWeek());
-        String dayFormat = dataFormat(localDate);
+    public Map<String, List<Lesson>> getLessonsByDayOfWeek() {
+        LocalDate today = LocalDate.now(clock);
+
+        List<Lesson> oneDayLesson = repository.findLessonByDayOfWeekOrderByStartTimeAsc(today.getDayOfWeek());
+        String dayFormat = dataFormat(today);
 
         return Map.of(dayFormat, oneDayLesson);
     }
@@ -68,7 +70,7 @@ public class LessonService implements DataFiller {
         return createResultMap(firstDay, lastDay, weekLesson);
     }
 
-    public Map<String, List<Lesson>> getLessonForMonth(){
+    public Map<String, List<Lesson>> getLessonsForMonth(){
         LocalDate firstDay = LocalDate.now(clock).withDayOfMonth(1);
         LocalDate lastDay = LocalDate.now(clock).with(TemporalAdjusters.lastDayOfMonth());
 
