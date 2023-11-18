@@ -1,4 +1,4 @@
-package com.university.universitycms.services;
+package com.university.universitycms.repository;
 
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

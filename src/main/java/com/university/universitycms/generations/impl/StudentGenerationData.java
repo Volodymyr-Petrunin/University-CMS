@@ -4,7 +4,7 @@ import com.university.universitycms.domain.Group;
 import com.university.universitycms.domain.Role;
 import com.university.universitycms.domain.Student;
 import com.university.universitycms.generations.GenerationData;
-import com.university.universitycms.generations.randomutils.RandomUtils;
+import com.university.universitycms.generations.randomutils.GenerationRandomizer;
 import com.university.universitycms.readers.ResourcesFileReader;
 import com.university.universitycms.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.util.List;
 
 @Component
 public class StudentGenerationData implements GenerationData<Student> {
-    private final RandomUtils randomUtils;
+    private final GenerationRandomizer generationRandomizer;
     private final int quantity;
     private final ResourcesFileReader resourcesFileReader;
     private final String firstNameFile;
@@ -24,11 +24,11 @@ public class StudentGenerationData implements GenerationData<Student> {
     private final GroupService groupService;
 
     @Autowired
-    public StudentGenerationData(RandomUtils randomUtils, GroupService groupService, ResourcesFileReader resourcesFileReader,
+    public StudentGenerationData(GenerationRandomizer generationRandomizer, GroupService groupService, ResourcesFileReader resourcesFileReader,
                                  @Value("${quantity.max.students}") int quantity,
                                  @Value("${generation.file.studentsName}") String firstNameFile,
                                  @Value("${generation.file.studentsSurname}") String secondNameFile) {
-        this.randomUtils = randomUtils;
+        this.generationRandomizer = generationRandomizer;
         this.groupService = groupService;
         this.resourcesFileReader = resourcesFileReader;
         this.quantity = quantity;
@@ -45,9 +45,9 @@ public class StudentGenerationData implements GenerationData<Student> {
         List<Group> groups = groupService.getAllGroups();
 
         for (int index = 0; index < quantity; index++) {
-            String name = randomUtils.getRandomElementFromList(firstNames);
-            String surname = randomUtils.getRandomElementFromList(secondNames);
-            Group group = randomUtils.getRandomElementFromList(groups);
+            String name = generationRandomizer.getRandomElementFromList(firstNames);
+            String surname = generationRandomizer.getRandomElementFromList(secondNames);
+            Group group = generationRandomizer.getRandomElementFromList(groups);
 
             result.add(new Student(null, Role.STUDENT, name, surname, null, group));
         }

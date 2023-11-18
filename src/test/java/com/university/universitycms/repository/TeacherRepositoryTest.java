@@ -1,4 +1,4 @@
-package com.university.universitycms.services;
+package com.university.universitycms.repository;
 
 import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Role;

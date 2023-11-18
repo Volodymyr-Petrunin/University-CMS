@@ -1,4 +1,4 @@
-package com.university.universitycms.services;
+package com.university.universitycms.repository;
 
 import com.university.universitycms.domain.*;
 import com.university.universitycms.repositories.LessonRepository;
@@ -45,7 +45,7 @@ class LessonRepositoryTest {
 
         lessonRepository.save(newLesson);
 
-        actual = lessonRepository.findAll();
+        actual = lessonRepository.findAllByOrderByIdAsc();
 
         expected = new ArrayList<>(expectedLessons);
         expected.add(newLesson);
@@ -63,7 +63,7 @@ class LessonRepositoryTest {
 
         lessonRepository.save(lessonForUpdate);
 
-        actual = lessonRepository.findAll();
+        actual = lessonRepository.findAllByOrderByIdAsc();
 
         expected = new ArrayList<>(expectedLessons);
         expected.set(0, lessonForUpdate);

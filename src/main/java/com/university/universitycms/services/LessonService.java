@@ -19,16 +19,19 @@ public class LessonService implements DataFiller {
     private final LessonRepository repository;
     private final LessonGenerationData lessonGenerationData;
     private final Clock clock;
+    private final DateTimeFormatter formatter;
 
     @Autowired
-    public LessonService(LessonRepository repository, LessonGenerationData lessonGenerationData, Clock clock) {
+    public LessonService(LessonRepository repository, LessonGenerationData lessonGenerationData, Clock clock,
+                         DateTimeFormatter formatter) {
         this.repository = repository;
         this.lessonGenerationData = lessonGenerationData;
         this.clock = clock;
+        this.formatter = formatter;
     }
 
     public List<Lesson> getAllLessons(){
-        return repository.findAll();
+        return repository.findAllByOrderByIdAsc();
     }
 
     public Optional<Lesson> getLessonById(long lessonId){
@@ -54,8 +57,12 @@ public class LessonService implements DataFiller {
     public Map<String, List<Lesson>> getLessonsByDayOfWeek() {
         LocalDate today = LocalDate.now(clock);
 
+        if (isWeekend(today)) {
+            today = today.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+        }
+
         List<Lesson> oneDayLesson = repository.findLessonByDayOfWeekOrderByStartTimeAsc(today.getDayOfWeek());
-        String dayFormat = dataFormat(today);
+        String dayFormat = formatDate(today);
 
         return Map.of(dayFormat, oneDayLesson);
     }
@@ -83,10 +90,12 @@ public class LessonService implements DataFiller {
         createSeveralLessons(lessonGenerationData.generateData());
     }
 
-    private String dataFormat(LocalDate currentDay){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EE/dd/MM");
+    private String formatDate(LocalDate date){
+        return date.format(formatter).toUpperCase();
+    }
 
-        return currentDay.format(formatter).toUpperCase();
+    private boolean isWeekend(LocalDate date){
+        return date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY;
     }
 
     private Map<String, List<Lesson>> createResultMap(LocalDate firstDay, LocalDate lastDay, List<Lesson> weekLesson){
@@ -103,7 +112,7 @@ public class LessonService implements DataFiller {
                     .filter(lesson -> lesson.getDayOfWeek().equals(day))
                     .toList();
 
-            result.put(dataFormat(currentDay), lessonsOfThisDay);
+            result.put(formatDate(currentDay), lessonsOfThisDay);
         }
 
         return result;

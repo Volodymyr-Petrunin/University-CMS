@@ -1,4 +1,4 @@
-package com.university.universitycms.services;
+package com.university.universitycms.repository;
 
 import com.university.universitycms.domain.Department;
 import com.university.universitycms.repositories.DepartmentRepository;
@@ -14,7 +14,6 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Sql(value = "classpath:scripts/department_service.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class DepartmentRepositoryTest {
     @Autowired

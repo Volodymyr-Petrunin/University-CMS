@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class LaunchApp {
+public class FillData {
     private final List<DataFiller> dataFillers;
 
     @Autowired
-    public LaunchApp(List<DataFiller> dataFillers) {
+    public FillData(List<DataFiller> dataFillers) {
         this.dataFillers = dataFillers;
     }
 

@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.Random;
 
 @Component
-public class RandomUtils {
+public class GenerationRandomizer {
     private final Random random;
     private final int dayStart;
     private final int dayEnd;
 
     @Autowired
-    public RandomUtils(@Qualifier("random") Random random, @Value("${quantity.university.day.start}") int dayStart,
-                       @Value("${quantity.university.day.end}") int dayEnd) {
+    public GenerationRandomizer(@Qualifier("random") Random random, @Value("${quantity.university.day.start}") int dayStart,
+                                @Value("${quantity.university.day.end}") int dayEnd) {
         this.random = random;
         this.dayStart = dayStart;
         this.dayEnd = dayEnd;

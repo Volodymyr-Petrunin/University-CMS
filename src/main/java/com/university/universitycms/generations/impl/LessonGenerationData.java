@@ -4,7 +4,7 @@ import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Group;
 import com.university.universitycms.domain.Lesson;
 import com.university.universitycms.generations.GenerationData;
-import com.university.universitycms.generations.randomutils.RandomUtils;
+import com.university.universitycms.generations.randomutils.GenerationRandomizer;
 import com.university.universitycms.readers.ResourcesFileReader;
 import com.university.universitycms.services.CourseService;
 import com.university.universitycms.services.GroupService;
@@ -18,25 +18,23 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @Component
 public class LessonGenerationData implements GenerationData<Lesson> {
-    private final RandomUtils randomUtils;
+    private final GenerationRandomizer generationRandomizer;
     private final Clock clock;
     private final GroupService groupService;
     private final CourseService courseService;
     private final ResourcesFileReader resourcesFileReader;
     private final String audienceFile;
     private final int quantity;
-    private DayOfWeek currentDayOfWeek;
 
     @Autowired
-    public LessonGenerationData(RandomUtils randomUtils, Clock clock, GroupService groupService, CourseService courseService,
+    public LessonGenerationData(GenerationRandomizer generationRandomizer, Clock clock, GroupService groupService, CourseService courseService,
                                 ResourcesFileReader resourcesFileReader,
                                 @Value("${generation.file.audiences}") String audienceFile,
                                 @Value("${quantity.max.lessonInWeek}") int quantity) {
-        this.randomUtils = randomUtils;
+        this.generationRandomizer = generationRandomizer;
         this.clock = clock;
         this.groupService = groupService;
         this.courseService = courseService;
@@ -50,18 +48,18 @@ public class LessonGenerationData implements GenerationData<Lesson> {
         List<String> audiences = resourcesFileReader.read(audienceFile);
         List<Group> groups = groupService.getAllGroups();
         List<Course> courses = courseService.getAllCourse();
-        currentDayOfWeek = LocalDate.now(clock).getDayOfWeek();
+        DayOfWeek currentDayOfWeek = LocalDate.now(clock).getDayOfWeek();
 
         List<Lesson> result = new ArrayList<>();
 
         for (int index = 0; index < quantity; index++) {
-            Group group = randomUtils.getRandomElementFromList(groups);
-            Course course = randomUtils.getRandomElementFromList(courses);
-            String audience = randomUtils.getRandomElementFromList(audiences);
-            LocalTime startTime = randomUtils.getStartTime();
+            Group group = generationRandomizer.getRandomElementFromList(groups);
+            Course course = generationRandomizer.getRandomElementFromList(courses);
+            String audience = generationRandomizer.getRandomElementFromList(audiences);
+            LocalTime startTime = generationRandomizer.getStartTime();
+            currentDayOfWeek = getDayOfWeek(index, currentDayOfWeek);
 
-
-            result.add(new Lesson(null, createLessonName(course, group), audience, getDayOfWeek(index), startTime,
+            result.add(new Lesson(null, createLessonName(course, group), audience, currentDayOfWeek, startTime,
                     startTime.plusHours(2), course, group));
         }
 
@@ -72,7 +70,7 @@ public class LessonGenerationData implements GenerationData<Lesson> {
         return course.getName() + " group " + group.getName();
     }
 
-    private DayOfWeek getDayOfWeek(int index){
+    private DayOfWeek getDayOfWeek(int index, DayOfWeek currentDayOfWeek){
         if (index % 5 == 0) {
             currentDayOfWeek = currentDayOfWeek.plus(1);
         }
