@@ -31,7 +31,7 @@ public class LessonService implements DataFiller {
     }
 
     public List<Lesson> getAllLessons(){
-        return repository.findAllByOrderByIdAsc();
+        return repository.findAll();
     }
 
     public Optional<Lesson> getLessonById(long lessonId){

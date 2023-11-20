@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.DayOfWeek;
@@ -43,7 +44,7 @@ class LessonRepositoryTest {
 
         lessonRepository.save(newLesson);
 
-        actual = lessonRepository.findAllByOrderByIdAsc();
+        actual = lessonRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
 
         expected = new ArrayList<>(expectedLessons);
         expected.add(newLesson);
@@ -61,7 +62,7 @@ class LessonRepositoryTest {
 
         lessonRepository.save(lessonForUpdate);
 
-        actual = lessonRepository.findAllByOrderByIdAsc();
+        actual = lessonRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
 
         expected = new ArrayList<>(expectedLessons);
         expected.set(0, lessonForUpdate);
