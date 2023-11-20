@@ -3,7 +3,6 @@ package com.university.universitycms.repository;
 import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Role;
 import com.university.universitycms.domain.Teacher;
-import com.university.universitycms.repositories.TeacherRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

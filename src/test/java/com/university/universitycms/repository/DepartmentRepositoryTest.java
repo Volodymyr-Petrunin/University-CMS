@@ -1,9 +1,7 @@
 package com.university.universitycms.repository;
 
 import com.university.universitycms.domain.Department;
-import com.university.universitycms.repositories.DepartmentRepository;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;

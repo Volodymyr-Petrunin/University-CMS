@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootConfiguration
 @EntityScan(basePackages = "com.university.universitycms.domain")
-@ComponentScan(basePackages = "com.university.universitycms.repositories")
-@EnableJpaRepositories("com.university.universitycms.repositories")
+@ComponentScan(basePackages = "com.university.universitycms.repository")
+@EnableJpaRepositories("com.university.universitycms.repository")
 @EnableAutoConfiguration
 public class DAOTestConfig {
 }
