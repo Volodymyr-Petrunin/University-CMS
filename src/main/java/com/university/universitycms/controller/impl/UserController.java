@@ -4,6 +4,7 @@ import com.university.universitycms.domain.Student;
 import com.university.universitycms.domain.Teacher;
 import com.university.universitycms.service.StudentService;
 import com.university.universitycms.service.TeacherService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ public class UserController {
     private final StudentService studentService;
     private final TeacherService teacherService;
 
+    @Autowired
     public UserController(StudentService studentService, TeacherService teacherService) {
         this.studentService = studentService;
         this.teacherService = teacherService;
