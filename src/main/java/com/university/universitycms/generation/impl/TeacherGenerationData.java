@@ -47,8 +47,9 @@ public class TeacherGenerationData implements GenerationData<Teacher> {
             String name = generationRandomizer.getRandomElementFromList(firstNames);
             String surname = generationRandomizer.getRandomElementFromList(secondNames);
             Course course = generationRandomizer.getRandomElementFromList(courses);
+            String password = generationRandomizer.getPassword();
 
-            result.add(new Teacher(null, Role.TEACHER, name, surname, null, Set.of(course)));
+            result.add(new Teacher(null, Role.TEACHER, name, surname, password, Set.of(course)));
         }
 
         return result;

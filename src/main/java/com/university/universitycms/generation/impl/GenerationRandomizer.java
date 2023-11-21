@@ -3,6 +3,7 @@ package com.university.universitycms.generation.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalTime;
@@ -14,13 +15,18 @@ public class GenerationRandomizer {
     private final Random random;
     private final int dayStart;
     private final int dayEnd;
+    private final int quantityPasswordChars;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public GenerationRandomizer(@Qualifier("random") Random random, @Value("${quantity.university.day.start}") int dayStart,
-                                @Value("${quantity.university.day.end}") int dayEnd) {
+                                @Value("${quantity.university.day.end}") int dayEnd, PasswordEncoder passwordEncoder,
+                                @Value("${quantity.max.password.chars}") int quantityPasswordChars) {
         this.random = random;
         this.dayStart = dayStart;
         this.dayEnd = dayEnd;
+        this.passwordEncoder = passwordEncoder;
+        this.quantityPasswordChars = quantityPasswordChars;
     }
 
     public <T> T getRandomElementFromList(List<T> list){
@@ -34,5 +40,22 @@ public class GenerationRandomizer {
 
     public LocalTime getStartTime(){
         return LocalTime.of(random.nextInt(dayStart, dayEnd), 0);
+    }
+
+    public String generateRandomChars(char startChar, char endChar, int count) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int index = 0; index < count; index++) {
+            char currentChar = (char) (random.nextInt(endChar - startChar + 1) + startChar);
+            stringBuilder.append(currentChar);
+        }
+
+        return stringBuilder.toString();
+    }
+
+    public String getPassword(){
+        String password = generateRandomChars('A', 'Z', quantityPasswordChars);
+
+        return passwordEncoder.encode(password);
     }
 }

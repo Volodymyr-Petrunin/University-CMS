@@ -47,8 +47,9 @@ public class StudentGenerationData implements GenerationData<Student> {
             String name = generationRandomizer.getRandomElementFromList(firstNames);
             String surname = generationRandomizer.getRandomElementFromList(secondNames);
             Group group = generationRandomizer.getRandomElementFromList(groups);
+            String password = generationRandomizer.getPassword();
 
-            result.add(new Student(null, Role.STUDENT, name, surname, null, group));
+            result.add(new Student(null, Role.STUDENT, name, surname, password, group));
         }
 
         return result;
