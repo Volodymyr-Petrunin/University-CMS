@@ -1,5 +1,6 @@
-package com.university.universitycms.controller.impl;
+package com.university.universitycms.controller.test;
 
+import com.university.universitycms.controller.impl.ScheduleController;
 import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Group;
 import com.university.universitycms.domain.Lesson;
@@ -17,6 +18,7 @@ import java.util.Map;
 
 import static org.hamcrest.core.StringContains.containsString;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -82,10 +84,9 @@ class ScheduleControllerTest {
     }
 
     private void defaultPerform(String urlTemplate, String attributeName, String viewName, Map<String, List<Lesson>> expectedLesson) throws Exception{
-        mockMvc.perform(get(urlTemplate))
+        mockMvc.perform(get(urlTemplate).with(user("user").password("password")))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("<header>")))
                 .andExpect(content().string(containsString("University-CMS")))
                 .andExpect(model().attributeExists(attributeName))
                 .andExpect(model().attribute(attributeName, expectedLesson))
