@@ -21,10 +21,10 @@ public class TeacherGenerationData implements GenerationData<Teacher> {
     private final String firstNameFile;
     private final String secondNameFile;
     private final CourseService courseService;
-    private final GenerationPassword generationPassword;
+    private final PasswordGeneration passwordGeneration;
 
     public TeacherGenerationData(GenerationRandomizer generationRandomizer, ResourcesFileReader resourcesFileReader,
-                                 CourseService courseService, GenerationPassword generationPassword,
+                                 CourseService courseService, PasswordGeneration passwordGeneration,
                                  @Value("${quantity.max.teachers}") int quantity,
                                  @Value("${generation.file.teachersName}") String firstNameFile,
                                  @Value("${generation.file.teachersSurname}") String secondNameFile) {
@@ -34,7 +34,7 @@ public class TeacherGenerationData implements GenerationData<Teacher> {
         this.firstNameFile = firstNameFile;
         this.secondNameFile = secondNameFile;
         this.courseService = courseService;
-        this.generationPassword = generationPassword;
+        this.passwordGeneration = passwordGeneration;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class TeacherGenerationData implements GenerationData<Teacher> {
             String name = generationRandomizer.getRandomElementFromList(firstNames);
             String surname = generationRandomizer.getRandomElementFromList(secondNames);
             Course course = generationRandomizer.getRandomElementFromList(courses);
-            String password = generationPassword.generatePassword();
+            String password = passwordGeneration.generatePassword();
 
             result.add(new Teacher(null, Role.TEACHER, name, surname, password, Set.of(course)));
         }

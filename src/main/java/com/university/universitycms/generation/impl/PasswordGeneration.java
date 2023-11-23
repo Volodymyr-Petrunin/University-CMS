@@ -9,13 +9,13 @@ import java.nio.CharBuffer;
 import java.util.Arrays;
 
 @Component
-public class GenerationPassword {
+public class PasswordGeneration {
     private final GenerationRandomizer generationRandomizer;
     private final PasswordEncoder passwordEncoder;
     private final int quantityPasswordChars;
 
     @Autowired
-    public GenerationPassword(GenerationRandomizer generationRandomizer, PasswordEncoder passwordEncoder,
+    public PasswordGeneration(GenerationRandomizer generationRandomizer, PasswordEncoder passwordEncoder,
                               @Value("${quantity.max.password.chars}") int quantityPasswordChars) {
         this.generationRandomizer = generationRandomizer;
         this.passwordEncoder = passwordEncoder;
@@ -24,8 +24,9 @@ public class GenerationPassword {
 
     public String generatePassword(){
         char[] password = generationRandomizer.generateRandomChars('A', 'Z', quantityPasswordChars).toCharArray();
+        String res = passwordEncoder.encode(CharBuffer.wrap(password));
         Arrays.fill(password, '\0');
 
-        return passwordEncoder.encode(CharBuffer.wrap(password));
+        return res;
     }
 }
