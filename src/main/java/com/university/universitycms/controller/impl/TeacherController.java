@@ -1,8 +1,6 @@
 package com.university.universitycms.controller.impl;
 
-import com.university.universitycms.domain.Student;
 import com.university.universitycms.domain.Teacher;
-import com.university.universitycms.service.StudentService;
 import com.university.universitycms.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,22 +10,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 
 @Controller
-public class UserController {
-    private final StudentService studentService;
+public class TeacherController {
+
     private final TeacherService teacherService;
 
     @Autowired
-    public UserController(StudentService studentService, TeacherService teacherService) {
-        this.studentService = studentService;
+    public TeacherController(TeacherService teacherService) {
         this.teacherService = teacherService;
-    }
-
-    @GetMapping("/students")
-    public String students(Model model){
-        List<Student> students = studentService.getAllStudents();
-        model.addAttribute("students", students);
-
-        return "students";
     }
 
     @GetMapping("/teachers")

@@ -25,7 +25,7 @@ public class DepartmentService implements DataFiller {
         this.departmentGenerationData = departmentGenerationData;
     }
 
-    public List<Department> getAllDepartment(){
+    public List<Department> getAllDepartments(){
         return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 

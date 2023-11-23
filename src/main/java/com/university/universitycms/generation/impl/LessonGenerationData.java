@@ -46,7 +46,7 @@ public class LessonGenerationData implements GenerationData<Lesson> {
     public List<Lesson> generateData() {
         List<String> audiences = resourcesFileReader.read(audienceFile);
         List<Group> groups = groupService.getAllGroups();
-        List<Course> courses = courseService.getAllCourse();
+        List<Course> courses = courseService.getAllCourses();
         DayOfWeek currentDayOfWeek = LocalDate.now(clock).getDayOfWeek();
 
         List<Lesson> result = new ArrayList<>();

@@ -21,25 +21,27 @@ public class TeacherGenerationData implements GenerationData<Teacher> {
     private final String firstNameFile;
     private final String secondNameFile;
     private final CourseService courseService;
+    private final GenerationPassword generationPassword;
 
     public TeacherGenerationData(GenerationRandomizer generationRandomizer, ResourcesFileReader resourcesFileReader,
+                                 CourseService courseService, GenerationPassword generationPassword,
                                  @Value("${quantity.max.teachers}") int quantity,
                                  @Value("${generation.file.teachersName}") String firstNameFile,
-                                 @Value("${generation.file.teachersSurname}") String secondNameFile,
-                                 CourseService courseService) {
+                                 @Value("${generation.file.teachersSurname}") String secondNameFile) {
         this.generationRandomizer = generationRandomizer;
         this.quantity = quantity;
         this.resourcesFileReader = resourcesFileReader;
         this.firstNameFile = firstNameFile;
         this.secondNameFile = secondNameFile;
         this.courseService = courseService;
+        this.generationPassword = generationPassword;
     }
 
     @Override
     public List<Teacher> generateData() {
         List<String> firstNames = resourcesFileReader.read(firstNameFile);
         List<String> secondNames = resourcesFileReader.read(secondNameFile);
-        List<Course> courses = courseService.getAllCourse();
+        List<Course> courses = courseService.getAllCourses();
 
         List<Teacher> result = new ArrayList<>();
 
@@ -47,7 +49,7 @@ public class TeacherGenerationData implements GenerationData<Teacher> {
             String name = generationRandomizer.getRandomElementFromList(firstNames);
             String surname = generationRandomizer.getRandomElementFromList(secondNames);
             Course course = generationRandomizer.getRandomElementFromList(courses);
-            String password = generationRandomizer.getPassword();
+            String password = generationPassword.generatePassword();
 
             result.add(new Teacher(null, Role.TEACHER, name, surname, password, Set.of(course)));
         }

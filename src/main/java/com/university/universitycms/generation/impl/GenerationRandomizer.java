@@ -3,7 +3,6 @@ package com.university.universitycms.generation.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalTime;
@@ -15,18 +14,13 @@ public class GenerationRandomizer {
     private final Random random;
     private final int dayStart;
     private final int dayEnd;
-    private final int quantityPasswordChars;
-    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public GenerationRandomizer(@Qualifier("random") Random random, @Value("${quantity.university.day.start}") int dayStart,
-                                @Value("${quantity.university.day.end}") int dayEnd, PasswordEncoder passwordEncoder,
-                                @Value("${quantity.max.password.chars}") int quantityPasswordChars) {
+                                @Value("${quantity.university.day.end}") int dayEnd) {
         this.random = random;
         this.dayStart = dayStart;
         this.dayEnd = dayEnd;
-        this.passwordEncoder = passwordEncoder;
-        this.quantityPasswordChars = quantityPasswordChars;
     }
 
     public <T> T getRandomElementFromList(List<T> list){
@@ -51,11 +45,5 @@ public class GenerationRandomizer {
         }
 
         return stringBuilder.toString();
-    }
-
-    public String getPassword(){
-        String password = generateRandomChars('A', 'Z', quantityPasswordChars);
-
-        return passwordEncoder.encode(password);
     }
 }

@@ -24,7 +24,7 @@ public class CourseService implements DataFiller {
         this.courseGenerationData = courseGenerationData;
     }
 
-    public List<Course> getAllCourse(){
+    public List<Course> getAllCourses(){
         return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 

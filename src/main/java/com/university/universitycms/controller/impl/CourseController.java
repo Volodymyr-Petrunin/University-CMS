@@ -20,7 +20,7 @@ public class CourseController {
 
     @GetMapping("/courses")
     public String courses(Model model){
-        List<Course> courses = courseService.getAllCourse();
+        List<Course> courses = courseService.getAllCourses();
         model.addAttribute("courses", courses);
 
         return "courses";

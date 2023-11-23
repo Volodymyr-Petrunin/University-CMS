@@ -21,15 +21,18 @@ public class StudentGenerationData implements GenerationData<Student> {
     private final String firstNameFile;
     private final String secondNameFile;
     private final GroupService groupService;
+    private final GenerationPassword generationPassword;
 
     @Autowired
-    public StudentGenerationData(GenerationRandomizer generationRandomizer, GroupService groupService, ResourcesFileReader resourcesFileReader,
+    public StudentGenerationData(GenerationRandomizer generationRandomizer, GroupService groupService,
+                                 ResourcesFileReader resourcesFileReader, GenerationPassword generationPassword,
                                  @Value("${quantity.max.students}") int quantity,
                                  @Value("${generation.file.studentsName}") String firstNameFile,
                                  @Value("${generation.file.studentsSurname}") String secondNameFile) {
         this.generationRandomizer = generationRandomizer;
         this.groupService = groupService;
         this.resourcesFileReader = resourcesFileReader;
+        this.generationPassword = generationPassword;
         this.quantity = quantity;
         this.firstNameFile = firstNameFile;
         this.secondNameFile = secondNameFile;
@@ -47,7 +50,7 @@ public class StudentGenerationData implements GenerationData<Student> {
             String name = generationRandomizer.getRandomElementFromList(firstNames);
             String surname = generationRandomizer.getRandomElementFromList(secondNames);
             Group group = generationRandomizer.getRandomElementFromList(groups);
-            String password = generationRandomizer.getPassword();
+            String password = generationPassword.generatePassword();
 
             result.add(new Student(null, Role.STUDENT, name, surname, password, group));
         }

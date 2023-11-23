@@ -33,7 +33,7 @@ public class DepartmentGenerationData implements GenerationData<Department> {
 
     @Override
     public List<Department> generateData() {
-        List<Course> courses = courseService.getAllCourse();
+        List<Course> courses = courseService.getAllCourses();
 
         if (courses.isEmpty()){
             throw new IllegalArgumentException("Courses list is empty");

@@ -20,7 +20,7 @@ public class DepartmentController {
 
     @GetMapping("/departments")
     public String departments(Model model){
-        List<Department> departments = departmentService.getAllDepartment();
+        List<Department> departments = departmentService.getAllDepartments();
         model.addAttribute("departments", departments);
 
         return "departments";
