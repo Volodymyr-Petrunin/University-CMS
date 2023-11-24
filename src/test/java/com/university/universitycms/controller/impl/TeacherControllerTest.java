@@ -36,9 +36,9 @@ class TeacherControllerTest {
     );
 
     private final List<Teacher> expectedTeachers = List.of(
-            new Teacher(1L, Role.TEACHER, "Mr Vova", "Petrunin", null, expectedCourse),
-            new Teacher(2L, Role.TEACHER, "Mr Oleg", "Nevagno", null, expectedCourse),
-            new Teacher(3L, Role.TEACHER, "Mr Nestor", "Makhno", null, expectedCourse)
+            new Teacher(1L, Role.TEACHER, "Mr Vova", "Petrunin", null, expectedCourse, null),
+            new Teacher(2L, Role.TEACHER, "Mr Oleg", "Nevagno", null, expectedCourse, null),
+            new Teacher(3L, Role.TEACHER, "Mr Nestor", "Makhno", null, expectedCourse, null)
     );
 
     @Test

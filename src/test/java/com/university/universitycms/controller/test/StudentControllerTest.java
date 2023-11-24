@@ -29,9 +29,9 @@ class StudentControllerTest {
     private final Group expectedGroup = new Group(1L, "A12");
 
     private final List<Student> expectedStudents = List.of(
-      new Student(1L, Role.STUDENT, "Vova", "Petrunin", null, expectedGroup),
-      new Student(2L, Role.STUDENT, "Oleg", "Nevagno", null, expectedGroup),
-      new Student(3L, Role.STUDENT, "Nestor", "Makhno", null, expectedGroup)
+      new Student(1L, Role.STUDENT, "Vova", "Petrunin", null, expectedGroup, null),
+      new Student(2L, Role.STUDENT, "Oleg", "Nevagno", null, expectedGroup, null),
+      new Student(3L, Role.STUDENT, "Nestor", "Makhno", null, expectedGroup, null)
     );
 
     @Test

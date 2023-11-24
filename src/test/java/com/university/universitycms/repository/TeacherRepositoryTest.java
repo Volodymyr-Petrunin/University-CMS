@@ -22,9 +22,9 @@ class TeacherRepositoryTest {
 
     private final Course expectedCourse = new Course(1L,"IT");
     private final List<Teacher> expectedTeacher = List.of(
-            new Teacher(null, Role.TEACHER, "Volodymyr", "Petrunin", null, Set.of(expectedCourse)),
-            new Teacher(null, Role.ADMIN, "Stas", "Solyanik", null, Set.of()),
-            new Teacher(null, Role.TEACHER, "Prepod", "Batikovich", null, Set.of(expectedCourse))
+            new Teacher(null, Role.TEACHER, "Volodymyr", "Petrunin", null, Set.of(expectedCourse), null),
+            new Teacher(null, Role.ADMIN, "Stas", "Solyanik", null, Set.of(), null),
+            new Teacher(null, Role.TEACHER, "Prepod", "Batikovich", null, Set.of(expectedCourse), null)
     );
     private List<Teacher> actual;
     private List<Teacher> expected;

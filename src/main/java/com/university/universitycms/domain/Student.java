@@ -18,8 +18,8 @@ public class Student extends User {
 
     }
 
-    public Student(Long id, Role role, String name, String surname, String password, Group group) {
-        super(id, role, name, surname, password);
+    public Student(Long id, Role role, String name, String surname, String password, Group group, String email) {
+        super(id, role, name, surname, password, email);
         this.group = group;
     }
 

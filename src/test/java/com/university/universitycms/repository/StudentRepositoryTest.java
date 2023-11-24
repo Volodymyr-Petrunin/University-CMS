@@ -23,9 +23,9 @@ class StudentRepositoryTest {
     private final Group expectedGroup = new Group(1L, "ABC");
 
     private final List<Student> expectedStudents = List.of(
-            new Student(null, Role.STUDENT, "Volodymyr", "Petrunin", null, expectedGroup),
-            new Student(null, Role.ADMIN, "Stas", "Solyanik", null, null),
-            new Student(null, Role.STUDENT, "Vasa", "Pupkin", null, expectedGroup)
+            new Student(null, Role.STUDENT, "Volodymyr", "Petrunin", null, expectedGroup, null),
+            new Student(null, Role.ADMIN, "Stas", "Solyanik", null, null, null),
+            new Student(null, Role.STUDENT, "Vasa", "Pupkin", null, expectedGroup, null)
     );
 
     private List<Student> actual;

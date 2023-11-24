@@ -27,8 +27,8 @@ public class Teacher extends User {
 
     }
 
-    public Teacher(Long id, Role role, String name, String surname, String password, Set<Course> courses) {
-        super(id, role, name, surname, password);
+    public Teacher(Long id, Role role, String name, String surname, String password, Set<Course> courses, String email) {
+        super(id, role, name, surname, password, email);
         this.courses = courses;
     }
 
