@@ -11,7 +11,7 @@ import java.nio.CharBuffer;
 
 
 @Component
-public class EmailSender {
+public class EmailSender implements EmailNotification{
     private final GreenMail greenMail;
     private final String subject;
     private final String from;
@@ -19,16 +19,17 @@ public class EmailSender {
 
 
     @Autowired
-    public EmailSender(GreenMail greenMail, @Value("${email.subject}") String subject,
+    public EmailSender(@Value("${email.subject}") String subject,
                        @Value("${email.from}") String from, @Value("${email.template}") String emailTemplate) {
-        this.greenMail = greenMail;
         this.subject = subject;
         this.from = from;
         this.emailTemplate = emailTemplate;
+        this.greenMail = setupGreenMail();
         greenMail.start();
     }
 
-    public void sendEmail(String name, String email, char[] password){
+    @Override
+    public void sendRegistrationConfirmation(String name, String email, char[] password){
         String text = fillTemplate(name, email, password);
         ServerSetup serverSetup = greenMail.getSmtp().getServerSetup();
 
@@ -37,5 +38,13 @@ public class EmailSender {
 
     private String fillTemplate(String name, String email, char[] password){
         return String.format(emailTemplate, name, email, CharBuffer.wrap(password));
+    }
+
+    private GreenMail setupGreenMail(){
+        ServerSetup serverSetup = new ServerSetup(3025, "localhost", "smtp");
+        GreenMail setupGreenMail = new GreenMail(serverSetup);
+        setupGreenMail.setUser("University-CMS", "1234");
+
+        return setupGreenMail;
     }
 }

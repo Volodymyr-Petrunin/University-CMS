@@ -49,7 +49,7 @@ public class StudentService implements DataFiller {
         student.setPassword(passwordEncoder.encode(CharBuffer.wrap(password)));
         repository.save(student);
 
-        emailSender.sendEmail(student.getName(), student.getEmail(), password);
+        emailSender.sendRegistrationConfirmation(student.getName(), student.getEmail(), password);
         Arrays.fill(password, '\0');
     }
 
@@ -58,7 +58,7 @@ public class StudentService implements DataFiller {
             char[] password = passwordGeneration.generatePassword();
             student.setPassword(passwordEncoder.encode(CharBuffer.wrap(password)));
 
-            emailSender.sendEmail(student.getName(), student.getEmail(), password);
+            emailSender.sendRegistrationConfirmation(student.getName(), student.getEmail(), password);
             Arrays.fill(password, '\0');
         }
 
