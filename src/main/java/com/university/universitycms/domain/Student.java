@@ -18,8 +18,8 @@ public class Student extends User {
 
     }
 
-    public Student(Long id, Role role, String name, String surname, String password, Group group) {
-        super(id, role, name, surname, password);
+    public Student(Long id, Role role, String name, String surname, String password, Group group, String email) {
+        super(id, role, name, surname, password, email);
         this.group = group;
     }
 
@@ -39,5 +39,17 @@ public class Student extends User {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), group);
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + getId() +
+                ", role=" + getRole() +
+                ", name='" + getName() + '\'' +
+                ", surname='" + getSurname() + '\'' +
+                ", password='" + getPassword() + '\'' +
+                "} group=" + group +
+                '}';
     }
 }

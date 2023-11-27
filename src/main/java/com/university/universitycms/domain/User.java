@@ -28,17 +28,20 @@ public abstract class User {
     private String surname;
     @Column(name = "user_password")
     private String password;
+    @Column(name = "user_email")
+    private String email;
 
     protected User() {
 
     }
 
-    protected User(Long id, Role role, String name, String surname, String password) {
+    protected User(Long id, Role role, String name, String surname, String password, String email) {
         this.id = id;
         this.role = role;
         this.name = name;
         this.surname = surname;
         this.password = password;
+        this.email = email;
     }
 
     @Override
@@ -47,12 +50,13 @@ public abstract class User {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return Objects.equals(id, user.id) && role == user.role && Objects.equals(name, user.name)
-                && Objects.equals(surname, user.surname) && Objects.equals(password, user.password);
+                && Objects.equals(surname, user.surname) && Objects.equals(password, user.password)
+                && Objects.equals(email, user.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, role, name, surname, password);
+        return Objects.hash(id, role, name, surname, password, email);
     }
 
     @Override
@@ -63,6 +67,7 @@ public abstract class User {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 }
