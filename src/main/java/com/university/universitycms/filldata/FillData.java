@@ -15,7 +15,7 @@ public class FillData {
         this.dataFillers = dataFillers;
     }
 
-    @PostConstruct
+//    @PostConstruct
     public void fill(){
         dataFillers.forEach(DataFiller::fillData);
     }

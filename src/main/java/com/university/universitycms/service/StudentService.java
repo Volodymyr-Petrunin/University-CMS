@@ -45,12 +45,10 @@ public class StudentService implements DataFiller {
     }
 
     public void createStudent(Student student){
-        char[] password = passwordGeneration.generatePassword();
-        student.setPassword(passwordEncoder.encode(CharBuffer.wrap(password)));
-        repository.save(student);
+        emailSender.sendRegistrationConfirmation(student.getName(), student.getEmail(), student.getPassword().toCharArray());
 
-        emailSender.sendRegistrationConfirmation(student.getName(), student.getEmail(), password);
-        Arrays.fill(password, '\0');
+        student.setPassword(passwordEncoder.encode(student.getPassword()));
+        repository.save(student);
     }
 
     public void createSeveralStudents(List<Student> students){

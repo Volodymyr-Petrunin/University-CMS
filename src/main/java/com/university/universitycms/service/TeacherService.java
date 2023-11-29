@@ -45,12 +45,10 @@ public class TeacherService implements DataFiller {
     }
 
     public void createTeacher(Teacher teacher){
-        char[] password = passwordGeneration.generatePassword();
-        teacher.setPassword(passwordEncoder.encode(CharBuffer.wrap(password)));
-        repository.save(teacher);
+        emailSender.sendRegistrationConfirmation(teacher.getName(), teacher.getEmail(), teacher.getPassword().toCharArray());
 
-        emailSender.sendRegistrationConfirmation(teacher.getName(), teacher.getEmail(), password);
-        Arrays.fill(password, '\0');
+        teacher.setPassword(passwordEncoder.encode(teacher.getPassword()));
+        repository.save(teacher);
     }
 
     public void createSeveralTeachers(List<Teacher> teachers){
