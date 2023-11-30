@@ -45,22 +45,16 @@ public class StudentService implements DataFiller {
     }
 
     public void createStudent(Student student){
-        emailSender.sendRegistrationConfirmation(student.getName(), student.getEmail(), student.getPassword().toCharArray());
-
-        student.setPassword(passwordEncoder.encode(student.getPassword()));
+        char[] password = passwordGeneration.generatePassword();
+        student.setPassword(passwordEncoder.encode(CharBuffer.wrap(password)));
         repository.save(student);
+
+        emailSender.sendRegistrationConfirmation(student.getName(), student.getEmail(), password);
+        Arrays.fill(password, '\0');
     }
 
     public void createSeveralStudents(List<Student> students){
-        for (Student student : students){
-            char[] password = passwordGeneration.generatePassword();
-            student.setPassword(passwordEncoder.encode(CharBuffer.wrap(password)));
-
-            emailSender.sendRegistrationConfirmation(student.getName(), student.getEmail(), password);
-            Arrays.fill(password, '\0');
-        }
-
-        repository.saveAll(students);
+        students.forEach(this::createStudent);
     }
 
     public void updateStudent(Student student){

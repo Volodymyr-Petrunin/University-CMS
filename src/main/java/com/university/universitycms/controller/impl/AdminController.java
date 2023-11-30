@@ -46,19 +46,22 @@ public class AdminController {
 
     @PostMapping("/register")
     public String registerUser(@RequestParam String name, @RequestParam String surname,
-                               @RequestParam String email, @RequestParam String password,
-                               @RequestParam Role role, @RequestParam(required = false) Long groupId,
+                               @RequestParam String email, @RequestParam Role role,
+                               @RequestParam(required = false) Long groupId,
                                @RequestParam(required = false) Long courseId){
+
         if (role.equals(Role.STUDENT)){
             Group group = groupService.getGroupById(groupId)
                     .orElseThrow(() -> new IllegalArgumentException("Group not found with id " + groupId));
 
-            studentService.createStudent(new Student(null, role, name, surname, password, group, email));
-        } else {
-            Course course = courseService.getCourseById(courseId)
-                    .orElseThrow(() -> new IllegalArgumentException("Course not found with id " + courseId));
-            teacherService.createTeacher(new Teacher(null, role, name, surname, password, Collections.singleton(course), email));
+            studentService.createStudent(new Student(null, role, name, surname, null, group, email));
         }
+
+        // we need this for check for create admin without course
+        Course course = (courseId != null) ? courseService.getCourseById(courseId)
+                .orElseThrow(() -> new IllegalArgumentException("Course not found with id " + courseId)) : null;
+
+        teacherService.createTeacher(new Teacher(null, role, name, surname, null, Collections.singleton(course), email));
 
         return "redirect:/";
     }
