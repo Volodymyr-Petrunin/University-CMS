@@ -9,13 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class AdminController {
@@ -57,7 +55,7 @@ public class AdminController {
             studentService.createStudent(new Student(null, role, name, surname, null, group, email));
         }
 
-        // we need this for check for create admin without course
+        // we need this check for create admin without course
         Course course = (courseId != null) ? courseService.getCourseById(courseId)
                 .orElseThrow(() -> new IllegalArgumentException("Course not found with id " + courseId)) : null;
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Users</title>
@@ -21,7 +21,7 @@
         </thead>
         <tbody>
             <tr th:each="student : ${students}">
-                <td th:text="${student.getId()}"></td>
+                <td><a th:href="@{'/students/' + ${student.getId()}}" th:text="${student.getId()}"></a></td>
                 <td th:text="${student.getName()}"></td>
                 <td th:text="${student.getSurname()}"></td>
                 <td th:text="${student.getGroup()}"></td>
