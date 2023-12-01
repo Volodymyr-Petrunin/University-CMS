@@ -24,8 +24,8 @@ public class WebSecurityConfiguration {
         http
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/", "/webjars/**", "/static/**").permitAll()
-                        .requestMatchers("/courses", "/departments", "/groups",
-                                "/students", "/teachers", "/reg", "/register", "/students/{id}").hasRole(Role.ADMIN.toString())
+                        .requestMatchers("/courses", "/departments", "/groups", "/teachers", "/reg", "/register").hasRole(Role.ADMIN.toString())
+                        .requestMatchers("/admin/**").hasRole(Role.ADMIN.toString())
                         .requestMatchers("/one-day-schedule", "/week-schedule", "/month-schedule")
                         .hasAnyRole(Role.STUDENT.toString(), Role.TEACHER.toString(), Role.ADMIN.toString())
                 )

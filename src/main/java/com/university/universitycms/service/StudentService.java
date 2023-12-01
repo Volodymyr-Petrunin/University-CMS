@@ -1,6 +1,10 @@
 package com.university.universitycms.service;
 
+import com.university.universitycms.domain.Group;
 import com.university.universitycms.domain.Student;
+import com.university.universitycms.domain.dto.StudentDTO;
+import com.university.universitycms.domain.mapper.GroupMapper;
+import com.university.universitycms.domain.mapper.StudentMapper;
 import com.university.universitycms.email.EmailSender;
 import com.university.universitycms.generation.impl.PasswordGeneration;
 import com.university.universitycms.generation.impl.StudentGenerationData;
@@ -25,15 +29,22 @@ public class StudentService implements DataFiller {
     private final EmailSender emailSender;
     private final PasswordGeneration passwordGeneration;
     private final PasswordEncoder passwordEncoder;
+    private final StudentMapper studentMapper;
+    private final GroupService groupService;
+    private final GroupMapper groupMapper;
 
     @Autowired
     public StudentService(StudentRepository repository, StudentGenerationData studentGenerationData, EmailSender emailSender,
-                          PasswordGeneration passwordGeneration, PasswordEncoder passwordEncoder) {
+                          PasswordGeneration passwordGeneration, PasswordEncoder passwordEncoder, StudentMapper studentMapper,
+                          GroupService groupService, GroupMapper groupMapper) {
         this.repository = repository;
         this.studentGenerationData = studentGenerationData;
         this.emailSender = emailSender;
         this.passwordGeneration = passwordGeneration;
         this.passwordEncoder = passwordEncoder;
+        this.studentMapper = studentMapper;
+        this.groupService = groupService;
+        this.groupMapper = groupMapper;
     }
 
     public List<Student> getAllStudents(){
@@ -57,7 +68,13 @@ public class StudentService implements DataFiller {
         students.forEach(this::createStudent);
     }
 
-    public void updateStudent(Student student){
+    public void updateStudent(StudentDTO studentDTO, long groupId){
+        Group group = groupService.getGroupById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("Can't find group!"));
+
+        studentDTO.setGroup(groupMapper.groupToGroupDTO(group));
+        Student student = studentMapper.studentDTOToStudent(studentDTO);
+
         repository.save(student);
     }
 
