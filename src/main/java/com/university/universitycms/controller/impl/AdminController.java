@@ -10,12 +10,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Collections;
 import java.util.List;
 
 @Controller
+@RequestMapping("/admin")
 public class AdminController {
     private final StudentService studentService;
     private final TeacherService teacherService;
@@ -30,7 +32,7 @@ public class AdminController {
         this.courseService = courseService;
     }
 
-    @GetMapping("/reg")
+    @GetMapping("/register")
     public String registerUser(Model model){
         List<Group> groups = groupService.getAllGroups();
         List<Course> courses = courseService.getAllCourses();
@@ -53,13 +55,14 @@ public class AdminController {
                     .orElseThrow(() -> new IllegalArgumentException("Group not found with id " + groupId));
 
             studentService.createStudent(new Student(null, role, name, surname, null, group, email));
+        } else { // add else because if we don't use it we create student and teacher in the same time
+
+            // we need this check for create admin without course
+            Course course = (courseId != null) ? courseService.getCourseById(courseId)
+                    .orElseThrow(() -> new IllegalArgumentException("Course not found with id " + courseId)) : null;
+
+            teacherService.createTeacher(new Teacher(null, role, name, surname, null, Collections.singleton(course), email));
         }
-
-        // we need this check for create admin without course
-        Course course = (courseId != null) ? courseService.getCourseById(courseId)
-                .orElseThrow(() -> new IllegalArgumentException("Course not found with id " + courseId)) : null;
-
-        teacherService.createTeacher(new Teacher(null, role, name, surname, null, Collections.singleton(course), email));
 
         return "redirect:/";
     }
