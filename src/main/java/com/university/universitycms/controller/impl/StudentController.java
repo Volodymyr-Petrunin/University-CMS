@@ -35,7 +35,7 @@ public class StudentController {
     @GetMapping("/students/{id}")
     public String openStudentData(@PathVariable(value = "id") Long id, Model model){
         Student student = studentService.getStudentById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Can't get student!"));
+                .orElseThrow(() -> new IllegalArgumentException("Can't find student!"));
 
         List<Group> groups = groupService.getAllGroups();
 

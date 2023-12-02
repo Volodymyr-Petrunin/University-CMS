@@ -1,13 +1,17 @@
 package com.university.universitycms.controller.impl;
 
+import com.university.universitycms.domain.Course;
+import com.university.universitycms.domain.Role;
 import com.university.universitycms.domain.Teacher;
+import com.university.universitycms.domain.dto.TeacherDTO;
+import com.university.universitycms.service.CourseService;
 import com.university.universitycms.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.EnumSet;
 import java.util.List;
 
 @Controller
@@ -15,10 +19,14 @@ import java.util.List;
 public class TeacherController {
 
     private final TeacherService teacherService;
+    private final CourseService courseService;
+    private final EnumSet<Role> roles;
 
     @Autowired
-    public TeacherController(TeacherService teacherService) {
+    public TeacherController(TeacherService teacherService, CourseService courseService) {
         this.teacherService = teacherService;
+        this.courseService = courseService;
+        this.roles = EnumSet.of(Role.TEACHER, Role.ADMIN);
     }
 
     @GetMapping("/teachers")
@@ -27,5 +35,25 @@ public class TeacherController {
         model.addAttribute("teachers", teachers);
 
         return "teachers";
+    }
+
+    @GetMapping("/teachers/{id}")
+    public String openTeacherData(@PathVariable(value = "id") Long id, Model model){
+        Teacher teacher = teacherService.getTeacherById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Can't find teacher!"));
+
+        List<Course> courses = courseService.getAllCourses();
+
+        model.addAttribute("teacher", teacher);
+        model.addAttribute("courses", courses);
+        model.addAttribute("roles", roles);
+
+        return "show-teacher";
+    }
+
+    @PostMapping("/teachers/update")
+    public String updateTeacher(@ModelAttribute TeacherDTO teacherDTO, @RequestParam List<Long> coursesId){
+        teacherService.updateTeacher(teacherDTO, coursesId);
+        return "redirect:/admin/teachers";
     }
 }

@@ -1,6 +1,10 @@
 package com.university.universitycms.service;
 
+import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Teacher;
+import com.university.universitycms.domain.dto.TeacherDTO;
+import com.university.universitycms.domain.mapper.CourseMapper;
+import com.university.universitycms.domain.mapper.TeacherMapper;
 import com.university.universitycms.email.EmailSender;
 import com.university.universitycms.generation.impl.PasswordGeneration;
 import com.university.universitycms.generation.impl.TeacherGenerationData;
@@ -13,9 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.CharBuffer;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -25,15 +28,22 @@ public class TeacherService implements DataFiller {
     private final EmailSender emailSender;
     private final PasswordGeneration passwordGeneration;
     private final PasswordEncoder passwordEncoder;
+    private final CourseService courseService;
+    private final TeacherMapper teacherMapper;
+    private final CourseMapper courseMapper;
 
     @Autowired
     public TeacherService(TeacherRepository repository, TeacherGenerationData teacherGenerationData,
-                          EmailSender emailSender, PasswordGeneration passwordGeneration, PasswordEncoder passwordEncoder) {
+                          EmailSender emailSender, PasswordGeneration passwordGeneration, PasswordEncoder passwordEncoder,
+                          CourseService courseService, TeacherMapper teacherMapper, CourseMapper courseMapper) {
         this.repository = repository;
         this.teacherGenerationData = teacherGenerationData;
         this.emailSender = emailSender;
         this.passwordGeneration = passwordGeneration;
         this.passwordEncoder = passwordEncoder;
+        this.courseService = courseService;
+        this.teacherMapper = teacherMapper;
+        this.courseMapper = courseMapper;
     }
 
     public List<Teacher> getAllTeachers(){
@@ -57,8 +67,15 @@ public class TeacherService implements DataFiller {
        teachers.forEach(this::createTeacher);
     }
 
-    public void updateTeacher(Teacher teacher){
-        repository.save(teacher);
+    public void updateTeacher(TeacherDTO teacherDTO, List<Long> coursesId){
+        Set<Course> courses = coursesId.stream()
+                .map(id -> courseService.getCourseById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("Course with id: " + id + " not found")))
+                .collect(Collectors.toSet());
+
+        teacherDTO.setCourses(courses.stream().map(courseMapper::courseToCourseDTO).collect(Collectors.toSet()));
+
+        repository.save(teacherMapper.teacherDTOToTeacher(teacherDTO));
     }
 
     public void deleteTeacher(Teacher teacher){
