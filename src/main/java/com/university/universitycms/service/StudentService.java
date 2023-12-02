@@ -93,6 +93,10 @@ public class StudentService implements DataFiller {
         repository.delete(student);
     }
 
+    public void deleteStudentById(long id){
+        repository.deleteById(id);
+    }
+
     @Override
     public void fillData() {
         createSeveralStudents(studentGenerationData.generateData());

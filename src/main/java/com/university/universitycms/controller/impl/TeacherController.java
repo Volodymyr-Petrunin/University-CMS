@@ -51,8 +51,14 @@ public class TeacherController {
     }
 
     @PostMapping("/teachers/update")
-    public String updateTeacher(@ModelAttribute TeacherDTO teacherDTO, @RequestParam List<Long> coursesId){
+    public String updateTeacherData(@ModelAttribute TeacherDTO teacherDTO, @RequestParam List<Long> coursesId){
         teacherService.updateTeacher(teacherDTO, coursesId);
+        return "redirect:/admin/teachers";
+    }
+
+    @PostMapping("/teachers/delete")
+    public String deleteTeacher(@RequestParam long deleteId){
+        teacherService.deleteTeacherById(deleteId);
         return "redirect:/admin/teachers";
     }
 }

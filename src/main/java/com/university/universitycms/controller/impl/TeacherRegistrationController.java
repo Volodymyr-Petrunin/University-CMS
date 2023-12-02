@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.EnumSet;
 import java.util.List;
 
 @Controller
@@ -16,25 +17,27 @@ import java.util.List;
 public class TeacherRegistrationController {
     private final TeacherService teacherService;
     private final CourseService courseService;
+    private final EnumSet<Role> roles;
 
     @Autowired
     public TeacherRegistrationController(TeacherService teacherService, CourseService courseService) {
         this.teacherService = teacherService;
         this.courseService = courseService;
+        this.roles = EnumSet.of(Role.TEACHER, Role.ADMIN);
     }
 
     @GetMapping("/register/teacher")
-    public String registerUser(Model model){
+    public String registerTeacher(Model model){
         List<Course> courses = courseService.getAllCourses();
 
-        model.addAttribute("roles", Role.values());
+        model.addAttribute("roles", roles);
         model.addAttribute("courses", courses);
 
         return "register-teacher";
     }
 
     @PostMapping("/register/teacher")
-    public String registerUser(@ModelAttribute TeacherDTO teacherDTO, @RequestParam List<Long> coursesId){
+    public String registerTeacher(@ModelAttribute TeacherDTO teacherDTO, @RequestParam List<Long> coursesId){
         teacherService.registerTeacher(teacherDTO, coursesId);
         return "redirect:/";
     }

@@ -87,6 +87,10 @@ public class TeacherService implements DataFiller {
         repository.delete(teacher);
     }
 
+    public void deleteTeacherById(long id){
+        repository.deleteById(id);
+    }
+
     @Override
     public void fillData() {
         createSeveralTeachers(teacherGenerationData.generateData());

@@ -50,4 +50,10 @@ public class StudentController {
         studentService.updateStudent(studentDTO, groupId);
         return "redirect:/admin/students";
     }
+
+    @PostMapping("/students/delete")
+    public String deleteStudent(@RequestParam long deleteId){
+        studentService.deleteStudentById(deleteId);
+        return "redirect:/admin/students";
+    }
 }

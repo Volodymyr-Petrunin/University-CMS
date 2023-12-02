@@ -45,6 +45,12 @@
 
     <button type="submit" class="btn btn-primary mt-3">Update</button>
   </form>
+
+  <form th:action="@{/admin/teachers/delete}" th:object="${teacher}" method="post">
+    <input type="hidden" name="deleteId" th:value="${teacher.id}" />
+    <button type="submit" class="btn btn-danger mt-3">Delete</button>
+  </form>
+
 </div>
 </body>
 </html>
