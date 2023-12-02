@@ -67,11 +67,16 @@ public class TeacherService implements DataFiller {
        teachers.forEach(this::createTeacher);
     }
 
+    public void registerTeacher(TeacherDTO teacherDTO, List<Long> coursesId){
+        Set<Course> courses = findFewCourse(coursesId);
+
+        teacherDTO.setCourses(courses.stream().map(courseMapper::courseToCourseDTO).collect(Collectors.toSet()));
+
+        this.createTeacher(teacherMapper.teacherDTOToTeacher(teacherDTO));
+    }
+
     public void updateTeacher(TeacherDTO teacherDTO, List<Long> coursesId){
-        Set<Course> courses = coursesId.stream()
-                .map(id -> courseService.getCourseById(id)
-                        .orElseThrow(() -> new IllegalArgumentException("Course with id: " + id + " not found")))
-                .collect(Collectors.toSet());
+        Set<Course> courses = findFewCourse(coursesId);
 
         teacherDTO.setCourses(courses.stream().map(courseMapper::courseToCourseDTO).collect(Collectors.toSet()));
 
@@ -85,5 +90,12 @@ public class TeacherService implements DataFiller {
     @Override
     public void fillData() {
         createSeveralTeachers(teacherGenerationData.generateData());
+    }
+
+    private Set<Course> findFewCourse(List<Long> coursesId){
+        return coursesId.stream()
+                .map(id -> courseService.getCourseById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("Course with id: " + id + " not found")))
+                .collect(Collectors.toSet());
     }
 }

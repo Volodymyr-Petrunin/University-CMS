@@ -33,7 +33,7 @@ public class StudentController {
     }
 
     @GetMapping("/students/{id}")
-    public String openStudentData(@PathVariable(value = "id") Long id, Model model){
+    public String openStudentData(@PathVariable(value = "id") long id, Model model){
         Student student = studentService.getStudentById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Can't find student!"));
 

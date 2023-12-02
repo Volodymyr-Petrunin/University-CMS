@@ -1,6 +1,7 @@
 package com.university.universitycms.service;
 
 import com.university.universitycms.domain.Group;
+import com.university.universitycms.domain.Role;
 import com.university.universitycms.domain.Student;
 import com.university.universitycms.domain.dto.StudentDTO;
 import com.university.universitycms.domain.mapper.GroupMapper;
@@ -66,6 +67,16 @@ public class StudentService implements DataFiller {
 
     public void createSeveralStudents(List<Student> students){
         students.forEach(this::createStudent);
+    }
+
+    public void registerStudent(StudentDTO studentDTO, long groupId){
+        Group group = groupService.getGroupById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("Group not found with id " + groupId));
+
+        studentDTO.setGroup(groupMapper.groupToGroupDTO(group));
+        studentDTO.setRole(Role.STUDENT);
+
+        this.createStudent(studentMapper.studentDTOToStudent(studentDTO));
     }
 
     public void updateStudent(StudentDTO studentDTO, long groupId){

@@ -54,7 +54,11 @@
                     </li>
 
                     <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                        <a href="/admin/register" class="nav-link">Register new User</a>
+                        <a href="/admin/register/teacher" class="nav-link">Register new Teacher or Admin</a>
+                    </li>
+
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                        <a href="/admin/register/student" class="nav-link">Register new Student</a>
                     </li>
 
                 </ul>

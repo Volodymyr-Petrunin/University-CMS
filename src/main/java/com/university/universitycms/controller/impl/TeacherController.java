@@ -17,7 +17,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin")
 public class TeacherController {
-
     private final TeacherService teacherService;
     private final CourseService courseService;
     private final EnumSet<Role> roles;
@@ -38,7 +37,7 @@ public class TeacherController {
     }
 
     @GetMapping("/teachers/{id}")
-    public String openTeacherData(@PathVariable(value = "id") Long id, Model model){
+    public String openTeacherData(@PathVariable(value = "id") long id, Model model){
         Teacher teacher = teacherService.getTeacherById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Can't find teacher!"));
 
