@@ -8,5 +8,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class StudentDTO extends UserDTO{
-    private GroupDTO group;
+    private Long groupId;
 }

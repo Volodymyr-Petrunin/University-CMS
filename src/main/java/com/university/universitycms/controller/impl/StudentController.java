@@ -46,8 +46,8 @@ public class StudentController {
     }
 
     @PostMapping("/students/update")
-    public String updateStudentData(@ModelAttribute StudentDTO studentDTO, @RequestParam long groupId){
-        studentService.updateStudent(studentDTO, groupId);
+    public String updateStudentData(@ModelAttribute StudentDTO studentDTO){
+        studentService.updateStudent(studentDTO);
         return "redirect:/admin/students";
     }
 

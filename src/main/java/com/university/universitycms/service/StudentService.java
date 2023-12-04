@@ -4,7 +4,6 @@ import com.university.universitycms.domain.Group;
 import com.university.universitycms.domain.Role;
 import com.university.universitycms.domain.Student;
 import com.university.universitycms.domain.dto.StudentDTO;
-import com.university.universitycms.domain.mapper.GroupMapper;
 import com.university.universitycms.domain.mapper.StudentMapper;
 import com.university.universitycms.email.EmailSender;
 import com.university.universitycms.generation.impl.PasswordGeneration;
@@ -32,12 +31,11 @@ public class StudentService implements DataFiller {
     private final PasswordEncoder passwordEncoder;
     private final StudentMapper studentMapper;
     private final GroupService groupService;
-    private final GroupMapper groupMapper;
 
     @Autowired
     public StudentService(StudentRepository repository, StudentGenerationData studentGenerationData, EmailSender emailSender,
                           PasswordGeneration passwordGeneration, PasswordEncoder passwordEncoder, StudentMapper studentMapper,
-                          GroupService groupService, GroupMapper groupMapper) {
+                          GroupService groupService) {
         this.repository = repository;
         this.studentGenerationData = studentGenerationData;
         this.emailSender = emailSender;
@@ -45,7 +43,6 @@ public class StudentService implements DataFiller {
         this.passwordEncoder = passwordEncoder;
         this.studentMapper = studentMapper;
         this.groupService = groupService;
-        this.groupMapper = groupMapper;
     }
 
     public List<Student> getAllStudents(){
@@ -69,22 +66,18 @@ public class StudentService implements DataFiller {
         students.forEach(this::createStudent);
     }
 
-    public void registerStudent(StudentDTO studentDTO, long groupId){
-        Group group = groupService.getGroupById(groupId)
-                .orElseThrow(() -> new IllegalArgumentException("Group not found with id " + groupId));
-
-        studentDTO.setGroup(groupMapper.groupToGroupDTO(group));
+    public void registerStudent(StudentDTO studentDTO){
         studentDTO.setRole(Role.STUDENT);
 
-        this.createStudent(studentMapper.studentDTOToStudent(studentDTO));
+        Student student = studentMapper.studentDTOToStudent(studentDTO);
+        student.setGroup(findGroupById(studentDTO.getGroupId()));
+
+        this.createStudent(student);
     }
 
-    public void updateStudent(StudentDTO studentDTO, long groupId){
-        Group group = groupService.getGroupById(groupId)
-                .orElseThrow(() -> new IllegalArgumentException("Can't find group!"));
-
-        studentDTO.setGroup(groupMapper.groupToGroupDTO(group));
+    public void updateStudent(StudentDTO studentDTO){
         Student student = studentMapper.studentDTOToStudent(studentDTO);
+        student.setGroup(findGroupById(studentDTO.getGroupId()));
 
         repository.save(student);
     }
@@ -100,5 +93,10 @@ public class StudentService implements DataFiller {
     @Override
     public void fillData() {
         createSeveralStudents(studentGenerationData.generateData());
+    }
+
+    private Group findGroupById(long id){
+        return groupService.getGroupById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Group not found with id " + id));
     }
 }

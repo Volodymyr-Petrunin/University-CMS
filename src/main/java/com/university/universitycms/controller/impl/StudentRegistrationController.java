@@ -36,8 +36,8 @@ public class StudentRegistrationController {
     }
 
     @PostMapping("/register/student")
-    public String registerStudent(@ModelAttribute StudentDTO studentDTO, long groupId){
-        studentService.registerStudent(studentDTO, groupId);
+    public String registerStudent(@ModelAttribute StudentDTO studentDTO){
+        studentService.registerStudent(studentDTO);
         return "redirect:/";
     }
 }
