@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -46,6 +47,10 @@ public class CourseService implements DataFiller {
 
     public void deleteCourse(Course course){
         repository.delete(course);
+    }
+
+    public Set<Course> getSeveralCoursesBySeveralId(List<Long> coursesId){
+        return repository.findAllByIdIn(coursesId);
     }
 
     @Override

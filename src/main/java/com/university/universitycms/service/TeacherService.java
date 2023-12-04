@@ -3,7 +3,6 @@ package com.university.universitycms.service;
 import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Teacher;
 import com.university.universitycms.domain.dto.TeacherDTO;
-import com.university.universitycms.domain.mapper.CourseMapper;
 import com.university.universitycms.domain.mapper.TeacherMapper;
 import com.university.universitycms.email.EmailSender;
 import com.university.universitycms.generation.impl.PasswordGeneration;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.nio.CharBuffer;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -30,12 +28,11 @@ public class TeacherService implements DataFiller {
     private final PasswordEncoder passwordEncoder;
     private final CourseService courseService;
     private final TeacherMapper teacherMapper;
-    private final CourseMapper courseMapper;
 
     @Autowired
     public TeacherService(TeacherRepository repository, TeacherGenerationData teacherGenerationData,
                           EmailSender emailSender, PasswordGeneration passwordGeneration, PasswordEncoder passwordEncoder,
-                          CourseService courseService, TeacherMapper teacherMapper, CourseMapper courseMapper) {
+                          CourseService courseService, TeacherMapper teacherMapper) {
         this.repository = repository;
         this.teacherGenerationData = teacherGenerationData;
         this.emailSender = emailSender;
@@ -43,7 +40,6 @@ public class TeacherService implements DataFiller {
         this.passwordEncoder = passwordEncoder;
         this.courseService = courseService;
         this.teacherMapper = teacherMapper;
-        this.courseMapper = courseMapper;
     }
 
     public List<Teacher> getAllTeachers(){
@@ -67,20 +63,22 @@ public class TeacherService implements DataFiller {
        teachers.forEach(this::createTeacher);
     }
 
-    public void registerTeacher(TeacherDTO teacherDTO, List<Long> coursesId){
-        Set<Course> courses = findFewCourse(coursesId);
+    public void registerTeacher(TeacherDTO teacherDTO){
+        Set<Course> courses = findFewCourse(teacherDTO.getCoursesId());
 
-        teacherDTO.setCourses(courses.stream().map(courseMapper::courseToCourseDTO).collect(Collectors.toSet()));
+        Teacher teacher = teacherMapper.teacherDTOToTeacher(teacherDTO);
+        teacher.setCourses(courses);
 
-        this.createTeacher(teacherMapper.teacherDTOToTeacher(teacherDTO));
+        this.createTeacher(teacher);
     }
 
-    public void updateTeacher(TeacherDTO teacherDTO, List<Long> coursesId){
-        Set<Course> courses = findFewCourse(coursesId);
+    public void updateTeacher(TeacherDTO teacherDTO){
+        Set<Course> courses = findFewCourse(teacherDTO.getCoursesId());
 
-        teacherDTO.setCourses(courses.stream().map(courseMapper::courseToCourseDTO).collect(Collectors.toSet()));
+        Teacher teacher = teacherMapper.teacherDTOToTeacher(teacherDTO);
+        teacher.setCourses(courses);
 
-        repository.save(teacherMapper.teacherDTOToTeacher(teacherDTO));
+        repository.save(teacher);
     }
 
     public void deleteTeacher(Teacher teacher){
@@ -97,9 +95,6 @@ public class TeacherService implements DataFiller {
     }
 
     private Set<Course> findFewCourse(List<Long> coursesId){
-        return coursesId.stream()
-                .map(id -> courseService.getCourseById(id)
-                        .orElseThrow(() -> new IllegalArgumentException("Course with id: " + id + " not found")))
-                .collect(Collectors.toSet());
+        return courseService.getSeveralCoursesBySeveralId(coursesId);
     }
 }

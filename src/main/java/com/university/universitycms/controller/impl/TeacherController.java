@@ -51,8 +51,8 @@ public class TeacherController {
     }
 
     @PostMapping("/teachers/update")
-    public String updateTeacherData(@ModelAttribute TeacherDTO teacherDTO, @RequestParam List<Long> coursesId){
-        teacherService.updateTeacher(teacherDTO, coursesId);
+    public String updateTeacherData(@ModelAttribute TeacherDTO teacherDTO){
+        teacherService.updateTeacher(teacherDTO);
         return "redirect:/admin/teachers";
     }
 

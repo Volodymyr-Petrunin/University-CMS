@@ -4,11 +4,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class TeacherDTO extends UserDTO {
-    private Set<CourseDTO> courses;
+    private List<Long> coursesId;
 }

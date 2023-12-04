@@ -37,8 +37,8 @@ public class TeacherRegistrationController {
     }
 
     @PostMapping("/register/teacher")
-    public String registerTeacher(@ModelAttribute TeacherDTO teacherDTO, @RequestParam List<Long> coursesId){
-        teacherService.registerTeacher(teacherDTO, coursesId);
+    public String registerTeacher(@ModelAttribute TeacherDTO teacherDTO){
+        teacherService.registerTeacher(teacherDTO);
         return "redirect:/";
     }
 }
