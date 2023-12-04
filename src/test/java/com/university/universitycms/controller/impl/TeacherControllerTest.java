@@ -3,6 +3,7 @@ package com.university.universitycms.controller.impl;
 import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Role;
 import com.university.universitycms.domain.Teacher;
+import com.university.universitycms.service.CourseService;
 import com.university.universitycms.service.TeacherService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ class TeacherControllerTest {
 
     @MockBean
     private TeacherService teacherService;
+    @MockBean
+    private CourseService courseService;
 
     private final Set<Course> expectedCourse = Set.of(
             new Course(1L, "IT"),
@@ -49,7 +52,7 @@ class TeacherControllerTest {
         String attributeName = "teachers";
         String viewName = "teachers";
 
-        mockMvc.perform(get(urlTemplate).with(user("user").password("password")))
+        mockMvc.perform(get("/admin" + urlTemplate).with(user("user").password("password")))
                 .andDo(print())
                 .andExpect(model().attributeExists(attributeName))
                 .andExpect(model().attribute(attributeName, expectedTeachers))

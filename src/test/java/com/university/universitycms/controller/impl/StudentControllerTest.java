@@ -1,7 +1,8 @@
-package com.university.universitycms.controller.test;
+package com.university.universitycms.controller.impl;
 
 import com.university.universitycms.controller.impl.StudentController;
 import com.university.universitycms.domain.*;
+import com.university.universitycms.service.GroupService;
 import com.university.universitycms.service.StudentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ class StudentControllerTest {
 
     @MockBean
     private StudentService studentService;
+    @MockBean
+    private GroupService groupService;
 
     private final Group expectedGroup = new Group(1L, "A12");
 
@@ -42,7 +45,7 @@ class StudentControllerTest {
         String attributeName = "students";
         String viewName = "students";
 
-        mockMvc.perform(get(urlTemplate).with(user("user").password("password")))
+        mockMvc.perform(get("/admin" + urlTemplate).with(user("user").password("password")))
                 .andDo(print())
                 .andExpect(model().attributeExists(attributeName))
                 .andExpect(model().attribute(attributeName, expectedStudents))
