@@ -15,7 +15,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/teachers")
 public class TeacherController {
     private final TeacherService teacherService;
     private final CourseService courseService;
@@ -28,7 +28,7 @@ public class TeacherController {
         this.roles = EnumSet.of(Role.TEACHER, Role.ADMIN);
     }
 
-    @GetMapping("/teachers")
+    @GetMapping("/all")
     public String teachers(Model model){
         List<Teacher> teachers = teacherService.getAllTeachers();
         model.addAttribute("teachers", teachers);
@@ -36,7 +36,7 @@ public class TeacherController {
         return "teachers";
     }
 
-    @GetMapping("/teachers/{id}")
+    @GetMapping("/show/{id}")
     public String openTeacherData(@PathVariable(value = "id") long id, Model model){
         Teacher teacher = teacherService.getTeacherById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Can't find teacher!"));
@@ -50,15 +50,31 @@ public class TeacherController {
         return "show-teacher";
     }
 
-    @PostMapping("/teachers/update")
-    public String updateTeacherData(@ModelAttribute TeacherDTO teacherDTO){
-        teacherService.updateTeacher(teacherDTO);
-        return "redirect:/admin/teachers";
+    @GetMapping("/register")
+    public String registerTeacher(Model model){
+        List<Course> courses = courseService.getAllCourses();
+
+        model.addAttribute("roles", roles);
+        model.addAttribute("courses", courses);
+
+        return "register-teacher";
     }
 
-    @PostMapping("/teachers/delete")
+    @PostMapping("/register")
+    public String registerTeacher(@ModelAttribute TeacherDTO teacherDTO){
+        teacherService.registerTeacher(teacherDTO);
+        return "redirect:/";
+    }
+
+    @PostMapping("/update")
+    public String updateTeacherData(@ModelAttribute TeacherDTO teacherDTO){
+        teacherService.updateTeacher(teacherDTO);
+        return "redirect:/teachers/all";
+    }
+
+    @PostMapping("/delete")
     public String deleteTeacher(@RequestParam long deleteId){
         teacherService.deleteTeacherById(deleteId);
-        return "redirect:/admin/teachers";
+        return "redirect:/teachers/all";
     }
 }

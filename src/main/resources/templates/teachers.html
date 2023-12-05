@@ -21,7 +21,7 @@
         </thead>
         <tbody>
             <tr th:each="teacher : ${teachers}">
-                <td><a th:href="@{'/admin/teachers/' + ${teacher.getId()}}" th:text="${teacher.getId()}"></a></td>
+                <td><a th:href="@{'/teachers/show/' + ${teacher.getId()}}" th:text="${teacher.getId()}"></a></td>
                 <td th:text="${teacher.getName()}"></td>
                 <td th:text="${teacher.getSurname()}"></td>
                 <td th:text="${teacher.getCourses()}"></td>

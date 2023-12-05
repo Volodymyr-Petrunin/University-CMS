@@ -7,6 +7,7 @@ import com.university.universitycms.domain.mapper.TeacherMapper;
 import com.university.universitycms.email.EmailSender;
 import com.university.universitycms.generation.impl.PasswordGeneration;
 import com.university.universitycms.generation.impl.TeacherGenerationData;
+import com.university.universitycms.repository.CourseRepository;
 import com.university.universitycms.repository.TeacherRepository;
 import com.university.universitycms.filldata.DataFiller;
 import jakarta.transaction.Transactional;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.CharBuffer;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -26,19 +28,19 @@ public class TeacherService implements DataFiller {
     private final EmailSender emailSender;
     private final PasswordGeneration passwordGeneration;
     private final PasswordEncoder passwordEncoder;
-    private final CourseService courseService;
+    private final CourseRepository courseRepository;
     private final TeacherMapper teacherMapper;
 
     @Autowired
     public TeacherService(TeacherRepository repository, TeacherGenerationData teacherGenerationData,
                           EmailSender emailSender, PasswordGeneration passwordGeneration, PasswordEncoder passwordEncoder,
-                          CourseService courseService, TeacherMapper teacherMapper) {
+                          CourseRepository courseRepository, TeacherMapper teacherMapper) {
         this.repository = repository;
         this.teacherGenerationData = teacherGenerationData;
         this.emailSender = emailSender;
         this.passwordGeneration = passwordGeneration;
         this.passwordEncoder = passwordEncoder;
-        this.courseService = courseService;
+        this.courseRepository = courseRepository;
         this.teacherMapper = teacherMapper;
     }
 
@@ -95,6 +97,18 @@ public class TeacherService implements DataFiller {
     }
 
     private Set<Course> findFewCourse(List<Long> coursesId){
-        return courseService.getSeveralCoursesBySeveralId(coursesId);
+        Set<Course> courses = courseRepository.findAllByIdIn(coursesId);
+
+        if (courses.size() != coursesId.size()){
+            List<Long> foundIds = courses.stream().map(Course::getId).toList();
+
+            List<Long> notFoundIds = coursesId.stream()
+                    .filter(courseId -> !foundIds.contains(courseId))
+                    .toList();
+
+            throw new IllegalArgumentException("Courses with ids: " + notFoundIds + " not found");
+        }
+
+        return courses;
     }
 }

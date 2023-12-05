@@ -64,11 +64,11 @@ class TeacherControllerTest {
     void testTeachers_ShouldRenderTeachers() throws Exception {
         when(teacherService.getAllTeachers()).thenReturn(expectedTeachers);
 
-        String urlTemplate = "/teachers";
+        String urlTemplate = "/teachers/all";
         String attributeName = "teachers";
         String viewName = "teachers";
 
-        mockMvc.perform(get("/admin" + urlTemplate))
+        mockMvc.perform(get(urlTemplate))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists(attributeName))
@@ -84,12 +84,12 @@ class TeacherControllerTest {
         when(teacherService.getTeacherById(anyLong())).thenReturn(Optional.of(expectedTeachers.get(0)));
         when(courseService.getAllCourses()).thenReturn(expectedCourse.stream().toList());
 
-        String urlTemplate = "/teachers/1";
+        String urlTemplate = "/teachers/show/1";
         String teacherAttributeName = "teacher";
         String courseAttributeName = "courses";
         String viewName = "show-teacher";
 
-        mockMvc.perform(get("/admin" + urlTemplate))
+        mockMvc.perform(get(urlTemplate))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists(teacherAttributeName))
@@ -106,9 +106,9 @@ class TeacherControllerTest {
     void testUpdateTeacher_ShouldRedirectToAdminTeachers_AndCallUpdateTeacher() throws Exception {
         String urlTemplate = "/teachers/update";
         String attributeName = "teacherDTO";
-        String redirectUrl = "/admin/teachers";
+        String redirectUrl = "/teachers/all";
 
-        mockMvc.perform(post("/admin" + urlTemplate)
+        mockMvc.perform(post(urlTemplate)
                 .flashAttr(attributeName, expectedTeacherDTO)
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
@@ -122,9 +122,9 @@ class TeacherControllerTest {
     void testDeleteTeacher_ShouldRedirectToAdminTeachers_AndCallDeleteTeacherById() throws Exception {
         String urlTemplate = "/teachers/delete";
         String attributeName = "deleteId";
-        String redirectUrl = "/admin/teachers";
+        String redirectUrl = "/teachers/all";
 
-        mockMvc.perform(post("/admin" + urlTemplate)
+        mockMvc.perform(post(urlTemplate)
                         .param(attributeName, String.valueOf(expectedTeacherDTO.getId()))
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
@@ -134,9 +134,16 @@ class TeacherControllerTest {
     }
 
     @Test
-    @WithMockUser("STUDENT")
+    @WithMockUser(roles = "STUDENT")
     void forbidRequestToAdmin_withStudentRole() throws Exception {
-        mockMvc.perform(get("/admin/teachers/1"))
+        mockMvc.perform(get("/teachers/show/1"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "TEACHER")
+    void forbidRequestToAdmin_withTeacherRole() throws Exception {
+        mockMvc.perform(get("/teachers/show/1"))
                 .andExpect(status().isForbidden());
     }
 }

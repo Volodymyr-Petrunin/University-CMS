@@ -49,10 +49,6 @@ public class CourseService implements DataFiller {
         repository.delete(course);
     }
 
-    public Set<Course> getSeveralCoursesBySeveralId(List<Long> coursesId){
-        return repository.findAllByIdIn(coursesId);
-    }
-
     @Override
     public void fillData() {
         createSeveralCourses(courseGenerationData.generateData());
