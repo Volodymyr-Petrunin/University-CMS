@@ -9,7 +9,7 @@
 
 <div class="container text-white">
     <h2>Update Student</h2>
-    <form th:action="@{/admin/students/update}" th:object="${student}" method="post">
+    <form th:action="@{/students/update}" th:object="${student}" method="post">
 
         <input type="hidden" th:field="*{id}"/>
         <input type="hidden" th:field="*{role}">
@@ -40,7 +40,7 @@
         <button type="submit" class="btn btn-primary mt-3">Update</button>
     </form>
 
-    <form th:action="@{/admin/students/delete}" th:object="${student}" method="post">
+    <form th:action="@{/students/delete}" th:object="${student}" method="post">
         <input type="hidden" name="deleteId" th:value="${student.id}" />
         <button type="submit" class="btn btn-danger mt-3">Delete</button>
     </form>

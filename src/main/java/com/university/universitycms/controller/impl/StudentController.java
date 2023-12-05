@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/students")
 public class StudentController {
     private final StudentService studentService;
     private final GroupService groupService;
@@ -24,7 +24,7 @@ public class StudentController {
         this.groupService = groupService;
     }
 
-    @GetMapping("/students")
+    @GetMapping("/all")
     public String students(Model model){
         List<Student> students = studentService.getAllStudents();
         model.addAttribute("students", students);
@@ -32,7 +32,7 @@ public class StudentController {
         return "students";
     }
 
-    @GetMapping("/students/{id}")
+    @GetMapping("/show/{id}")
     public String openStudentData(@PathVariable(value = "id") long id, Model model){
         Student student = studentService.getStudentById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Can't find student!"));
@@ -45,15 +45,30 @@ public class StudentController {
         return "show-student";
     }
 
-    @PostMapping("/students/update")
-    public String updateStudentData(@ModelAttribute StudentDTO studentDTO){
-        studentService.updateStudent(studentDTO);
-        return "redirect:/admin/students";
+    @GetMapping("/register")
+    public String registerStudent(Model model){
+        List<Group> groups = groupService.getAllGroups();
+
+        model.addAttribute("groups", groups);
+
+        return "register-student";
     }
 
-    @PostMapping("/students/delete")
+    @PostMapping("/register")
+    public String registerStudent(@ModelAttribute StudentDTO studentDTO){
+        studentService.registerStudent(studentDTO);
+        return "redirect:/";
+    }
+
+    @PostMapping("/update")
+    public String updateStudentData(@ModelAttribute StudentDTO studentDTO){
+        studentService.updateStudent(studentDTO);
+        return "redirect:/students/all";
+    }
+
+    @PostMapping("/delete")
     public String deleteStudent(@RequestParam long deleteId){
         studentService.deleteStudentById(deleteId);
-        return "redirect:/admin/students";
+        return "redirect:/students/all";
     }
 }
