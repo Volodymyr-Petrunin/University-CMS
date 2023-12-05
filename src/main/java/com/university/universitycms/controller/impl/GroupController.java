@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/groups")
 public class GroupController {
     private final GroupService groupService;
 
@@ -20,7 +20,7 @@ public class GroupController {
         this.groupService = groupService;
     }
 
-    @GetMapping("/groups")
+    @GetMapping("/all")
     public String groups(Model model){
         List<Group> groups = groupService.getAllGroups();
         model.addAttribute("groups", groups);

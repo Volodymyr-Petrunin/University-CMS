@@ -22,15 +22,15 @@
                     </li>
 
                     <li class="nav-item" sec:authorize="isAuthenticated()">
-                        <a href="/user/one-day-schedule" class="nav-link">One day schedule</a>
+                        <a href="/schedule/one-day-schedule" class="nav-link">One day schedule</a>
                     </li>
 
                     <li class="nav-item" sec:authorize="isAuthenticated()">
-                        <a href="/user/week-schedule" class="nav-link">Week schedule</a>
+                        <a href="/schedule/week-schedule" class="nav-link">Week schedule</a>
                     </li>
 
                     <li class="nav-item" sec:authorize="isAuthenticated()">
-                        <a href="/user/month-schedule" class="nav-link">Month schedule</a>
+                        <a href="/schedule/month-schedule" class="nav-link">Month schedule</a>
                     </li>
 
                     <li class="nav-item" sec:authorize="hasRole('ADMIN')">
@@ -42,15 +42,15 @@
                     </li>
 
                     <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                        <a href="/admin/courses" class="nav-link">Courses</a>
+                        <a href="/courses/all" class="nav-link">Courses</a>
                     </li>
 
                     <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                        <a href="/admin/groups" class="nav-link">Groups</a>
+                        <a href="/groups/all" class="nav-link">Groups</a>
                     </li>
 
                     <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                        <a href="/admin/departments" class="nav-link">Departments</a>
+                        <a href="/departments/all" class="nav-link">Departments</a>
                     </li>
 
                     <li class="nav-item" sec:authorize="hasRole('ADMIN')">

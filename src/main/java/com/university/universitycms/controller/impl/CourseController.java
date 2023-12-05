@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/courses")
 public class CourseController {
     private final CourseService courseService;
 
@@ -20,7 +20,7 @@ public class CourseController {
         this.courseService = courseService;
     }
 
-    @GetMapping("/courses")
+    @GetMapping("/all")
     public String courses(Model model){
         List<Course> courses = courseService.getAllCourses();
         model.addAttribute("courses", courses);

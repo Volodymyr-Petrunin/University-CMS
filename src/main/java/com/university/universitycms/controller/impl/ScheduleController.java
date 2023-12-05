@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/schedule")
 public class ScheduleController {
     private final LessonService lessonService;
 
