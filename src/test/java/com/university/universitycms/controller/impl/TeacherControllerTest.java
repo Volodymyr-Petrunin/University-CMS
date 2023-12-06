@@ -103,7 +103,7 @@ class TeacherControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void testUpdateTeacher_ShouldRedirectToAdminTeachers_AndCallUpdateTeacher() throws Exception {
+    void testUpdateTeacher_ShouldRedirectToTeachersAll_AndCallUpdateTeacher() throws Exception {
         String urlTemplate = "/teachers/update";
         String attributeName = "teacherDTO";
         String redirectUrl = "/teachers/all";
@@ -119,18 +119,20 @@ class TeacherControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void testDeleteTeacher_ShouldRedirectToAdminTeachers_AndCallDeleteTeacherById() throws Exception {
+    void testDeleteTeacher_ShouldRedirectToTeachersAll_AndCallDeleteTeacherById() throws Exception {
         String urlTemplate = "/teachers/delete";
         String attributeName = "deleteId";
         String redirectUrl = "/teachers/all";
 
+        long id = expectedTeacherDTO.getId();
+
         mockMvc.perform(post(urlTemplate)
-                        .param(attributeName, String.valueOf(expectedTeacherDTO.getId()))
+                        .param(attributeName, String.valueOf(id))
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(redirectUrl));
 
-        verify(teacherService, times(1)).deleteTeacherById(expectedTeacherDTO.getId());
+        verify(teacherService, times(1)).deleteTeacherById(id);
     }
 
     @Test
@@ -143,7 +145,14 @@ class TeacherControllerTest {
     @Test
     @WithMockUser(roles = "TEACHER")
     void forbidRequestToAdmin_withTeacherRole() throws Exception {
-        mockMvc.perform(get("/teachers/show/1"))
+        mockMvc.perform(get("/teachers/all"))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void expectOkRequestToAdmin_withAdminRole() throws Exception {
+        mockMvc.perform(get("/teachers/all"))
+                .andExpect(status().isOk());
     }
 }
