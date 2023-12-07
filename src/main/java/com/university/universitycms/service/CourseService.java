@@ -29,8 +29,9 @@ public class CourseService implements DataFiller {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
-    public Optional<Course> getCourseById(long courseId){
-        return repository.findById(courseId);
+    public Course getCourseById(long courseId){
+        return repository.findById(courseId)
+                .orElseThrow(() -> new IllegalArgumentException("Cant find course with id: " + courseId));
     }
 
     public void createCourse(Course course){
@@ -41,12 +42,20 @@ public class CourseService implements DataFiller {
         repository.saveAll(courses);
     }
 
+    public void registerCourse(String courseName){
+        this.createCourse(new Course(null, courseName));
+    }
+
     public void updateCourse(Course course){
         repository.save(course);
     }
 
     public void deleteCourse(Course course){
         repository.delete(course);
+    }
+
+    public void deleteCourseById(long id){
+        repository.deleteById(id);
     }
 
     @Override
