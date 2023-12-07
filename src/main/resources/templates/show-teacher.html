@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Teacher</title>
+</head>
+<body style="background-color: #252d36;">
+<div th:replace="~{layouts/header :: header}"></div>
+
+<div class="container text-white">
+  <h2>Update Student</h2>
+  <form th:action="@{/teachers/update}" th:object="${teacher}" method="post">
+
+    <input type="hidden" th:field="*{id}"/>
+    <input type="hidden" th:field="*{password}">
+
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" class="form-control" id="name" th:field="*{name}"/>
+    </div>
+
+    <div class="form-group">
+      <label for="surname">Surname:</label>
+      <input type="text" class="form-control" id="surname" th:field="*{surname}"/>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="text" class="form-control" id="email" th:field="*{email}"/>
+    </div>
+
+    <div class="form-group">
+      <label for="role">Role:</label>
+      <select class="form-control" id="role" name="role">
+        <option th:each="role : ${roles}" th:value="${role}" th:text="${role}" th:field="*{role}"></option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="coursesId">Courses:</label>
+      <select multiple class="form-select form-select-lg mb-3" aria-label="Large select example" id="coursesId" name="coursesId">
+        <option th:each="course : ${courses}" th:value="${course.getId()}" th:text="${course.getName()}" th:field="*{courses}"></option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Update</button>
+  </form>
+
+  <form th:action="@{/teachers/delete}" th:object="${teacher}" method="post">
+    <input type="hidden" name="deleteId" th:value="${teacher.id}" />
+    <button type="submit" class="btn btn-danger mt-3">Delete</button>
+  </form>
+
+</div>
+</body>
+</html>

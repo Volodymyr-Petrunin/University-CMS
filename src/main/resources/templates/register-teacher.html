@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration user</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+</head>
+<body style="background-color: #252d36;">
+  <div th:replace="~{layouts/header :: header}"></div>
+
+  <div class="container text-white">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+          <h1 class="mt-5">Register Teacher</h1>
+
+        <form th:action="@{/teachers/register}" method="post">
+
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="surname">Surname</label>
+            <input type="text" id="surname" name="surname" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="role">Role</label>
+            <select class="form-control" id="role" name="role">
+              <option th:each="role : ${roles}" th:value="${role.name()}" th:text="${role.name}"></option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="coursesId">Courses:</label>
+            <select multiple class="form-select form-select-lg mb-3" aria-label="Large select example" id="coursesId" name="coursesId">
+              <option value="" th:text="${'-----'}"></option>
+              <option th:each="course : ${courses}" th:value="${course.getId()}" th:text="${course.getName()}"></option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-primary mt-3">Register</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

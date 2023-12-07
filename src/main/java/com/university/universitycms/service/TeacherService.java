@@ -1,9 +1,13 @@
 package com.university.universitycms.service;
 
+import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Teacher;
+import com.university.universitycms.domain.dto.TeacherDTO;
+import com.university.universitycms.domain.mapper.TeacherMapper;
 import com.university.universitycms.email.EmailSender;
 import com.university.universitycms.generation.impl.PasswordGeneration;
 import com.university.universitycms.generation.impl.TeacherGenerationData;
+import com.university.universitycms.repository.CourseRepository;
 import com.university.universitycms.repository.TeacherRepository;
 import com.university.universitycms.filldata.DataFiller;
 import jakarta.transaction.Transactional;
@@ -13,9 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.CharBuffer;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -25,15 +28,20 @@ public class TeacherService implements DataFiller {
     private final EmailSender emailSender;
     private final PasswordGeneration passwordGeneration;
     private final PasswordEncoder passwordEncoder;
+    private final CourseRepository courseRepository;
+    private final TeacherMapper teacherMapper;
 
     @Autowired
     public TeacherService(TeacherRepository repository, TeacherGenerationData teacherGenerationData,
-                          EmailSender emailSender, PasswordGeneration passwordGeneration, PasswordEncoder passwordEncoder) {
+                          EmailSender emailSender, PasswordGeneration passwordGeneration, PasswordEncoder passwordEncoder,
+                          CourseRepository courseRepository, TeacherMapper teacherMapper) {
         this.repository = repository;
         this.teacherGenerationData = teacherGenerationData;
         this.emailSender = emailSender;
         this.passwordGeneration = passwordGeneration;
         this.passwordEncoder = passwordEncoder;
+        this.courseRepository = courseRepository;
+        this.teacherMapper = teacherMapper;
     }
 
     public List<Teacher> getAllTeachers(){
@@ -54,17 +62,24 @@ public class TeacherService implements DataFiller {
     }
 
     public void createSeveralTeachers(List<Teacher> teachers){
-        for (Teacher teacher : teachers){
-            char[] password = passwordGeneration.generatePassword();
-            teacher.setPassword(passwordEncoder.encode(CharBuffer.wrap(password)));
-
-            emailSender.sendRegistrationConfirmation(teacher.getName(), teacher.getEmail(), password);
-            Arrays.fill(password, '\0');
-        }
-        repository.saveAll(teachers);
+       teachers.forEach(this::createTeacher);
     }
 
-    public void updateTeacher(Teacher teacher){
+    public void registerTeacher(TeacherDTO teacherDTO){
+        Set<Course> courses = findFewCourse(teacherDTO.getCoursesId());
+
+        Teacher teacher = teacherMapper.teacherDTOToTeacher(teacherDTO);
+        teacher.setCourses(courses);
+
+        this.createTeacher(teacher);
+    }
+
+    public void updateTeacher(TeacherDTO teacherDTO){
+        Set<Course> courses = findFewCourse(teacherDTO.getCoursesId());
+
+        Teacher teacher = teacherMapper.teacherDTOToTeacher(teacherDTO);
+        teacher.setCourses(courses);
+
         repository.save(teacher);
     }
 
@@ -72,8 +87,26 @@ public class TeacherService implements DataFiller {
         repository.delete(teacher);
     }
 
+    public void deleteTeacherById(long id){
+        repository.deleteById(id);
+    }
+
     @Override
     public void fillData() {
         createSeveralTeachers(teacherGenerationData.generateData());
+    }
+
+    private Set<Course> findFewCourse(List<Long> coursesId){
+        Set<Course> courses = courseRepository.findAllByIdIn(coursesId);
+        Set<Long> foundIds = courses.stream().map(Course::getId).collect(Collectors.toSet());
+
+        if (foundIds.size() != coursesId.size()){
+            Set<Long> notFoundIds = new HashSet<>(coursesId);
+            notFoundIds.removeAll(foundIds);
+
+            throw new IllegalArgumentException("Courses with ids: " + notFoundIds + " not found");
+        }
+
+        return courses;
     }
 }

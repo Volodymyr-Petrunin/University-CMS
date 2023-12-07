@@ -1,5 +1,6 @@
 package com.university.universitycms.security;
 
+import com.university.universitycms.domain.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -15,7 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity(securedEnabled = true)
 public class WebSecurityConfiguration {
 
     @Bean
@@ -23,7 +24,10 @@ public class WebSecurityConfiguration {
         http
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/", "/webjars/**", "/static/**").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/teachers/**", "/students/**",
+                                "/groups/**", "/departments/**", "/courses/**").hasRole(Role.ADMIN.toString())
+                        .requestMatchers("/schedule/**")
+                        .hasAnyRole(Role.STUDENT.toString(), Role.TEACHER.toString(), Role.ADMIN.toString())
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
@@ -33,17 +37,6 @@ public class WebSecurityConfiguration {
                 .logout(LogoutConfigurer::permitAll);
 
         return http.build();
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user = User.builder()
-                .username("user")
-                .password(passwordEncoder().encode("password"))
-                .roles("ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(user);
     }
 
     @Bean

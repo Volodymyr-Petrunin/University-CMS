@@ -1,4 +1,4 @@
-package com.university.universitycms.controller.test;
+package com.university.universitycms.controller.impl;
 
 import com.university.universitycms.controller.impl.ScheduleController;
 import com.university.universitycms.domain.Course;
@@ -84,7 +84,7 @@ class ScheduleControllerTest {
     }
 
     private void defaultPerform(String urlTemplate, String attributeName, String viewName, Map<String, List<Lesson>> expectedLesson) throws Exception{
-        mockMvc.perform(get(urlTemplate).with(user("user").password("password")))
+        mockMvc.perform(get("/user" + urlTemplate).with(user("user").password("password")))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("University-CMS")))

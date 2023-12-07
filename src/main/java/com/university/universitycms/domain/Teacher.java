@@ -2,12 +2,14 @@ package com.university.universitycms.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Getter
+@Setter
 @DiscriminatorValue("Teacher")
 public class Teacher extends User {
 
@@ -19,10 +21,6 @@ public class Teacher extends User {
     )
     private Set<Course> courses;
 
-    public void addCourses(Course course) {
-        this.courses.add(course);
-    }
-
     public Teacher() {
 
     }
@@ -30,6 +28,10 @@ public class Teacher extends User {
     public Teacher(Long id, Role role, String name, String surname, String password, Set<Course> courses, String email) {
         super(id, role, name, surname, password, email);
         this.courses = courses;
+    }
+
+    public void addCourses(Course course) {
+        this.courses.add(course);
     }
 
     @Override
