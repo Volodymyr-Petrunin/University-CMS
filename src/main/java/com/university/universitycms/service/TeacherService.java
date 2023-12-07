@@ -98,13 +98,11 @@ public class TeacherService implements DataFiller {
 
     private Set<Course> findFewCourse(List<Long> coursesId){
         Set<Course> courses = courseRepository.findAllByIdIn(coursesId);
+        Set<Long> foundIds = courses.stream().map(Course::getId).collect(Collectors.toSet())
 
-        if (courses.size() != coursesId.size()){
-            List<Long> foundIds = courses.stream().map(Course::getId).toList();
-
-            List<Long> notFoundIds = coursesId.stream()
-                    .filter(courseId -> !foundIds.contains(courseId))
-                    .toList();
+        if (foundIds.size() != coursesId.size()){
+            Set<Long> notFoundIds = new HashSet<>(coursesId);
+            notFoundIds.removeAll(foundIds);
 
             throw new IllegalArgumentException("Courses with ids: " + notFoundIds + " not found");
         }
