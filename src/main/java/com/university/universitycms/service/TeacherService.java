@@ -98,7 +98,7 @@ public class TeacherService implements DataFiller {
 
     private Set<Course> findFewCourse(List<Long> coursesId){
         Set<Course> courses = courseRepository.findAllByIdIn(coursesId);
-        Set<Long> foundIds = courses.stream().map(Course::getId).collect(Collectors.toSet())
+        Set<Long> foundIds = courses.stream().map(Course::getId).collect(Collectors.toSet());
 
         if (foundIds.size() != coursesId.size()){
             Set<Long> notFoundIds = new HashSet<>(coursesId);
