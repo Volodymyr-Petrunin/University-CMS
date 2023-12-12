@@ -20,7 +20,7 @@
             <div class="form-group">
                 <label for="teachersId">Teachers:</label>
                 <select multiple class="form-select form-select-lg mb-3" aria-label="Large select example" id="teachersId" name="teachersId">
-                    <option th:each="teacher : ${teachers}" th:value="${teacher.getId()}" th:text="${teacher.getName() + ' ' + teacher.surname}" th:selected="${#lists.contains(teachersIn, teacher)}"></option>
+                    <option th:each="teacher : ${teachers}" th:value="${teacher.getId()}" th:text="${teacher.getName() + ' ' + teacher.surname}" th:selected="${#sets.contains(teachersIn, teacher)}"></option>
                 </select>
             </div>
 

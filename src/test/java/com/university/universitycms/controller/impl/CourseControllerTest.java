@@ -14,7 +14,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -54,15 +53,14 @@ class CourseControllerTest {
         Long expectedId = 1L;
 
         mockMvc.perform(post(urlTemplate)
-                .flashAttr(courseAttributeName, course)
-                .param(listAttributeName, String.valueOf(expectedId))
-                .with(csrf()))
+                    .flashAttr(courseAttributeName, course)
+                    .param(listAttributeName, String.valueOf(expectedId))
+                    .with(csrf()))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(redirectUrl));
 
-        verify(teacherService, times(1)).addTeachersToCourse(Collections.singletonList(expectedId), course);
-        verify(courseService, times(1)).updateCourse(course);
+        verify(courseService, times(1)).updateCourse(course, Collections.singleton(expectedId));
     }
 
     @Test

@@ -9,7 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/courses")
@@ -46,11 +49,11 @@ public class CourseController {
     @GetMapping("/show/{id}")
     public String openCourseData(@PathVariable(value = "id") long id, Model model){
         Course course = courseService.getCourseById(id);
-        List<Teacher> teachers = teacherService.getAllTeachers();
+        Set<Teacher> teachers = new HashSet<>(teacherService.getAllTeachers());
 
-        List<Teacher> teachersInCourse = teachers.stream()
+        Set<Teacher> teachersInCourse = teachers.stream()
                 .filter(teacher -> teacher.getCourses().contains(course))
-                .toList();
+                .collect(Collectors.toSet());
 
         model.addAttribute("course", course);
         model.addAttribute("teachers", teachers);
@@ -60,9 +63,8 @@ public class CourseController {
     }
 
     @PostMapping("/update")
-    public String updateCourse(@ModelAttribute Course course, @RequestParam List<Long> teachersId){
-        teacherService.addTeachersToCourse(teachersId, course);
-        courseService.updateCourse(course);
+    public String updateCourse(@ModelAttribute Course course, @RequestParam Set<Long> teachersId){
+        courseService.updateCourse(course, teachersId);
         return REDIRECT_TO_COURSES_ALL;
     }
 

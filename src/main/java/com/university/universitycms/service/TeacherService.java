@@ -91,13 +91,6 @@ public class TeacherService implements DataFiller {
         repository.deleteById(id);
     }
 
-    public void addTeachersToCourse(List<Long> id, Course course){
-        List<Teacher> teachers = repository.findAllByIdIn(id);
-        teachers.forEach(teacher -> teacher.addCourses(course));
-
-        repository.saveAll(teachers);
-    }
-
     @Override
     public void fillData() {
         createSeveralTeachers(teacherGenerationData.generateData());
