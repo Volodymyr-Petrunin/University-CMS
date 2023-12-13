@@ -51,7 +51,8 @@ public class CourseService implements DataFiller {
     }
 
     public void updateCourse(Course course, Set<Long> teachersId){
-        updateTeachersCourse(teachersId, course);
+        removeTeachersFromCourse(teachersId, course);
+        addTeachersToCourse(teachersId, course);
         repository.save(course);
     }
 
@@ -68,21 +69,20 @@ public class CourseService implements DataFiller {
         createSeveralCourses(courseGenerationData.generateData());
     }
 
-    private void updateTeachersCourse(Set<Long> id, Course course){
-        Set<Long> coursesContaining = teacherRepository.findAllByCoursesContaining(course)
-                .stream().map(Teacher::getId).collect(Collectors.toSet());
-
-        Set<Long> teacherIdRemoveFromCourse = coursesContaining.stream()
-                .filter(teacherId -> !id.contains(teacherId)).collect(Collectors.toSet());
-
-        List<Teacher> removeTeacherFromCourse = teacherRepository.findAllByIdIn(teacherIdRemoveFromCourse);
-        removeTeacherFromCourse.forEach(teacher -> teacher.getCourses().remove(course));
-
-        teacherRepository.saveAll(removeTeacherFromCourse);
-
-        List<Teacher> teachers = teacherRepository.findAllByIdIn(id);
+    private void addTeachersToCourse(Set<Long> teachersId, Course course){
+        List<Teacher> teachers = teacherRepository.findAllByIdIn(teachersId);
         teachers.forEach(teacher -> teacher.addCourses(course));
 
         teacherRepository.saveAll(teachers);
+    }
+
+    private void removeTeachersFromCourse(Set<Long> teachersId, Course course) {
+        Set<Teacher> teachersToRemove = teacherRepository.findAllByCoursesContaining(course);
+
+        teachersToRemove.removeIf(teacher -> teachersId.contains(teacher.getId()));
+
+        teachersToRemove.forEach(teacher -> teacher.getCourses().remove(course));
+
+        teacherRepository.saveAll(teachersToRemove);
     }
 }
