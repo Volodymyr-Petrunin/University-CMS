@@ -44,7 +44,7 @@ public class GroupService implements DataFiller {
         repository.save(group);
     }
 
-    public void deleteGroup(Group group){
+    public void graduateGroup(Group group){
         repository.delete(group);
     }
 
