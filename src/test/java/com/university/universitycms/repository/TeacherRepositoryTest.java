@@ -20,7 +20,7 @@ class TeacherRepositoryTest {
     @Autowired
     private TeacherRepository teacherRepository;
 
-    private final Course expectedCourse = new Course(1L,"IT");
+    private final Course expectedCourse = new Course(1L,"IT", null);
     private final List<Teacher> expectedTeacher = List.of(
             new Teacher(null, Role.TEACHER, "Volodymyr", "Petrunin", null, Set.of(expectedCourse), null),
             new Teacher(null, Role.ADMIN, "Stas", "Solyanik", null, Set.of(), null),

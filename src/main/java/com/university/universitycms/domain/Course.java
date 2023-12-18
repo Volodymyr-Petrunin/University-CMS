@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "courses")
@@ -20,13 +21,22 @@ public class Course {
     @Column(name = "course_name")
     private String name;
 
+    @ManyToMany
+    @JoinTable(
+            name = "teachers_course",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "teacher_id")
+    )
+    private Set<Teacher> teachers;
+
     public Course() {
 
     }
 
-    public Course(Long id, String name) {
+    public Course(Long id, String name, Set<Teacher> teachers) {
         this.id = id;
         this.name = name;
+        this.teachers = teachers;
     }
 
     @Override
@@ -34,7 +44,7 @@ public class Course {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Course course = (Course) o;
-        return Objects.equals(id, course.id) && Objects.equals(name, course.name);
+        return Objects.equals(id, course.id) && Objects.equals(name, course.name) && Objects.equals(teachers, course.teachers);
     }
 
     @Override

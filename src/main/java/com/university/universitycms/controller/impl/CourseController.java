@@ -4,6 +4,7 @@ import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Teacher;
 import com.university.universitycms.service.CourseService;
 import com.university.universitycms.service.TeacherService;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,13 +37,16 @@ public class CourseController {
     }
 
     @GetMapping("/register")
-    public String registerCourse(){
+    public String registerCourse(Model model){
+        List<Teacher> teachers = teacherService.getAllTeachers();
+        model.addAttribute("teachers", teachers);
+
         return "register-course";
     }
 
     @PostMapping("/register")
-    public String registerCourse(@RequestParam String courseName){
-        courseService.registerCourse(courseName);
+    public String registerCourse(@RequestParam String courseName, @RequestParam Set<Long> teachersId){
+        courseService.registerCourse(courseName, teachersId);
         return REDIRECT_TO_COURSES_ALL;
     }
 
@@ -51,9 +55,7 @@ public class CourseController {
         Course course = courseService.getCourseById(id);
         Set<Teacher> teachers = new HashSet<>(teacherService.getAllTeachers());
 
-        Set<Teacher> teachersInCourse = teachers.stream()
-                .filter(teacher -> teacher.getCourses().contains(course))
-                .collect(Collectors.toSet());
+        Set<Teacher> teachersInCourse = course.getTeachers();
 
         model.addAttribute("course", course);
         model.addAttribute("teachers", teachers);

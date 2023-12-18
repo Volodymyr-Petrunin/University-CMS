@@ -24,7 +24,7 @@ public class CourseGenerationData implements GenerationData<Course> {
     @Override
     public List<Course> generateData() {
         return resourcesFileReader.read(fileName).stream()
-                .map(line -> new Course(null, line))
+                .map(line -> new Course(null, line, null))
                 .toList();
     }
 }

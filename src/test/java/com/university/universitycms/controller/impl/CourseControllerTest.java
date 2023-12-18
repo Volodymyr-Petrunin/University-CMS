@@ -36,8 +36,8 @@ class CourseControllerTest {
     private TeacherService teacherService;
 
     private final List<Course> expectedCourse = List.of(
-            new Course(1L, "IT"),
-            new Course(2L, "Math")
+            new Course(1L, "IT", null),
+            new Course(2L, "Math", null)
     );
 
     @Test

@@ -19,6 +19,13 @@
                         <input type="text" id="courseName" name="courseName" class="form-control" required>
                     </div>
 
+                    <div class="form-group">
+                        <label for="teachersId">Teachers:</label>
+                        <select multiple class="form-select form-select-lg mb-3" aria-label="Large select example" id="teachersId" name="teachersId">
+                            <option th:each="teacher : ${teachers}" th:value="${teacher.getId()}" th:text="${teacher.getName() + ' ' + teacher.getSurname()}"></option>
+                        </select>
+                    </div>
+
                     <button type="submit" class="btn btn-primary mt-3">Register</button>
                 </form>
             </div>

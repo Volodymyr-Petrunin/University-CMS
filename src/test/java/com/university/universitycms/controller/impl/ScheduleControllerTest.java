@@ -35,7 +35,7 @@ class ScheduleControllerTest {
     @MockBean
     private LessonService lessonService;
 
-    private final Course expectedCourse = new Course(1L, "IT");
+    private final Course expectedCourse = new Course(1L, "IT", null);
     private final Group expectedGroup = new Group(1L, "A12");
 
     private final List<Lesson> lessons = List.of(

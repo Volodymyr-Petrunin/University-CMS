@@ -11,5 +11,5 @@ import java.util.Set;
 @Repository
 public interface TeacherRepository extends JpaRepository<Teacher, Long> {
     Set<Teacher> findAllByCoursesContaining(Course course);
-    List<Teacher> findAllByIdIn(Set<Long> id);
+    Set<Teacher> findAllByIdIn(Set<Long> id);
 }

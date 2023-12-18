@@ -70,14 +70,14 @@ public class StudentService implements DataFiller {
         studentDTO.setRole(Role.STUDENT);
 
         Student student = studentMapper.studentDTOToStudent(studentDTO);
-        student.setGroup(findGroupById(studentDTO.getGroupId()));
+        student.setGroup(groupService.getGroupById(studentDTO.getGroupId()));
 
         this.createStudent(student);
     }
 
     public void updateStudent(StudentDTO studentDTO){
         Student student = studentMapper.studentDTOToStudent(studentDTO);
-        student.setGroup(findGroupById(studentDTO.getGroupId()));
+        student.setGroup(groupService.getGroupById(studentDTO.getGroupId()));
 
         repository.save(student);
     }
@@ -93,10 +93,5 @@ public class StudentService implements DataFiller {
     @Override
     public void fillData() {
         createSeveralStudents(studentGenerationData.generateData());
-    }
-
-    private Group findGroupById(long id){
-        return groupService.getGroupById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Group not found with id " + id));
     }
 }

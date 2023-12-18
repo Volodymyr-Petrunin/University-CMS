@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class LessonRepositoryTest {
     @Autowired
     private LessonRepository lessonRepository;
-    private final Course expectedCourse = new Course(1L, "IT");
+    private final Course expectedCourse = new Course(1L, "IT", null);
     private final Group expectedGroup = new Group(1L, "A12");
     private List<Lesson> actual;
     private List<Lesson> expected;

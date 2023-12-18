@@ -13,7 +13,7 @@ import java.util.Set;
 @DiscriminatorValue("Teacher")
 public class Teacher extends User {
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
             name = "teachers_course",
             joinColumns = @JoinColumn(name = "teacher_id"),
@@ -56,7 +56,6 @@ public class Teacher extends User {
                 ", name='" + getName() + '\'' +
                 ", surname='" + getSurname() + '\'' +
                 ", password='" + getPassword() + '\'' +
-                "} courses=" + courses +
                 '}';
     }
 }

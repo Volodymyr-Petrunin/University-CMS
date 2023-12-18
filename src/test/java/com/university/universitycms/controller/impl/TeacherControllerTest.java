@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -42,8 +43,8 @@ class TeacherControllerTest {
     private static final TeacherDTO expectedTeacherDTO = new TeacherDTO();
 
     private final Set<Course> expectedCourse = Set.of(
-            new Course(1L, "IT"),
-            new Course(2L, "Math")
+            new Course(1L, "IT", null),
+            new Course(2L, "Math", null)
     );
 
     private final List<Teacher> expectedTeachers = List.of(

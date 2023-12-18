@@ -46,13 +46,15 @@ public class CourseService implements DataFiller {
         repository.saveAll(courses);
     }
 
-    public void registerCourse(String courseName){
-        this.createCourse(new Course(null, courseName));
+    public void registerCourse(String courseName, Set<Long> teachersId){
+        Set<Teacher> teachers = teacherRepository.findAllByIdIn(teachersId);
+        this.createCourse(new Course(null, courseName, teachers));
     }
 
-    public void updateCourse(Course course, Set<Long> teachersId){
-        removeTeachersFromCourse(teachersId, course);
-        addTeachersToCourse(teachersId, course);
+    public void updateCourse(Course course, Set<Long> teachersId) {
+        Set<Teacher> teachers = teacherRepository.findAllByIdIn(teachersId);
+        course.setTeachers(teachers);
+
         repository.save(course);
     }
 
@@ -70,7 +72,7 @@ public class CourseService implements DataFiller {
     }
 
     private void addTeachersToCourse(Set<Long> teachersId, Course course){
-        List<Teacher> teachers = teacherRepository.findAllByIdIn(teachersId);
+        Set<Teacher> teachers = teacherRepository.findAllByIdIn(teachersId);
         teachers.forEach(teacher -> teacher.addCourses(course));
 
         teacherRepository.saveAll(teachers);
