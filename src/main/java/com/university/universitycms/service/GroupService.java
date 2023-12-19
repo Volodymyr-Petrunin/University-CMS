@@ -28,8 +28,9 @@ public class GroupService implements DataFiller {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
-    public Optional<Group> getGroupById(long groupId){
-        return repository.findById(groupId);
+    public Group getGroupById(long groupId){
+        return repository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("Group not found with id: " + groupId));
     }
 
     public void createGroup(Group group){
