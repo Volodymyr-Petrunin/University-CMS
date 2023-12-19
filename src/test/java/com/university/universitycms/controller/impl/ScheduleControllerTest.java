@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +36,7 @@ class ScheduleControllerTest {
     @MockBean
     private LessonService lessonService;
 
-    private final Course expectedCourse = new Course(1L, "IT", null);
+    private final Course expectedCourse = new Course(1L, "IT", Collections.emptySet());
     private final Group expectedGroup = new Group(1L, "A12");
 
     private final List<Lesson> lessons = List.of(

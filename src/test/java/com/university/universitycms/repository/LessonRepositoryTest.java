@@ -12,6 +12,7 @@ import org.springframework.test.context.jdbc.Sql;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class LessonRepositoryTest {
     @Autowired
     private LessonRepository lessonRepository;
-    private final Course expectedCourse = new Course(1L, "IT", null);
+    private final Course expectedCourse = new Course(1L, "IT", Collections.emptySet());
     private final Group expectedGroup = new Group(1L, "A12");
     private List<Lesson> actual;
     private List<Lesson> expected;

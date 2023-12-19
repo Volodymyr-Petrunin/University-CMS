@@ -44,11 +44,6 @@ public class Teacher extends User {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode());
-    }
-
-    @Override
     public String toString() {
         return "Teacher{" +
                 "id=" + getId() +

@@ -4,7 +4,6 @@ import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Teacher;
 import com.university.universitycms.service.CourseService;
 import com.university.universitycms.service.TeacherService;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/courses")
