@@ -44,7 +44,7 @@ public class Course {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Course course = (Course) o;
-        return Objects.equals(id, course.id) && Objects.equals(name, course.name) && Objects.equals(teachers, course.teachers);
+        return Objects.equals(id, course.id) && Objects.equals(name, course.name);
     }
 
     @Override

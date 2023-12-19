@@ -70,21 +70,4 @@ public class CourseService implements DataFiller {
     public void fillData() {
         createSeveralCourses(courseGenerationData.generateData());
     }
-
-    private void addTeachersToCourse(Set<Long> teachersId, Course course){
-        Set<Teacher> teachers = teacherRepository.findAllByIdIn(teachersId);
-        teachers.forEach(teacher -> teacher.addCourses(course));
-
-        teacherRepository.saveAll(teachers);
-    }
-
-    private void removeTeachersFromCourse(Set<Long> teachersId, Course course) {
-        Set<Teacher> teachersToRemove = teacherRepository.findAllByCoursesContaining(course);
-
-        teachersToRemove.removeIf(teacher -> teachersId.contains(teacher.getId()));
-
-        teachersToRemove.forEach(teacher -> teacher.getCourses().remove(course));
-
-        teacherRepository.saveAll(teachersToRemove);
-    }
 }

@@ -45,7 +45,7 @@ public class Teacher extends User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), courses);
+        return Objects.hash(super.hashCode());
     }
 
     @Override
