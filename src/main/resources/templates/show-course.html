@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show course</title>
+</head>
+<body style="background-color: #252d36;">
+<div th:replace="~{layouts/header :: header}"></div>
+    <div class="container text-white">
+        <h2 class="mt-5">Update Course</h2>
+
+        <form th:action="@{/courses/update}" th:object="${course}" method="post">
+            <input type="hidden" th:field="*{id}">
+
+            <div class="form-group">
+                <label for="courseName">Course Name:</label>
+                <input type="text" class="form-control" id="courseName" th:field="*{name}"/>
+            </div>
+
+            <div class="form-group">
+                <label for="teachersId">Teachers:</label>
+                <select multiple class="form-select form-select-lg mb-3" aria-label="Large select example" id="teachersId" name="teachersId">
+                    <option th:each="teacher : ${teachers}" th:value="${teacher.getId()}" th:text="${teacher.getName() + ' ' + teacher.surname}" th:selected="${#sets.contains(teachersIn, teacher)}"></option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Update</button>
+        </form>
+
+        <form th:action="@{/courses/delete}" th:object="${course}" method="post">
+            <input type="hidden" name="deleteId" th:value="${course.getId()}" />
+            <button type="submit" class="btn btn-danger mt-3">Delete</button>
+        </form>
+    </div>
+</body>
+</html>

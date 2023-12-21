@@ -5,11 +5,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "courses")
 @Getter
 @Setter
+@NamedEntityGraph(name = "course-entity-graph",
+attributeNodes = {
+        @NamedAttributeNode("teachers")
+})
 public class Course {
     @Id
     @Column(name = "course_id")
@@ -20,13 +25,22 @@ public class Course {
     @Column(name = "course_name")
     private String name;
 
+    @ManyToMany
+    @JoinTable(
+            name = "teachers_course",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "teacher_id")
+    )
+    private Set<Teacher> teachers;
+
     public Course() {
 
     }
 
-    public Course(Long id, String name) {
+    public Course(Long id, String name, Set<Teacher> teachers) {
         this.id = id;
         this.name = name;
+        this.teachers = teachers;
     }
 
     @Override

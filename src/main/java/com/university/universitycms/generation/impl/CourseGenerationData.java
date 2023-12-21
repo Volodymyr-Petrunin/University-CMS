@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -24,7 +25,7 @@ public class CourseGenerationData implements GenerationData<Course> {
     @Override
     public List<Course> generateData() {
         return resourcesFileReader.read(fileName).stream()
-                .map(line -> new Course(null, line))
+                .map(line -> new Course(null, line, Collections.emptySet()))
                 .toList();
     }
 }

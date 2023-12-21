@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Course</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+</head>
+<body style="background-color: #252d36;">
+<div th:replace="~{layouts/header :: header}"></div>
+
+    <div class="container text-white">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h1 class="mt-5">Register new Course</h1>
+
+                <form th:action="@{/courses/register}" method="post">
+                    <div class="form-group">
+                        <label for="courseName">Course name</label>
+                        <input type="text" id="courseName" name="courseName" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="teachersId">Teachers:</label>
+                        <select multiple class="form-select form-select-lg mb-3" aria-label="Large select example" id="teachersId" name="teachersId">
+                            <option th:each="teacher : ${teachers}" th:value="${teacher.getId()}" th:text="${teacher.getName() + ' ' + teacher.getSurname()}"></option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

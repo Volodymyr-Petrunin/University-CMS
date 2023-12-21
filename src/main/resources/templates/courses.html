@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Courses</title>
@@ -8,6 +8,8 @@
 <div th:replace="~{layouts/header :: header}"></div>
 
 <div class="container mt-5">
+    <a href="/courses/register" class="link-warning">Register new Course</a>
+
     <h2>Courses</h2>
     <table class="table table-bordered">
         <thead>
@@ -18,7 +20,7 @@
         </thead>
         <tbody>
         <tr th:each="course : ${courses}">
-            <td th:text="${course.getId()}"></td>
+            <td><a th:href="@{'/courses/show/' + ${course.getId()}}" th:text="${course.getId()}"></a></td>
             <td th:text="${course.getName()}"></td>
         </tr>
         </tbody>

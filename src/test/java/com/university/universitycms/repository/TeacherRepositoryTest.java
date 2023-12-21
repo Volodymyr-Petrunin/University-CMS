@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -20,7 +21,7 @@ class TeacherRepositoryTest {
     @Autowired
     private TeacherRepository teacherRepository;
 
-    private final Course expectedCourse = new Course(1L,"IT");
+    private final Course expectedCourse = new Course(1L,"IT", Collections.emptySet());
     private final List<Teacher> expectedTeacher = List.of(
             new Teacher(null, Role.TEACHER, "Volodymyr", "Petrunin", null, Set.of(expectedCourse), null),
             new Teacher(null, Role.ADMIN, "Stas", "Solyanik", null, Set.of(), null),

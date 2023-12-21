@@ -4,15 +4,19 @@ import com.university.universitycms.controller.impl.ScheduleController;
 import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Group;
 import com.university.universitycms.domain.Lesson;
+import com.university.universitycms.security.WebSecurityConfiguration;
 import com.university.universitycms.service.LessonService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ScheduleController.class)
+@Import(WebSecurityConfiguration.class)
 class ScheduleControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -31,7 +36,7 @@ class ScheduleControllerTest {
     @MockBean
     private LessonService lessonService;
 
-    private final Course expectedCourse = new Course(1L, "IT");
+    private final Course expectedCourse = new Course(1L, "IT", Collections.emptySet());
     private final Group expectedGroup = new Group(1L, "A12");
 
     private final List<Lesson> lessons = List.of(
@@ -45,6 +50,7 @@ class ScheduleControllerTest {
             );
 
     @Test
+    @WithMockUser(roles = "STUDENT")
     void testDaySchedule_ShouldRenderOneDayScheduleViewWithExpectedLesson() throws Exception {
         when(lessonService.getLessonsByDayOfWeek()).thenReturn(expectedLesson);
 
@@ -58,6 +64,7 @@ class ScheduleControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "TEACHER")
     void testWeekSchedule_ShouldRenderWeekScheduleViewWithExpectedLesson() throws Exception {
         when(lessonService.getLessonsForWeek()).thenReturn(expectedLesson);
 
@@ -71,6 +78,7 @@ class ScheduleControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void testMonthSchedule_ShouldRenderMonthScheduleViewWithExpectedLesson() throws Exception {
         when(lessonService.getLessonsForMonth()).thenReturn(expectedLesson);
 
@@ -84,7 +92,7 @@ class ScheduleControllerTest {
     }
 
     private void defaultPerform(String urlTemplate, String attributeName, String viewName, Map<String, List<Lesson>> expectedLesson) throws Exception{
-        mockMvc.perform(get("/user" + urlTemplate).with(user("user").password("password")))
+        mockMvc.perform(get("/schedule" + urlTemplate))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("University-CMS")))

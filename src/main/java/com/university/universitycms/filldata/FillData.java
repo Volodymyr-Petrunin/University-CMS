@@ -2,11 +2,13 @@ package com.university.universitycms.filldata;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Profile("fill-dev-data")
 public class FillData {
     private final List<DataFiller> dataFillers;
 
@@ -15,7 +17,7 @@ public class FillData {
         this.dataFillers = dataFillers;
     }
 
-//    @PostConstruct
+    @PostConstruct
     public void fill(){
         dataFillers.forEach(DataFiller::fillData);
     }

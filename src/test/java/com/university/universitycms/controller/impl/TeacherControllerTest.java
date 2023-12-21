@@ -16,9 +16,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -42,8 +40,8 @@ class TeacherControllerTest {
     private static final TeacherDTO expectedTeacherDTO = new TeacherDTO();
 
     private final Set<Course> expectedCourse = Set.of(
-            new Course(1L, "IT"),
-            new Course(2L, "Math")
+            new Course(1L, "IT", Collections.emptySet()),
+            new Course(2L, "Math", Collections.emptySet())
     );
 
     private final List<Teacher> expectedTeachers = List.of(
