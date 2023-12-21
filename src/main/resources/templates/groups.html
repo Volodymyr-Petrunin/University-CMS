@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Groups</title>
@@ -18,7 +18,7 @@
         </thead>
         <tbody>
         <tr th:each="group : ${groups}">
-            <td th:text="${group.getId()}"></td>
+            <td><a th:href="@{'/groups/show/' + ${group.getId()}}" th:text="${group.getId()}"></a></td>
             <td th:text="${group.getName()}"></td>
         </tr>
         </tbody>
