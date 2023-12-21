@@ -4,14 +4,12 @@ import com.university.universitycms.domain.Role;
 import com.university.universitycms.domain.Teacher;
 import com.university.universitycms.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 
 @Component
-@Profile("fill-dev-data")
 public class AdminFiller implements DataFiller {
 
     private final Teacher admin;
