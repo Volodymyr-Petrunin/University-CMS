@@ -42,13 +42,10 @@ public class GroupService implements DataFiller {
                 .orElseThrow(() -> new IllegalArgumentException("Group not found with id: " + groupId));
     }
 
-    public GroupDTO showGroupDTOById(long id) {
+    public GroupDTO showGroupById(long id) {
         Group group = this.getGroupById(id);
 
-        GroupDTO groupDTO = groupMapper.groupToGroupDTO(group);
-        groupDTO.setStudents(studentRepository.findAllByGroup(group));
-
-        return groupDTO;
+        return groupMapper.groupToGroupDTO(group);
     }
 
     public void createGroup(Group group){
@@ -59,12 +56,16 @@ public class GroupService implements DataFiller {
         repository.saveAll(groups);
     }
 
-    public void updateGroup(Group group){
-        repository.save(group);
+    public void registerGroup(String groupName){
+        this.createGroup(new Group(null, groupName));
     }
 
-    public void graduateGroup(Group group){
-        repository.delete(group);
+    public void updateGroup(GroupDTO group){
+        repository.save(groupMapper.groupDTOToGroup(group));
+    }
+
+    public void graduateGroup(long id){
+        repository.deleteById(id);
     }
 
     @Override

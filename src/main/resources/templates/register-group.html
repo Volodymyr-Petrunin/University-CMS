@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Group</title>
+</head>
+<body style="background-color: #252d36;">
+<div th:replace="~{layouts/header :: header}"></div>
+
+<div class="container text-white">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1 class="mt-5">Register new Group</h1>
+
+            <form th:action="@{/groups/register}" method="post">
+                <div class="form-group">
+                    <label for="groupName">Group name</label>
+                    <input type="text" id="groupName" name="groupName" class="form-control" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-3">Register</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

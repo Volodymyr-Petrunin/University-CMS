@@ -2,11 +2,13 @@ package com.university.universitycms.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Objects;
 
 @Entity
 @Getter
+@Setter
 @DiscriminatorValue("Student")
 public class Student extends User {
 
@@ -21,24 +23,6 @@ public class Student extends User {
     public Student(Long id, Role role, String name, String surname, String password, Group group, String email) {
         super(id, role, name, surname, password, email);
         this.group = group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Student student = (Student) o;
-        return Objects.equals(group, student.group);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), group);
     }
 
     @Override

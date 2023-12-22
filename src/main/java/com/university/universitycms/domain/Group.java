@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "groups")
@@ -18,6 +19,9 @@ public class Group {
     private Long id;
     @Column(name = "group_name")
     private String name;
+
+    @OneToMany(mappedBy = "group")
+    private Set<Student> students;
 
     public Group() {
 
