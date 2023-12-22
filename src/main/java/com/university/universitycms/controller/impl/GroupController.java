@@ -31,7 +31,7 @@ public class GroupController {
 
     @GetMapping("/show/{id}")
     public String showGroup(@PathVariable long id, Model model) {
-        GroupDTO groupDTO = groupService.showGroupById(id);
+        GroupDTO groupDTO = groupService.getDTOById(id);
 
         model.addAttribute("groupDTO", groupDTO);
         return "show-group";

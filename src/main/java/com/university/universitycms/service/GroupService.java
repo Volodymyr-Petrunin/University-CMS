@@ -38,7 +38,7 @@ public class GroupService implements DataFiller {
                 .orElseThrow(() -> new IllegalArgumentException("Group not found with id: " + groupId));
     }
 
-    public GroupDTO showGroupById(long id) {
+    public GroupDTO getDTOById(long id) {
         Group group = this.getGroupById(id);
 
         return groupMapper.groupToGroupDTO(group);
