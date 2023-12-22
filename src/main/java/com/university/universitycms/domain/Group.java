@@ -11,6 +11,10 @@ import java.util.Set;
 @Table(name = "groups")
 @Getter
 @Setter
+@NamedEntityGraph(name = "group-entity-graph",
+        attributeNodes = {
+        @NamedAttributeNode("students")
+})
 public class Group {
     @Id
     @Column(name = "group_id")
