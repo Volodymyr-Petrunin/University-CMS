@@ -24,7 +24,7 @@ class LessonRepositoryTest {
     @Autowired
     private LessonRepository lessonRepository;
     private final Course expectedCourse = new Course(1L, "IT", Collections.emptySet());
-    private final Group expectedGroup = new Group(1L, "A12");
+    private final Group expectedGroup = new Group(1L, "A12", Collections.emptySet());
     private List<Lesson> actual;
     private List<Lesson> expected;
 

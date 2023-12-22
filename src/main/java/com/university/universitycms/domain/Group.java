@@ -27,9 +27,10 @@ public class Group {
 
     }
 
-    public Group(Long id, String name) {
+    public Group(Long id, String name, Set<Student> students) {
         this.id = id;
         this.name = name;
+        this.students = students;
     }
 
     @Override

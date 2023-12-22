@@ -37,7 +37,7 @@ class ScheduleControllerTest {
     private LessonService lessonService;
 
     private final Course expectedCourse = new Course(1L, "IT", Collections.emptySet());
-    private final Group expectedGroup = new Group(1L, "A12");
+    private final Group expectedGroup = new Group(1L, "A12", Collections.emptySet());
 
     private final List<Lesson> lessons = List.of(
             new Lesson(1L, "ENG group 1", "A105", DayOfWeek.WEDNESDAY, LocalTime.of(11, 0), LocalTime.of(12, 0), expectedCourse, expectedGroup),

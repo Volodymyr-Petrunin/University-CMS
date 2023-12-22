@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -33,7 +34,7 @@ public class GroupGenerationData implements GenerationData<Group> {
             String name = generationRandomizer.generateRandomChars('A','Z', amountOfLetters) + "-"
                     + generationRandomizer.generateRandomChars('1', '9', amountOfNumbers);
 
-            result.add(new Group(null, name));
+            result.add(new Group(null, name, Collections.emptySet()));
         }
 
         return result;
