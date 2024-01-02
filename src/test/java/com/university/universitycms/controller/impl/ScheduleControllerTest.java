@@ -1,6 +1,5 @@
 package com.university.universitycms.controller.impl;
 
-import com.university.universitycms.controller.impl.ScheduleController;
 import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Group;
 import com.university.universitycms.domain.Lesson;
@@ -52,7 +51,7 @@ class ScheduleControllerTest {
     @Test
     @WithMockUser(roles = "STUDENT")
     void testDaySchedule_ShouldRenderOneDayScheduleViewWithExpectedLesson() throws Exception {
-        when(lessonService.getLessonsByDayOfWeek()).thenReturn(expectedLesson);
+        when(lessonService.getLessonsByDayOfWeek(any())).thenReturn(expectedLesson);
 
         String urlTemplate = "/one-day-schedule";
         String attributeName = "oneDaySchedule";
@@ -60,13 +59,13 @@ class ScheduleControllerTest {
 
         defaultPerform(urlTemplate, attributeName, viewName, expectedLesson);
 
-        verify(lessonService, times(1)).getLessonsByDayOfWeek();
+        verify(lessonService, times(1)).getLessonsByDayOfWeek(any());
     }
 
     @Test
     @WithMockUser(roles = "TEACHER")
     void testWeekSchedule_ShouldRenderWeekScheduleViewWithExpectedLesson() throws Exception {
-        when(lessonService.getLessonsForWeek()).thenReturn(expectedLesson);
+        when(lessonService.getLessonsForWeek(any())).thenReturn(expectedLesson);
 
         String urlTemplate = "/week-schedule";
         String attributeName = "weekSchedule";
@@ -74,13 +73,13 @@ class ScheduleControllerTest {
 
         defaultPerform(urlTemplate, attributeName, viewName, expectedLesson);
 
-        verify(lessonService, times(1)).getLessonsForWeek();
+        verify(lessonService, times(1)).getLessonsForWeek(any());
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
     void testMonthSchedule_ShouldRenderMonthScheduleViewWithExpectedLesson() throws Exception {
-        when(lessonService.getLessonsForMonth()).thenReturn(expectedLesson);
+        when(lessonService.getLessonsForMonth(any())).thenReturn(expectedLesson);
 
         String urlTemplate = "/month-schedule";
         String attributeName = "monthSchedule";
@@ -88,7 +87,7 @@ class ScheduleControllerTest {
 
         defaultPerform(urlTemplate, attributeName, viewName, expectedLesson);
 
-        verify(lessonService, times(1)).getLessonsForMonth();
+        verify(lessonService, times(1)).getLessonsForMonth(any());
     }
 
     private void defaultPerform(String urlTemplate, String attributeName, String viewName, Map<String, List<Lesson>> expectedLesson) throws Exception{

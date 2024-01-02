@@ -1,6 +1,5 @@
 package com.university.universitycms.service;
 
-import com.university.universitycms.domain.Group;
 import com.university.universitycms.domain.Role;
 import com.university.universitycms.domain.Student;
 import com.university.universitycms.domain.dto.StudentDTO;
