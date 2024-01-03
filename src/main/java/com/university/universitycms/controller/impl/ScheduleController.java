@@ -2,9 +2,9 @@ package com.university.universitycms.controller.impl;
 
 import com.university.universitycms.domain.*;
 import com.university.universitycms.service.LessonService;
+import com.university.universitycms.service.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,8 +24,8 @@ public class ScheduleController {
     }
 
     @GetMapping("/one-day-schedule")
-    public String daySchedule(Model model, @AuthenticationPrincipal UserDetails userDetails){
-        Map<String, List<Lesson>> lessons = lessonService.getLessonsByDayOfWeek(userDetails);
+    public String daySchedule(Model model, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
+        Map<String, List<Lesson>> lessons = lessonService.getLessonsByDayOfWeek(userDetailsImpl);
 
         model.addAttribute("oneDaySchedule", lessons);
 
@@ -33,8 +33,8 @@ public class ScheduleController {
     }
 
     @GetMapping("/week-schedule")
-    public String weekSchedule(Model model, @AuthenticationPrincipal UserDetails userDetails){
-        Map<String, List<Lesson>> lessons = lessonService.getLessonsForWeek(userDetails);
+    public String weekSchedule(Model model, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
+        Map<String, List<Lesson>> lessons = lessonService.getLessonsForWeek(userDetailsImpl);
 
         model.addAttribute("weekSchedule", lessons);
 
@@ -42,8 +42,8 @@ public class ScheduleController {
     }
 
     @GetMapping("/month-schedule")
-    public String monthSchedule(Model model, @AuthenticationPrincipal UserDetails userDetails){
-        Map<String, List<Lesson>> lessonForMonth = lessonService.getLessonsForMonth(userDetails);
+    public String monthSchedule(Model model, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
+        Map<String, List<Lesson>> lessonForMonth = lessonService.getLessonsForMonth(userDetailsImpl);
 
         model.addAttribute("monthSchedule", lessonForMonth);
 

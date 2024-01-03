@@ -4,11 +4,8 @@ import com.university.universitycms.domain.*;
 import com.university.universitycms.generation.impl.LessonGenerationData;
 import com.university.universitycms.repository.LessonRepository;
 import com.university.universitycms.filldata.DataFiller;
-import com.university.universitycms.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.Clock;
@@ -25,16 +22,14 @@ public class LessonService implements DataFiller {
     private final LessonGenerationData lessonGenerationData;
     private final Clock clock;
     private final DateTimeFormatter formatter;
-    private final UserRepository userRepository;
 
     @Autowired
     public LessonService(LessonRepository repository, LessonGenerationData lessonGenerationData, Clock clock,
-                         DateTimeFormatter formatter, UserRepository userRepository) {
+                         DateTimeFormatter formatter) {
         this.repository = repository;
         this.lessonGenerationData = lessonGenerationData;
         this.clock = clock;
         this.formatter = formatter;
-        this.userRepository = userRepository;
     }
 
     public List<Lesson> getAllLessons(){
@@ -61,14 +56,13 @@ public class LessonService implements DataFiller {
         repository.delete(lesson);
     }
 
-    public Map<String, List<Lesson>> getLessonsByDayOfWeek(UserDetails userDetails){
-        User user = userRepository.findByEmail(userDetails.getUsername());
+    public Map<String, List<Lesson>> getLessonsByDayOfWeek(UserDetailsImpl userDetails){
 
-        if (user.getRole().equals(Role.STUDENT)){
-            return getLessonsByDayOfWeekAndGroupForStudent(unwrap(user, Student.class));
+        if (userDetails.checkRole(Role.STUDENT)){
+            return getLessonsByDayOfWeekAndGroupForStudent(userDetails.unwrap(Student.class));
         }
 
-        return getLessonsByDayOfWeekAndCourseForTeacher(unwrap(user, Teacher.class));
+        return getLessonsByDayOfWeekAndCourseForTeacher(userDetails.unwrap(Teacher.class));
     }
 
     private Map<String, List<Lesson>> getLessonsByDayOfWeekAndGroupForStudent(Student student) {
@@ -101,14 +95,13 @@ public class LessonService implements DataFiller {
         return Map.of(dayFormat, oneDayLesson);
     }
 
-    public Map<String, List<Lesson>> getLessonsForWeek(UserDetails userDetails){
-        User user = userRepository.findByEmail(userDetails.getUsername());
+    public Map<String, List<Lesson>> getLessonsForWeek(UserDetailsImpl userDetailsImpl){
 
-        if (user.getRole().equals(Role.STUDENT)){
-            return getLessonsForWeekForStudent(unwrap(user, Student.class));
+        if (userDetailsImpl.checkRole(Role.STUDENT)){
+            return getLessonsForWeekForStudent(userDetailsImpl.unwrap(Student.class));
         }
 
-        return getLessonsForWeekForTeacher(unwrap(user, Teacher.class));
+        return getLessonsForWeekForTeacher(userDetailsImpl.unwrap(Teacher.class));
     }
 
     private Map<String, List<Lesson>> getLessonsForWeekForStudent(Student student){
@@ -129,14 +122,13 @@ public class LessonService implements DataFiller {
         return createResultMap(firstDay, lastDay, weekLesson);
     }
 
-    public Map<String, List<Lesson>> getLessonsForMonth(UserDetails userDetails){
-        User user = userRepository.findByEmail(userDetails.getUsername());
+    public Map<String, List<Lesson>> getLessonsForMonth(UserDetailsImpl userDetailsImpl){
 
-        if (user.getRole().equals(Role.STUDENT)){
-            return getLessonsForMonthForStudent(unwrap(user, Student.class));
+        if (userDetailsImpl.checkRole(Role.STUDENT)){
+            return getLessonsForMonthForStudent(userDetailsImpl.unwrap(Student.class));
         }
 
-        return getLessonsForMonthForTeacher(unwrap(user, Teacher.class));
+        return getLessonsForMonthForTeacher(userDetailsImpl.unwrap(Teacher.class));
     }
 
     private Map<String, List<Lesson>> getLessonsForMonthForStudent(Student student){
@@ -188,9 +180,5 @@ public class LessonService implements DataFiller {
         }
 
         return result;
-    }
-
-    private <T extends User> T unwrap(User user, Class<T> tClass) {
-        return tClass.cast(user);
     }
 }

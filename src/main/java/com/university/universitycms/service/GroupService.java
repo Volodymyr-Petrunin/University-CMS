@@ -52,8 +52,8 @@ public class GroupService implements DataFiller {
         repository.saveAll(groups);
     }
 
-    public void registerGroup(String groupName){
-        this.createGroup(new Group(null, groupName, Collections.emptySet()));
+    public void registerGroup(GroupDTO groupDTO){
+        this.createGroup(groupMapper.groupDTOToGroup(groupDTO));
     }
 
     public void updateGroup(GroupDTO group){

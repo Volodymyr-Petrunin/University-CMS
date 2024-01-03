@@ -44,8 +44,8 @@ public class GroupController {
     }
 
     @PostMapping("/graduate")
-    public String graduateGroup(@RequestParam long graduateId){
-        groupService.graduateGroup(graduateId);
+    public String graduateGroup(@RequestParam long groupId){
+        groupService.graduateGroup(groupId);
         return REDIRECT_TO_GROUPS_ALL;
     }
 
@@ -55,8 +55,8 @@ public class GroupController {
     }
 
     @PostMapping("/register")
-    public String registerGroup(@RequestParam String groupName){
-        groupService.registerGroup(groupName);
+    public String registerGroup(@ModelAttribute GroupDTO groupDTO){
+        groupService.registerGroup(groupDTO);
         return REDIRECT_TO_GROUPS_ALL;
     }
 }

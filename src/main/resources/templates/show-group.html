@@ -11,7 +11,6 @@
 
         <form th:action="@{/groups/update}" th:object="${groupDTO}" method="post">
             <input type="hidden" th:field="*{id}">
-            <input type="hidden" th:field="*{students}">
 
             <div class="form-group">
                 <label for="courseName">Course Name:</label>
@@ -22,7 +21,7 @@
         </form>
 
         <form th:action="@{/groups/graduate}" th:object="${groupDTO}" method="post">
-            <input type="hidden" name="graduateId" th:value="${groupDTO.getId()}" />
+            <input type="hidden" name="groupId" th:value="${groupDTO.getId()}" />
             <button type="submit" class="btn btn-danger mt-3">Graduate</button>
         </form>
 
