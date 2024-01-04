@@ -8,7 +8,7 @@
 <div th:replace="~{layouts/header :: header}"></div>
 
 <div class="container mt-5">
-    <a href="/change/schedule/register" class="link-warning">Register new Lesson</a>
+    <a href="/lesson/register" class="link-warning">Register new Lesson</a>
 
     <h2>Lessons</h2>
 
@@ -27,7 +27,7 @@
         </thead>
         <tbody>
             <tr th:each="lesson : ${lessons}">
-                <td><a th:href="@{'/change/schedule/show/' + ${lesson.getId()}}" th:text="${lesson.getId()}"></a></td>
+                <td><a th:href="@{'/lesson/show/' + ${lesson.getId()}}" th:text="${lesson.getId()}"></a></td>
                 <td th:text="${lesson.getName()}"></td>
                 <td th:text="${lesson.getAudience()}"></td>
                 <td th:text="${lesson.getCourse().getName()}"></td>

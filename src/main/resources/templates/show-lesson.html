@@ -10,7 +10,7 @@
 <div class="container text-white">
     <h2>Update Lesson</h2>
 
-    <form th:action="@{/change/schedule/update}" th:object="${lesson}" method="post">
+    <form th:action="@{/lesson/update}" th:object="${lesson}" method="post">
         <input type="hidden" th:field="*{id}"/>
 
         <div class="form-group">
@@ -59,7 +59,7 @@
         <button type="submit" class="btn btn-primary mt-3">Update</button>
     </form>
 
-    <form th:action="@{/change/schedule/delete}" th:object="${lesson}" method="post">
+    <form th:action="@{/lesson/delete}" th:object="${lesson}" method="post">
         <input type="hidden" name="lessonId" th:value="${lesson.id}" />
         <button type="submit" class="btn btn-danger mt-3">Delete</button>
     </form>

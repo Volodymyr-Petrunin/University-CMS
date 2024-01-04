@@ -17,16 +17,16 @@ import java.util.EnumSet;
 import java.util.List;
 
 @Controller
-@RequestMapping("/change/schedule")
-public class ChangeScheduleController {
-    private static final String REDIRECT_TO_CHANGE_SCHEDULE_ALL = "redirect:/change/schedule/all";
+@RequestMapping("/lesson")
+public class LessonController {
+    private static final String REDIRECT_TO_CHANGE_SCHEDULE_ALL = "redirect:/lesson/all";
     private final LessonService lessonService;
     private final EnumSet<DayOfWeek> dayOfWeeks;
     private final CourseService courseService;
     private final GroupService groupService;
 
     @Autowired
-    public ChangeScheduleController(LessonService lessonService, CourseService courseService, GroupService groupService) {
+    public LessonController(LessonService lessonService, CourseService courseService, GroupService groupService) {
         this.lessonService = lessonService;
         this.courseService = courseService;
         this.groupService = groupService;

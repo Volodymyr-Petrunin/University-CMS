@@ -25,10 +25,9 @@ public class WebSecurityConfiguration {
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/", "/webjars/**", "/static/**").permitAll()
                         .requestMatchers("/teachers/**", "/students/**",
-                                "/groups/**", "/departments/**", "/courses/**").hasRole(Role.ADMIN.toString())
+                                "/groups/**", "/departments/**", "/courses/**", "/lesson/**").hasRole(Role.ADMIN.toString())
                         .requestMatchers("/schedule/**")
                         .hasAnyRole(Role.STUDENT.toString(), Role.TEACHER.toString(), Role.ADMIN.toString())
-                        .requestMatchers("/change/schedule/**").hasRole(Role.ADMIN.toString())
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
