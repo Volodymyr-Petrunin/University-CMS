@@ -16,4 +16,5 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
     List<Lesson> findLessonsByDayOfWeekAndCourseInOrderByStartTimeAsc(DayOfWeek dayOfWeek, Set<Course> courses);
     List<Lesson> findLessonsByGroupOrderByDayOfWeekAscStartTimeAsc(Group group);
     List<Lesson> findLessonsByCourseInOrderByDayOfWeekAscStartTimeAsc(Set<Course> courses);
+    List<Lesson> findLessonsByOrderByDayOfWeekAscStartTimeAsc();
 }

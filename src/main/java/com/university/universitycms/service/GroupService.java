@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -31,6 +32,10 @@ public class GroupService implements DataFiller {
 
     public List<Group> getAllGroups() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    }
+
+    public List<GroupDTO> getAllGroupsInDTO(){
+       return this.getAllGroups().stream().map(groupMapper::groupToGroupDTO).toList();
     }
 
     public Group getGroupById(long groupId){

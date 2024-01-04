@@ -56,12 +56,14 @@ public class Lesson {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Lesson lesson = (Lesson) o;
-        return Objects.equals(id, lesson.id) && Objects.equals(name, lesson.name) && Objects.equals(audience, lesson.audience) && dayOfWeek == lesson.dayOfWeek && Objects.equals(startTime, lesson.startTime) && Objects.equals(endTime, lesson.endTime) && Objects.equals(course, lesson.course) && Objects.equals(group, lesson.group);
+        return Objects.equals(id, lesson.id) && Objects.equals(name, lesson.name) && Objects.equals(audience, lesson.audience)
+                && dayOfWeek == lesson.dayOfWeek && Objects.equals(startTime, lesson.startTime)
+                && Objects.equals(endTime, lesson.endTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, audience, dayOfWeek, startTime, endTime, course, group);
+        return Objects.hash(id, name, audience, dayOfWeek, startTime, endTime);
     }
 
     @Override
@@ -72,9 +74,6 @@ public class Lesson {
                 ", audience='" + audience + '\'' +
                 ", dayOfWeek=" + dayOfWeek +
                 ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", course=" + course +
-                ", group=" + group +
-                '}';
+                ", endTime=" + endTime + '}';
     }
 }

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lessons</title>
+</head>
+<body>
+<div th:replace="~{layouts/header :: header}"></div>
+
+<div class="container mt-5">
+    <a href="/change/schedule/register" class="link-warning">Register new Lesson</a>
+
+    <h2>Lessons</h2>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Audience</th>
+                <th>Course</th>
+                <th>Group</th>
+                <th>Day Of Week</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="lesson : ${lessons}">
+                <td><a th:href="@{'/change/schedule/show/' + ${lesson.getId()}}" th:text="${lesson.getId()}"></a></td>
+                <td th:text="${lesson.getName()}"></td>
+                <td th:text="${lesson.getAudience()}"></td>
+                <td th:text="${lesson.getCourse().getName()}"></td>
+                <td th:text="${lesson.getGroup().getName()}"></td>
+                <td th:text="${lesson.getDayOfWeek()}"></td>
+                <td th:text="${lesson.getStartTime()}"></td>
+                <td th:text="${lesson.getEndTime()}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

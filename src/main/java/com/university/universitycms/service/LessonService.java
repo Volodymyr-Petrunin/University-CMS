@@ -1,11 +1,15 @@
 package com.university.universitycms.service;
 
 import com.university.universitycms.domain.*;
+import com.university.universitycms.domain.dto.LessonDTO;
+import com.university.universitycms.domain.mapper.LessonMapper;
 import com.university.universitycms.generation.impl.LessonGenerationData;
+import com.university.universitycms.reader.ResourcesFileReader;
 import com.university.universitycms.repository.LessonRepository;
 import com.university.universitycms.filldata.DataFiller;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Clock;
@@ -22,22 +26,43 @@ public class LessonService implements DataFiller {
     private final LessonGenerationData lessonGenerationData;
     private final Clock clock;
     private final DateTimeFormatter formatter;
+    private final LessonMapper lessonMapper;
+    private final String audienceFile;
+    private final ResourcesFileReader resourcesFileReader;
+    private final CourseService courseService;
+    private final GroupService groupService;
 
     @Autowired
     public LessonService(LessonRepository repository, LessonGenerationData lessonGenerationData, Clock clock,
-                         DateTimeFormatter formatter) {
+                         DateTimeFormatter formatter, LessonMapper lessonMapper,
+                         @Value("${generation.file.audiences}") String audienceFile, ResourcesFileReader resourcesFileReader,
+                         CourseService courseService, GroupService groupService) {
         this.repository = repository;
         this.lessonGenerationData = lessonGenerationData;
         this.clock = clock;
         this.formatter = formatter;
+        this.lessonMapper = lessonMapper;
+        this.audienceFile = audienceFile;
+        this.resourcesFileReader = resourcesFileReader;
+        this.courseService = courseService;
+        this.groupService = groupService;
     }
 
     public List<Lesson> getAllLessons(){
         return repository.findAll();
     }
 
-    public Optional<Lesson> getLessonById(long lessonId){
-        return repository.findById(lessonId);
+    public List<Lesson> getLessonsOrderByDayOfWeekAndStartTime(){
+        return repository.findLessonsByOrderByDayOfWeekAscStartTimeAsc();
+    }
+
+    public List<String> getAllAudience(){
+        return resourcesFileReader.read(audienceFile);
+    }
+
+    public Lesson getLessonById(long lessonId){
+        return repository.findById(lessonId)
+                .orElseThrow(() -> new IllegalArgumentException("Cant get lesson with id: " + lessonId));
     }
 
     public void createLesson(Lesson lesson){
@@ -48,12 +73,20 @@ public class LessonService implements DataFiller {
         repository.saveAll(lessons);
     }
 
-    public void updateLesson(Lesson lesson){
-        repository.save(lesson);
+    public void registerLesson(LessonDTO lessonDTO){
+        this.createLesson(mapLessonDTOToLessonWithGroupAndCourse(lessonDTO));
+    }
+
+    public void updateLesson(LessonDTO lessonDTO){
+        repository.save(mapLessonDTOToLessonWithGroupAndCourse(lessonDTO));
     }
 
     public void deleteLesson(Lesson lesson){
         repository.delete(lesson);
+    }
+
+    public void deleteLessonById(long id){
+        repository.deleteById(id);
     }
 
     public Map<String, List<Lesson>> getLessonsByDayOfWeek(UserDetailsImpl userDetails){
@@ -180,5 +213,17 @@ public class LessonService implements DataFiller {
         }
 
         return result;
+    }
+
+    private Lesson mapLessonDTOToLessonWithGroupAndCourse(LessonDTO lessonDTO){
+        Course course = courseService.getCourseById(lessonDTO.getCourseId());
+        Group group = groupService.getGroupById(lessonDTO.getGroupId());
+
+        Lesson lesson = lessonMapper.lessonDTOToLesson(lessonDTO);
+
+        lesson.setCourse(course);
+        lesson.setGroup(group);
+
+        return lesson;
     }
 }
