@@ -5,11 +5,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "groups")
 @Getter
 @Setter
+@NamedEntityGraph(name = "group-entity-graph",
+        attributeNodes = {
+        @NamedAttributeNode("students")
+})
 public class Group {
     @Id
     @Column(name = "group_id")
@@ -19,13 +24,17 @@ public class Group {
     @Column(name = "group_name")
     private String name;
 
+    @OneToMany(mappedBy = "group")
+    private Set<Student> students;
+
     public Group() {
 
     }
 
-    public Group(Long id, String name) {
+    public Group(Long id, String name, Set<Student> students) {
         this.id = id;
         this.name = name;
+        this.students = students;
     }
 
     @Override

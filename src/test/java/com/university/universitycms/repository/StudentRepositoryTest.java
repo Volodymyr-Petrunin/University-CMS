@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,7 +21,7 @@ class StudentRepositoryTest {
     @Autowired
     private StudentRepository studentRepository;
 
-    private final Group expectedGroup = new Group(1L, "ABC");
+    private final Group expectedGroup = new Group(1L, "ABC", Collections.emptySet());
 
     private final List<Student> expectedStudents = List.of(
             new Student(null, Role.STUDENT, "Volodymyr", "Petrunin", null, expectedGroup, null),

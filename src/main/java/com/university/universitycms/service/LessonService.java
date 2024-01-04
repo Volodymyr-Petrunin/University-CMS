@@ -4,6 +4,7 @@ import com.university.universitycms.domain.*;
 import com.university.universitycms.generation.impl.LessonGenerationData;
 import com.university.universitycms.repository.LessonRepository;
 import com.university.universitycms.filldata.DataFiller;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 @Service
+@Transactional
 public class LessonService implements DataFiller {
     private final LessonRepository repository;
     private final LessonGenerationData lessonGenerationData;
@@ -54,33 +56,95 @@ public class LessonService implements DataFiller {
         repository.delete(lesson);
     }
 
-    public Map<String, List<Lesson>> getLessonsByDayOfWeek() {
+    public Map<String, List<Lesson>> getLessonsByDayOfWeek(UserDetailsImpl userDetails){
+
+        if (userDetails.checkRole(Role.STUDENT)){
+            return getLessonsByDayOfWeekAndGroupForStudent(userDetails.unwrap(Student.class));
+        }
+
+        return getLessonsByDayOfWeekAndCourseForTeacher(userDetails.unwrap(Teacher.class));
+    }
+
+    private Map<String, List<Lesson>> getLessonsByDayOfWeekAndGroupForStudent(Student student) {
         LocalDate today = LocalDate.now(clock);
 
         if (isWeekend(today)) {
             today = today.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
         }
 
-        List<Lesson> oneDayLesson = repository.findLessonByDayOfWeekOrderByStartTimeAsc(today.getDayOfWeek());
+        List<Lesson> oneDayLesson = repository
+                .findLessonByDayOfWeekAndGroupOrderByStartTimeAsc(today.getDayOfWeek(), student.getGroup());
+
         String dayFormat = formatDate(today);
 
         return Map.of(dayFormat, oneDayLesson);
     }
 
-    public Map<String, List<Lesson>> getLessonsForWeek(){
+    private Map<String, List<Lesson>> getLessonsByDayOfWeekAndCourseForTeacher(Teacher teacher){
+        LocalDate today = LocalDate.now(clock);
+
+        if (isWeekend(today)) {
+            today = today.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+        }
+
+        List<Lesson> oneDayLesson = repository
+                .findLessonsByDayOfWeekAndCourseInOrderByStartTimeAsc(today.getDayOfWeek(), teacher.getCourses());
+
+        String dayFormat = formatDate(today);
+
+        return Map.of(dayFormat, oneDayLesson);
+    }
+
+    public Map<String, List<Lesson>> getLessonsForWeek(UserDetailsImpl userDetailsImpl){
+
+        if (userDetailsImpl.checkRole(Role.STUDENT)){
+            return getLessonsForWeekForStudent(userDetailsImpl.unwrap(Student.class));
+        }
+
+        return getLessonsForWeekForTeacher(userDetailsImpl.unwrap(Teacher.class));
+    }
+
+    private Map<String, List<Lesson>> getLessonsForWeekForStudent(Student student){
         LocalDate firstDay = LocalDate.now(clock).with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         LocalDate lastDay = firstDay.plusDays(4);
 
-        List<Lesson> weekLesson = repository.findLessonByOrderByDayOfWeekAscStartTimeAsc();
+        List<Lesson> weekLesson = repository.findLessonsByGroupOrderByDayOfWeekAscStartTimeAsc(student.getGroup());
 
         return createResultMap(firstDay, lastDay, weekLesson);
     }
 
-    public Map<String, List<Lesson>> getLessonsForMonth(){
+    private Map<String, List<Lesson>> getLessonsForWeekForTeacher(Teacher teacher){
+        LocalDate firstDay = LocalDate.now(clock).with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate lastDay = firstDay.plusDays(4);
+
+        List<Lesson> weekLesson = repository.findLessonsByCourseInOrderByDayOfWeekAscStartTimeAsc(teacher.getCourses());
+
+        return createResultMap(firstDay, lastDay, weekLesson);
+    }
+
+    public Map<String, List<Lesson>> getLessonsForMonth(UserDetailsImpl userDetailsImpl){
+
+        if (userDetailsImpl.checkRole(Role.STUDENT)){
+            return getLessonsForMonthForStudent(userDetailsImpl.unwrap(Student.class));
+        }
+
+        return getLessonsForMonthForTeacher(userDetailsImpl.unwrap(Teacher.class));
+    }
+
+    private Map<String, List<Lesson>> getLessonsForMonthForStudent(Student student){
         LocalDate firstDay = LocalDate.now(clock).withDayOfMonth(1);
         LocalDate lastDay = LocalDate.now(clock).with(TemporalAdjusters.lastDayOfMonth());
 
-        List<Lesson> weekLesson = repository.findLessonByOrderByDayOfWeekAscStartTimeAsc();
+        List<Lesson> weekLesson = repository.findLessonsByGroupOrderByDayOfWeekAscStartTimeAsc(student.getGroup());
+
+        return createResultMap(firstDay, lastDay, weekLesson);
+    }
+
+    private Map<String, List<Lesson>> getLessonsForMonthForTeacher(Teacher teacher){
+        LocalDate firstDay = LocalDate.now(clock).withDayOfMonth(1);
+        LocalDate lastDay = LocalDate.now(clock).with(TemporalAdjusters.lastDayOfMonth());
+
+        List<Lesson> weekLesson = repository.findLessonsByCourseInOrderByDayOfWeekAscStartTimeAsc(teacher.getCourses());
 
         return createResultMap(firstDay, lastDay, weekLesson);
     }

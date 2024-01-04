@@ -39,7 +39,7 @@ class StudentControllerTest {
     private GroupService groupService;
     private final static StudentDTO expectedStudentDTO = new StudentDTO();
 
-    private final Group expectedGroup = new Group(1L, "A12");
+    private final Group expectedGroup = new Group(1L, "A12", Collections.emptySet());
 
     private final List<Student> expectedStudents = List.of(
       new Student(1L, Role.STUDENT, "Vova", "Petrunin", null, expectedGroup, null),

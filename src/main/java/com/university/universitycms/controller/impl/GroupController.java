@@ -1,18 +1,19 @@
 package com.university.universitycms.controller.impl;
 
 import com.university.universitycms.domain.Group;
+import com.university.universitycms.domain.dto.GroupDTO;
 import com.university.universitycms.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
 @RequestMapping("/groups")
 public class GroupController {
+    private static final String REDIRECT_TO_GROUPS_ALL = "redirect:/groups/all";
     private final GroupService groupService;
 
     @Autowired
@@ -21,10 +22,41 @@ public class GroupController {
     }
 
     @GetMapping("/all")
-    public String groups(Model model){
+    public String groups(Model model) {
         List<Group> groups = groupService.getAllGroups();
         model.addAttribute("groups", groups);
 
         return "groups";
+    }
+
+    @GetMapping("/show/{id}")
+    public String showGroup(@PathVariable long id, Model model) {
+        GroupDTO groupDTO = groupService.getDTOById(id);
+
+        model.addAttribute("groupDTO", groupDTO);
+        return "show-group";
+    }
+
+    @PostMapping("/update")
+    public String updateGroup(@ModelAttribute GroupDTO groupDTO){
+        groupService.updateGroup(groupDTO);
+        return REDIRECT_TO_GROUPS_ALL;
+    }
+
+    @PostMapping("/graduate")
+    public String graduateGroup(@RequestParam long groupId){
+        groupService.graduateGroup(groupId);
+        return REDIRECT_TO_GROUPS_ALL;
+    }
+
+    @GetMapping("/register")
+    public String registerGroup(){
+        return "register-group";
+    }
+
+    @PostMapping("/register")
+    public String registerGroup(@ModelAttribute GroupDTO groupDTO){
+        groupService.registerGroup(groupDTO);
+        return REDIRECT_TO_GROUPS_ALL;
     }
 }

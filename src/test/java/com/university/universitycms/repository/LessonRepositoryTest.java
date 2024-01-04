@@ -14,6 +14,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,7 +25,7 @@ class LessonRepositoryTest {
     @Autowired
     private LessonRepository lessonRepository;
     private final Course expectedCourse = new Course(1L, "IT", Collections.emptySet());
-    private final Group expectedGroup = new Group(1L, "A12");
+    private final Group expectedGroup = new Group(1L, "A12", Collections.emptySet());
     private List<Lesson> actual;
     private List<Lesson> expected;
 
@@ -67,6 +68,45 @@ class LessonRepositoryTest {
 
         expected = new ArrayList<>(expectedLessons);
         expected.set(0, lessonForUpdate);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testFindLessonByDayOfWeekAndGroupOrderByStartTimeAsc_ShouldFindCorrectLessons_AndReturnCorrectList(){
+        actual = lessonRepository.findLessonByDayOfWeekAndGroupOrderByStartTimeAsc(DayOfWeek.FRIDAY, expectedGroup);
+
+        Lesson expected = expectedLessons.get(0);
+
+        assertEquals(List.of(expected), actual);
+    }
+
+    @Test
+    void testFindLessonsByDayOfWeekAndCourseInOrderByStartTimeAsc_ShouldFindCorrectLessons_AndReturnCorrectList(){
+        actual = lessonRepository
+                .findLessonsByDayOfWeekAndCourseInOrderByStartTimeAsc(DayOfWeek.FRIDAY, Collections.singleton(expectedCourse));
+
+        Lesson expected = expectedLessons.get(0);
+
+        assertEquals(List.of(expected), actual);
+    }
+
+    @Test
+    void testFindLessonsByGroupOrderByDayOfWeekAscStartTimeAsc_ShouldFindCorrectLessons_AndReturnCorrectList(){
+        actual = lessonRepository.findLessonsByGroupOrderByDayOfWeekAscStartTimeAsc(expectedGroup);
+
+        expected = new ArrayList<>(expectedLessons);
+        expected.remove(1); // remove second lesson because it not has a group
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testFindLessonsByCourseInOrderByDayOfWeekAscStartTimeAsc_ShouldFindCorrectLessons_AndReturnCorrectList(){
+        actual = lessonRepository.findLessonsByCourseInOrderByDayOfWeekAscStartTimeAsc(Set.of(expectedCourse));
+
+        expected = new ArrayList<>(expectedLessons);
+        expected.remove(2); // remove second lesson because it not has a course
 
         assertEquals(expected, actual);
     }
