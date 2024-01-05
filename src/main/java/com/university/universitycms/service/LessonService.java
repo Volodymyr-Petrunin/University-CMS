@@ -29,14 +29,11 @@ public class LessonService implements DataFiller {
     private final LessonMapper lessonMapper;
     private final String audienceFile;
     private final ResourcesFileReader resourcesFileReader;
-    private final CourseService courseService;
-    private final GroupService groupService;
 
     @Autowired
     public LessonService(LessonRepository repository, LessonGenerationData lessonGenerationData, Clock clock,
                          DateTimeFormatter formatter, LessonMapper lessonMapper,
-                         @Value("${generation.file.audiences}") String audienceFile, ResourcesFileReader resourcesFileReader,
-                         CourseService courseService, GroupService groupService) {
+                         @Value("${generation.file.audiences}") String audienceFile, ResourcesFileReader resourcesFileReader) {
         this.repository = repository;
         this.lessonGenerationData = lessonGenerationData;
         this.clock = clock;
@@ -44,8 +41,6 @@ public class LessonService implements DataFiller {
         this.lessonMapper = lessonMapper;
         this.audienceFile = audienceFile;
         this.resourcesFileReader = resourcesFileReader;
-        this.courseService = courseService;
-        this.groupService = groupService;
     }
 
     public List<Lesson> getAllLessons(){
@@ -74,11 +69,11 @@ public class LessonService implements DataFiller {
     }
 
     public void registerLesson(LessonDTO lessonDTO){
-        this.createLesson(mapLessonDTOToLessonWithGroupAndCourse(lessonDTO));
+        this.createLesson(lessonMapper.lessonDTOToLesson(lessonDTO));
     }
 
     public void updateLesson(LessonDTO lessonDTO){
-        repository.save(mapLessonDTOToLessonWithGroupAndCourse(lessonDTO));
+        repository.save(lessonMapper.lessonDTOToLesson(lessonDTO));
     }
 
     public void deleteLesson(Lesson lesson){
@@ -213,17 +208,5 @@ public class LessonService implements DataFiller {
         }
 
         return result;
-    }
-
-    private Lesson mapLessonDTOToLessonWithGroupAndCourse(LessonDTO lessonDTO){
-        Course course = courseService.getCourseById(lessonDTO.getCourseId());
-        Group group = groupService.getGroupById(lessonDTO.getGroupId());
-
-        Lesson lesson = lessonMapper.lessonDTOToLesson(lessonDTO);
-
-        lesson.setCourse(course);
-        lesson.setGroup(group);
-
-        return lesson;
     }
 }

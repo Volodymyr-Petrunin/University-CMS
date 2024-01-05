@@ -19,7 +19,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/lesson")
 public class LessonController {
-    private static final String REDIRECT_TO_CHANGE_SCHEDULE_ALL = "redirect:/lesson/all";
+    private static final String REDIRECT_TO_LESSON_ALL = "redirect:/lesson/all";
     private final LessonService lessonService;
     private final EnumSet<DayOfWeek> dayOfWeeks;
     private final CourseService courseService;
@@ -61,7 +61,7 @@ public class LessonController {
     public String registerLesson(@ModelAttribute LessonDTO lessonDTO) {
         lessonService.registerLesson(lessonDTO);
 
-        return REDIRECT_TO_CHANGE_SCHEDULE_ALL;
+        return REDIRECT_TO_LESSON_ALL;
     }
 
     @GetMapping("/show/{id}")
@@ -83,12 +83,12 @@ public class LessonController {
     @PostMapping("/update")
     public String updateLesson(@ModelAttribute LessonDTO lessonDTO){
         lessonService.updateLesson(lessonDTO);
-        return REDIRECT_TO_CHANGE_SCHEDULE_ALL;
+        return REDIRECT_TO_LESSON_ALL;
     }
 
     @PostMapping("/delete")
     public String deleteLesson(@RequestParam long lessonId){
         lessonService.deleteLessonById(lessonId);
-        return REDIRECT_TO_CHANGE_SCHEDULE_ALL;
+        return REDIRECT_TO_LESSON_ALL;
     }
 }

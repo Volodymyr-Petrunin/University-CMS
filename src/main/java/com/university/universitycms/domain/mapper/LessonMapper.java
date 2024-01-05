@@ -1,11 +1,26 @@
 package com.university.universitycms.domain.mapper;
 
+import com.university.universitycms.domain.Course;
+import com.university.universitycms.domain.Group;
 import com.university.universitycms.domain.Lesson;
 import com.university.universitycms.domain.dto.LessonDTO;
-import org.mapstruct.Mapper;
+import jakarta.persistence.EntityManager;
+import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(componentModel = "spring")
-public interface LessonMapper {
-    LessonDTO lessonToLessonDTO(Lesson lesson);
-    Lesson lessonDTOToLesson(LessonDTO lessonDTO);
+public abstract class LessonMapper {
+
+    @Autowired
+    private EntityManager manager;
+
+    public abstract LessonDTO lessonToLessonDTO(Lesson lesson);
+
+    public abstract Lesson lessonDTOToLesson(LessonDTO lessonDTO);
+
+    @AfterMapping
+    public void fetchEntities(@MappingTarget Lesson lesson, LessonDTO lessonDTO) {
+        lesson.setCourse(manager.find(Course.class, lessonDTO.getCourseId()));
+        lesson.setGroup(manager.find(Group.class, lessonDTO.getGroupId()));
+    }
 }
