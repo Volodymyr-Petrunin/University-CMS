@@ -3,10 +3,12 @@ package com.university.universitycms.generation.impl;
 import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Group;
 import com.university.universitycms.domain.Lesson;
+import com.university.universitycms.domain.Teacher;
 import com.university.universitycms.generation.GenerationData;
 import com.university.universitycms.reader.ResourcesFileReader;
 import com.university.universitycms.service.CourseService;
 import com.university.universitycms.service.GroupService;
+import com.university.universitycms.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -24,12 +26,13 @@ public class LessonGenerationData implements GenerationData<Lesson> {
     private final Clock clock;
     private final GroupService groupService;
     private final CourseService courseService;
+    private final TeacherService teacherService;
     private final ResourcesFileReader resourcesFileReader;
     private final String audienceFile;
     private final int quantity;
 
     @Autowired
-    public LessonGenerationData(GenerationRandomizer generationRandomizer, Clock clock, GroupService groupService, CourseService courseService,
+    public LessonGenerationData(GenerationRandomizer generationRandomizer, Clock clock, GroupService groupService, CourseService courseService, TeacherService teacherService,
                                 ResourcesFileReader resourcesFileReader,
                                 @Value("${generation.file.audiences}") String audienceFile,
                                 @Value("${quantity.max.lessonInWeek}") int quantity) {
@@ -37,6 +40,7 @@ public class LessonGenerationData implements GenerationData<Lesson> {
         this.clock = clock;
         this.groupService = groupService;
         this.courseService = courseService;
+        this.teacherService = teacherService;
         this.resourcesFileReader = resourcesFileReader;
         this.audienceFile = audienceFile;
         this.quantity = quantity;
@@ -47,6 +51,7 @@ public class LessonGenerationData implements GenerationData<Lesson> {
         List<String> audiences = resourcesFileReader.read(audienceFile);
         List<Group> groups = groupService.getAllGroups();
         List<Course> courses = courseService.getAllCourses();
+        List<Teacher> teachers = teacherService.getAllTeachers();
         DayOfWeek currentDayOfWeek = LocalDate.now(clock).getDayOfWeek();
 
         List<Lesson> result = new ArrayList<>();
@@ -54,12 +59,13 @@ public class LessonGenerationData implements GenerationData<Lesson> {
         for (int index = 0; index < quantity; index++) {
             Group group = generationRandomizer.getRandomElementFromList(groups);
             Course course = generationRandomizer.getRandomElementFromList(courses);
+            Teacher teacher = generationRandomizer.getRandomElementFromList(teachers);
             String audience = generationRandomizer.getRandomElementFromList(audiences);
             LocalTime startTime = generationRandomizer.getStartTime();
             currentDayOfWeek = getDayOfWeek(index, currentDayOfWeek);
 
             result.add(new Lesson(null, createLessonName(course, group), audience, currentDayOfWeek, startTime,
-                    startTime.plusHours(2), course, group));
+                    startTime.plusHours(2), course, group, teacher));
         }
 
         return result;

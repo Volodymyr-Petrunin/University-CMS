@@ -10,6 +10,7 @@ import com.university.universitycms.filldata.DataFiller;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import java.time.Clock;
@@ -68,8 +69,12 @@ public class LessonService implements DataFiller {
         repository.saveAll(lessons);
     }
 
-    public void registerLesson(LessonDTO lessonDTO){
-        this.createLesson(lessonMapper.lessonDTOToLesson(lessonDTO));
+    public void registerLesson(LessonDTO lessonDTO) {
+        Lesson lesson = lessonMapper.lessonDTOToLesson(lessonDTO);
+
+        validateLessonAvailability(lesson);
+
+        this.createLesson(lesson);
     }
 
     public void updateLesson(LessonDTO lessonDTO){
@@ -116,7 +121,7 @@ public class LessonService implements DataFiller {
         }
 
         List<Lesson> oneDayLesson = repository
-                .findLessonsByDayOfWeekAndCourseInOrderByStartTimeAsc(today.getDayOfWeek(), teacher.getCourses());
+                .findLessonsByDayOfWeekAndTeacherOrderByStartTimeAsc(today.getDayOfWeek(), teacher);
 
         String dayFormat = formatDate(today);
 
@@ -145,7 +150,7 @@ public class LessonService implements DataFiller {
         LocalDate firstDay = LocalDate.now(clock).with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         LocalDate lastDay = firstDay.plusDays(4);
 
-        List<Lesson> weekLesson = repository.findLessonsByCourseInOrderByDayOfWeekAscStartTimeAsc(teacher.getCourses());
+        List<Lesson> weekLesson = repository.findLessonsByTeacherOrderByDayOfWeekAscStartTimeAsc(teacher);
 
         return createResultMap(firstDay, lastDay, weekLesson);
     }
@@ -172,7 +177,7 @@ public class LessonService implements DataFiller {
         LocalDate firstDay = LocalDate.now(clock).withDayOfMonth(1);
         LocalDate lastDay = LocalDate.now(clock).with(TemporalAdjusters.lastDayOfMonth());
 
-        List<Lesson> weekLesson = repository.findLessonsByCourseInOrderByDayOfWeekAscStartTimeAsc(teacher.getCourses());
+        List<Lesson> weekLesson = repository.findLessonsByTeacherOrderByDayOfWeekAscStartTimeAsc(teacher);
 
         return createResultMap(firstDay, lastDay, weekLesson);
     }
@@ -208,5 +213,38 @@ public class LessonService implements DataFiller {
         }
 
         return result;
+    }
+
+    private void validateLessonAvailability(Lesson lesson) {
+        if (!audienceIsFree(lesson))
+            throw new IllegalArgumentException("Audience: " + lesson.getAudience() + ", is not free at this time. " + lesson.getStartTime() + "-" + lesson.getEndTime());
+        else if (!groupIsFree(lesson))
+            throw new IllegalArgumentException("Group: " + lesson.getGroup().getName() +  ", is not free at this time.");
+        else if (!teacherIsFree(lesson))
+            throw new IllegalArgumentException("Teacher: " + lesson.getTeacher() + ", is not free at this time.");
+    }
+
+    private boolean audienceIsFree(Lesson lesson) {
+        return !repository.existsAllByAudienceAndStartTimeBetween(
+                lesson.getAudience(),
+                lesson.getStartTime(),
+                lesson.getEndTime()
+        );
+    }
+
+    private boolean groupIsFree(Lesson lesson) {
+        return !repository.existsAllByGroupAndStartTimeBetween(
+                lesson.getGroup(),
+                lesson.getStartTime(),
+                lesson.getEndTime()
+        );
+    }
+
+    private boolean teacherIsFree(Lesson lesson) {
+        return !repository.existsAllByTeacherAndStartTimeBetween(
+                lesson.getTeacher(),
+                lesson.getStartTime(),
+                lesson.getEndTime()
+        );
     }
 }

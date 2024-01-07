@@ -22,6 +22,7 @@
                             <div class="card-body">
                             <h5 class="card-title" th:text="${lesson.getCourse().getName()}"></h5>
                             <p class="card-text">
+                                Teacher: <span th:text="${lesson.getTeacher().getName() + ' ' + lesson.getTeacher().getSurname()}"></span><br>
                                 Time: <span th:text="${lesson.getStartTime() + ' - ' + lesson.getEndTime()}"></span><br>
                                 Audience: <span th:text="${lesson.getAudience()}"></span><br>
                                 Group: <span th:text="${lesson.getGroup().getName()}"></span><br>

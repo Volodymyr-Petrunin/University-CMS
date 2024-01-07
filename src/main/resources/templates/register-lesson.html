@@ -51,6 +51,13 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="teacherId">Teacher</label>
+                        <select class="form-control" id="teacherId" name="teacherId">
+                            <option th:each="teacher : ${teachers}" th:value="${teacher.getId()}" th:text="${teacher.getName() + ' ' + teacher.getSurname()}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label for="groupId">Group</label>
                         <select class="form-control" id="groupId" name="groupId">
                             <option th:each="group : ${groups}" th:value="${group.getId()}" th:text="${group.getName()}"></option>

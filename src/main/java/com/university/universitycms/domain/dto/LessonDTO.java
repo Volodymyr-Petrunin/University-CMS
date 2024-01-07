@@ -19,4 +19,5 @@ public class LessonDTO {
     private LocalTime endTime;
     private Long courseId;
     private Long groupId;
+    private Long teacherId;
 }

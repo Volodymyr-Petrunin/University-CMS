@@ -2,11 +2,13 @@ package com.university.universitycms.controller.impl;
 
 import com.university.universitycms.domain.Course;
 import com.university.universitycms.domain.Lesson;
+import com.university.universitycms.domain.Teacher;
 import com.university.universitycms.domain.dto.GroupDTO;
 import com.university.universitycms.domain.dto.LessonDTO;
 import com.university.universitycms.service.CourseService;
 import com.university.universitycms.service.GroupService;
 import com.university.universitycms.service.LessonService;
+import com.university.universitycms.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,12 +26,14 @@ public class LessonController {
     private final EnumSet<DayOfWeek> dayOfWeeks;
     private final CourseService courseService;
     private final GroupService groupService;
+    private final TeacherService teacherService;
 
     @Autowired
-    public LessonController(LessonService lessonService, CourseService courseService, GroupService groupService) {
+    public LessonController(LessonService lessonService, CourseService courseService, GroupService groupService, TeacherService teacherService) {
         this.lessonService = lessonService;
         this.courseService = courseService;
         this.groupService = groupService;
+        this.teacherService = teacherService;
         this.dayOfWeeks = EnumSet.range(DayOfWeek.MONDAY, DayOfWeek.FRIDAY);
     }
 
@@ -48,11 +52,13 @@ public class LessonController {
         List<String> audiences = lessonService.getAllAudience();
         List<Course> courses = courseService.getAllCourses();
         List<GroupDTO> groups = groupService.getAllGroupsInDTO();
+        List<Teacher> teachers = teacherService.getAllTeachers();
 
         model.addAttribute("audiences", audiences);
         model.addAttribute("dayOfWeeks", dayOfWeeks);
         model.addAttribute("courses", courses);
         model.addAttribute("groups", groups);
+        model.addAttribute("teachers", teachers);
 
         return "register-lesson";
     }

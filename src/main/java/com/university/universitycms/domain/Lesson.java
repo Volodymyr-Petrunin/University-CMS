@@ -36,11 +36,16 @@ public class Lesson {
     @OneToOne
     @JoinColumn(name = "lesson_group_id")
     private Group group;
+    @OneToOne
+    @JoinColumn(name = "lesson_teacher_id")
+    private Teacher teacher;
+
     public Lesson() {
 
     }
 
-    public Lesson(Long id, String name, String audience, DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime, Course course, Group group) {
+    public Lesson(Long id, String name, String audience, DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime,
+                  Course course, Group group, Teacher teacher) {
         this.id = id;
         this.name = name;
         this.audience = audience;
@@ -49,6 +54,7 @@ public class Lesson {
         this.endTime = endTime;
         this.course = course;
         this.group = group;
+        this.teacher = teacher;
     }
 
     @Override

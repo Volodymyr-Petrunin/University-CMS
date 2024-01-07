@@ -40,7 +40,6 @@ public class Teacher extends User {
                 ", role=" + getRole() +
                 ", name='" + getName() + '\'' +
                 ", surname='" + getSurname() + '\'' +
-                ", password='" + getPassword() + '\'' +
                 '}';
     }
 }
