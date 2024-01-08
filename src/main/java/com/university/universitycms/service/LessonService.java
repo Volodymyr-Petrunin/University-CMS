@@ -226,26 +226,29 @@ public class LessonService implements DataFiller {
     }
 
     private boolean audienceIsFree(Lesson lesson) {
-        return !repository.existsAllByAudienceAndStartTimeBetween(
+        return !repository.existsAllByAudienceAndStartTimeBetweenAndDayOfWeek(
                 lesson.getAudience(),
                 lesson.getStartTime(),
-                lesson.getEndTime()
+                lesson.getEndTime(),
+                lesson.getDayOfWeek()
         );
     }
 
     private boolean groupIsFree(Lesson lesson) {
-        return !repository.existsAllByGroupAndStartTimeBetween(
+        return !repository.existsAllByGroupAndStartTimeBetweenAndDayOfWeek(
                 lesson.getGroup(),
                 lesson.getStartTime(),
-                lesson.getEndTime()
+                lesson.getEndTime(),
+                lesson.getDayOfWeek()
         );
     }
 
     private boolean teacherIsFree(Lesson lesson) {
-        return !repository.existsAllByTeacherAndStartTimeBetween(
+        return !repository.existsAllByTeacherAndStartTimeBetweenAndDayOfWeek(
                 lesson.getTeacher(),
                 lesson.getStartTime(),
-                lesson.getEndTime()
+                lesson.getEndTime(),
+                lesson.getDayOfWeek()
         );
     }
 }
