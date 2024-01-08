@@ -8,6 +8,7 @@ import com.university.universitycms.repository.CourseRepository;
 import com.university.universitycms.repository.TeacherRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@Order(1)
 public class CourseService implements DataFiller {
     private final CourseRepository repository;
     private final CourseGenerationData courseGenerationData;

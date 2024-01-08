@@ -11,6 +11,7 @@ import com.university.universitycms.repository.StudentRepository;
 import com.university.universitycms.filldata.DataFiller;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@Order(4)
 public class StudentService implements DataFiller {
     private final StudentRepository repository;
     private final StudentGenerationData studentGenerationData;

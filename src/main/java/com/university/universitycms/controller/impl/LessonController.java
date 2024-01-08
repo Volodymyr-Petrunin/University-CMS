@@ -58,6 +58,8 @@ public class LessonController {
         model.addAttribute("dayOfWeeks", dayOfWeeks);
         model.addAttribute("courses", courses);
         model.addAttribute("groups", groups);
+        // her we should use js for get teacher by course what admin chose (course.getTeachers())
+        // but I have no idea how do this in html with bootstrap, so I suggest keep it like this
         model.addAttribute("teachers", teachers);
 
         return "register-lesson";
@@ -82,6 +84,9 @@ public class LessonController {
         model.addAttribute("courses", courses);
         model.addAttribute("groups", groups);
         model.addAttribute("audiences", audiences);
+
+        // the same situation her we must use js for update course and teacher,
+        //I suggest just keeping the same teacher
 
         return "show-lesson";
     }

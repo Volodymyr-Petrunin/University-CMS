@@ -22,6 +22,7 @@ import java.util.*;
 
 @Service
 @Transactional
+@Order(6)
 public class LessonService implements DataFiller {
     private final LessonRepository repository;
     private final LessonGenerationData lessonGenerationData;
