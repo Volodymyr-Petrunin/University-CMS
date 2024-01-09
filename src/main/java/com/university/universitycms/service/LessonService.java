@@ -7,6 +7,9 @@ import com.university.universitycms.generation.impl.LessonGenerationData;
 import com.university.universitycms.reader.ResourcesFileReader;
 import com.university.universitycms.repository.LessonRepository;
 import com.university.universitycms.filldata.DataFiller;
+import com.university.universitycms.service.exception.AudienceNotFreeException;
+import com.university.universitycms.service.exception.GroupNotFreeException;
+import com.university.universitycms.service.exception.TeacherNotFreeException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -63,6 +66,8 @@ public class LessonService implements DataFiller {
     }
 
     public void createLesson(Lesson lesson){
+        validateLessonAvailability(lesson);
+
         repository.save(lesson);
     }
 
@@ -73,13 +78,15 @@ public class LessonService implements DataFiller {
     public void registerLesson(LessonDTO lessonDTO) {
         Lesson lesson = lessonMapper.lessonDTOToLesson(lessonDTO);
 
-        validateLessonAvailability(lesson);
-
         this.createLesson(lesson);
     }
 
     public void updateLesson(LessonDTO lessonDTO){
-        repository.save(lessonMapper.lessonDTOToLesson(lessonDTO));
+        Lesson lesson = lessonMapper.lessonDTOToLesson(lessonDTO);
+
+        validateLessonAvailability(lesson);
+
+        repository.save(lesson);
     }
 
     public void deleteLesson(Lesson lesson){
@@ -217,38 +224,56 @@ public class LessonService implements DataFiller {
     }
 
     private void validateLessonAvailability(Lesson lesson) {
-        if (!audienceIsFree(lesson))
-            throw new IllegalArgumentException("Audience: " + lesson.getAudience() + ", is not free at this time. " + lesson.getStartTime() + "-" + lesson.getEndTime());
-        else if (!groupIsFree(lesson))
-            throw new IllegalArgumentException("Group: " + lesson.getGroup().getName() +  ", is not free at this time.");
-        else if (!teacherIsFree(lesson))
-            throw new IllegalArgumentException("Teacher: " + lesson.getTeacher() + ", is not free at this time.");
+        if (!audienceIsFree(lesson)) {
+            throw new AudienceNotFreeException(lesson.getAudience());
+        } else if (!groupIsFree(lesson)) {
+            throw new GroupNotFreeException(lesson.getGroup().getName());
+        } else if (!teacherIsFree(lesson)) {
+            throw new TeacherNotFreeException(lesson.getTeacher().getName(), lesson.getTeacher().getSurname());
+        }
     }
 
     private boolean audienceIsFree(Lesson lesson) {
-        return !repository.existsAllByAudienceAndStartTimeBetweenAndDayOfWeek(
+        List<Lesson> existingLessons = repository.findAllByAudienceAndStartTimeBetweenAndDayOfWeek(
                 lesson.getAudience(),
                 lesson.getStartTime(),
                 lesson.getEndTime(),
                 lesson.getDayOfWeek()
         );
+
+        return existingLessons.isEmpty() || isSameLesson(existingLessons, lesson);
     }
 
     private boolean groupIsFree(Lesson lesson) {
-        return !repository.existsAllByGroupAndStartTimeBetweenAndDayOfWeek(
+        List<Lesson> existingLessons = repository.findAllByGroupAndStartTimeBetweenAndDayOfWeek(
                 lesson.getGroup(),
                 lesson.getStartTime(),
                 lesson.getEndTime(),
                 lesson.getDayOfWeek()
         );
+
+        return existingLessons.isEmpty() || isSameLesson(existingLessons, lesson);
     }
 
     private boolean teacherIsFree(Lesson lesson) {
-        return !repository.existsAllByTeacherAndStartTimeBetweenAndDayOfWeek(
+        List<Lesson> existingLessons = repository.findAllByTeacherAndStartTimeBetweenAndDayOfWeek(
                 lesson.getTeacher(),
                 lesson.getStartTime(),
                 lesson.getEndTime(),
                 lesson.getDayOfWeek()
         );
+
+        return existingLessons.isEmpty() || isSameLesson(existingLessons, lesson);
+    }
+
+    private boolean isSameLesson(List<Lesson> existingLessons, Lesson updatedLesson) {
+
+        if (existingLessons.size() == 1) {
+            Lesson firstExistingLesson = existingLessons.get(0);
+
+            return firstExistingLesson.getId().equals(updatedLesson.getId());
+        }
+
+        return false;
     }
 }

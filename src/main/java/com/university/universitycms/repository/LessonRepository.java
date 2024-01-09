@@ -17,7 +17,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
     List<Lesson> findLessonsByGroupOrderByDayOfWeekAscStartTimeAsc(Group group);
     List<Lesson> findLessonsByTeacherOrderByDayOfWeekAscStartTimeAsc(Teacher teacher);
     List<Lesson> findLessonsByOrderByDayOfWeekAscStartTimeAsc();
-    boolean existsAllByAudienceAndStartTimeBetweenAndDayOfWeek(String audience, LocalTime startTime, LocalTime endTime, DayOfWeek dayOfWeek);
-    boolean existsAllByGroupAndStartTimeBetweenAndDayOfWeek(Group group, LocalTime startTime, LocalTime endTime, DayOfWeek dayOfWeek);
-    boolean existsAllByTeacherAndStartTimeBetweenAndDayOfWeek(Teacher teacher, LocalTime startTime, LocalTime endTime, DayOfWeek dayOfWeek);
+    List<Lesson> findAllByAudienceAndStartTimeBetweenAndDayOfWeek(String audience, LocalTime startTime, LocalTime endTime, DayOfWeek dayOfWeek);
+    List<Lesson> findAllByGroupAndStartTimeBetweenAndDayOfWeek(Group group, LocalTime startTime, LocalTime endTime, DayOfWeek dayOfWeek);
+    List<Lesson> findAllByTeacherAndStartTimeBetweenAndDayOfWeek(Teacher teacher, LocalTime startTime, LocalTime endTime, DayOfWeek dayOfWeek);
 }
