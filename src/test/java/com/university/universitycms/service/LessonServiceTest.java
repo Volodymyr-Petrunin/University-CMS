@@ -53,22 +53,14 @@ class LessonServiceTest {
     @Test
     void testRegisterLesson_ShouldRegisterNewLesson_WithoutThrows() {
         when(lessonMapper.lessonDTOToLesson(expectedLessonDTO)).thenReturn(expectedLesson);
-        when(repository.findAllByAudienceAndStartTimeBetweenAndDayOfWeek(expectedLesson.getAudience(), expectedLesson.getStartTime(),
-                expectedLesson.getEndTime(), expectedLesson.getDayOfWeek())).thenReturn(Collections.emptyList());
-        when(repository.findAllByGroupAndStartTimeBetweenAndDayOfWeek(expectedLesson.getGroup(), expectedLesson.getStartTime(),
-                expectedLesson.getEndTime(), expectedLesson.getDayOfWeek())).thenReturn(Collections.emptyList());
-        when(repository.findAllByTeacherAndStartTimeBetweenAndDayOfWeek(expectedLesson.getTeacher(), expectedLesson.getStartTime(),
-                expectedLesson.getEndTime(), expectedLesson.getDayOfWeek())).thenReturn(Collections.emptyList());
+        when(repository.findAllByExistence(expectedLesson.getAudience(), expectedLesson.getGroup(), expectedLesson.getTeacher(),
+                expectedLesson.getStartTime(), expectedLesson.getEndTime(), expectedLesson.getDayOfWeek())).thenReturn(Collections.emptyList());
 
         lessonService.registerLesson(expectedLessonDTO);
 
         verify(lessonMapper).lessonDTOToLesson(expectedLessonDTO);
-        verify(repository).findAllByAudienceAndStartTimeBetweenAndDayOfWeek(expectedLesson.getAudience(), expectedLesson.getStartTime(),
-                expectedLesson.getEndTime(), expectedLesson.getDayOfWeek());
-        verify(repository).findAllByGroupAndStartTimeBetweenAndDayOfWeek(expectedLesson.getGroup(), expectedLesson.getStartTime(),
-                expectedLesson.getEndTime(), expectedLesson.getDayOfWeek());
-        verify(repository).findAllByTeacherAndStartTimeBetweenAndDayOfWeek(expectedLesson.getTeacher(), expectedLesson.getStartTime(),
-                expectedLesson.getEndTime(), expectedLesson.getDayOfWeek());
+        verify(repository).findAllByExistence(expectedLesson.getAudience(), expectedLesson.getGroup(), expectedLesson.getTeacher(),
+                expectedLesson.getStartTime(), expectedLesson.getEndTime(), expectedLesson.getDayOfWeek());
         verify(repository).save(expectedLesson);
         verify(repository, times(1)).save(expectedLesson);
     }
@@ -78,14 +70,14 @@ class LessonServiceTest {
         Lesson newLesson = new Lesson(2L, "PE group 1", expectedLesson.getAudience(), DayOfWeek.MONDAY, LocalTime.of(1, 30),
                 LocalTime.of(3, 30), null, null, null);
         when(lessonMapper.lessonDTOToLesson(expectedLessonDTO)).thenReturn(newLesson);
-        when(repository.findAllByAudienceAndStartTimeBetweenAndDayOfWeek(newLesson.getAudience(), newLesson.getStartTime(),
+        when(repository.findAllByExistence(newLesson.getAudience(), newLesson.getGroup(), newLesson.getTeacher() ,newLesson.getStartTime(),
                 newLesson.getEndTime(), newLesson.getDayOfWeek())).thenReturn(List.of(expectedLesson));
 
         assertThrows(AudienceNotFreeException.class, () -> lessonService.registerLesson(expectedLessonDTO));
 
         verify(lessonMapper, times(1)).lessonDTOToLesson(expectedLessonDTO);
-        verify(repository, times(1)).findAllByAudienceAndStartTimeBetweenAndDayOfWeek(newLesson.getAudience(), newLesson.getStartTime(),
-                newLesson.getEndTime(), newLesson.getDayOfWeek());
+        verify(repository, times(1)).findAllByExistence(newLesson.getAudience(), newLesson.getGroup(),
+                newLesson.getTeacher() ,newLesson.getStartTime(), newLesson.getEndTime(), newLesson.getDayOfWeek());
     }
 
     @Test
@@ -93,14 +85,14 @@ class LessonServiceTest {
         Lesson newLesson = new Lesson(2L, "PE group 1", "SLS", DayOfWeek.MONDAY, LocalTime.of(1, 30),
                 LocalTime.of(3, 30), null, expectedGroup, null);
         when(lessonMapper.lessonDTOToLesson(expectedLessonDTO)).thenReturn(newLesson);
-        when(repository.findAllByGroupAndStartTimeBetweenAndDayOfWeek(newLesson.getGroup(), newLesson.getStartTime(),
+        when(repository.findAllByExistence(newLesson.getAudience(), newLesson.getGroup(), newLesson.getTeacher() ,newLesson.getStartTime(),
                 newLesson.getEndTime(), newLesson.getDayOfWeek())).thenReturn(List.of(expectedLesson));
 
         assertThrows(GroupNotFreeException.class, () -> lessonService.registerLesson(expectedLessonDTO));
 
         verify(lessonMapper, times(1)).lessonDTOToLesson(expectedLessonDTO);
-        verify(repository, times(1)).findAllByGroupAndStartTimeBetweenAndDayOfWeek(newLesson.getGroup(), newLesson.getStartTime(),
-                newLesson.getEndTime(), newLesson.getDayOfWeek());
+        verify(repository, times(1)).findAllByExistence(newLesson.getAudience(), newLesson.getGroup(),
+                newLesson.getTeacher() ,newLesson.getStartTime(), newLesson.getEndTime(), newLesson.getDayOfWeek());
     }
 
     @Test
@@ -108,13 +100,13 @@ class LessonServiceTest {
         Lesson newLesson = new Lesson(2L, "PE group 1", "AMG", DayOfWeek.MONDAY, LocalTime.of(1, 30),
                 LocalTime.of(3, 30), null, null, expectedTeacher);
         when(lessonMapper.lessonDTOToLesson(expectedLessonDTO)).thenReturn(newLesson);
-        when(repository.findAllByTeacherAndStartTimeBetweenAndDayOfWeek(newLesson.getTeacher(), newLesson.getStartTime(),
+        when(repository.findAllByExistence(newLesson.getAudience(), newLesson.getGroup(), newLesson.getTeacher() ,newLesson.getStartTime(),
                 newLesson.getEndTime(), newLesson.getDayOfWeek())).thenReturn(List.of(expectedLesson));
 
         assertThrows(TeacherNotFreeException.class, () -> lessonService.registerLesson(expectedLessonDTO));
 
         verify(lessonMapper, times(1)).lessonDTOToLesson(expectedLessonDTO);
-        verify(repository, times(1)).findAllByTeacherAndStartTimeBetweenAndDayOfWeek(newLesson.getTeacher(), newLesson.getStartTime(),
-                newLesson.getEndTime(), newLesson.getDayOfWeek());
+        verify(repository, times(1)).findAllByExistence(newLesson.getAudience(), newLesson.getGroup(),
+                newLesson.getTeacher() ,newLesson.getStartTime(), newLesson.getEndTime(), newLesson.getDayOfWeek());
     }
 }

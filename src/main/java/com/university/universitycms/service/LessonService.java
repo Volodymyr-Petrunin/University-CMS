@@ -66,7 +66,7 @@ public class LessonService implements DataFiller {
     }
 
     public void createLesson(Lesson lesson){
-        validateLessonAvailability(lesson);
+        validateLessonAvailability(lessonExists(lesson), lesson);
 
         repository.save(lesson);
     }
@@ -84,7 +84,7 @@ public class LessonService implements DataFiller {
     public void updateLesson(LessonDTO lessonDTO){
         Lesson lesson = lessonMapper.lessonDTOToLesson(lessonDTO);
 
-        validateLessonAvailability(lesson);
+        validateAvailabilityForUpdate(lesson);
 
         repository.save(lesson);
     }
@@ -223,57 +223,45 @@ public class LessonService implements DataFiller {
         return result;
     }
 
-    private void validateLessonAvailability(Lesson lesson) {
-        if (!audienceIsFree(lesson)) {
+    private void validateLessonAvailability(List<Lesson> existingLessons, Lesson lesson) {
+        if (!audienceIsFree(existingLessons, lesson)) {
             throw new AudienceNotFreeException(lesson.getAudience());
-        } else if (!groupIsFree(lesson)) {
+        } else if (!groupIsFree(existingLessons, lesson)) {
             throw new GroupNotFreeException(lesson.getGroup().getName());
-        } else if (!teacherIsFree(lesson)) {
+        } else if (!teacherIsFree(existingLessons, lesson)) {
             throw new TeacherNotFreeException(lesson.getTeacher().getName(), lesson.getTeacher().getSurname());
         }
     }
 
-    private boolean audienceIsFree(Lesson lesson) {
-        List<Lesson> existingLessons = repository.findAllByAudienceAndStartTimeBetweenAndDayOfWeek(
+    private void validateAvailabilityForUpdate(Lesson updatedLesson) {
+        List<Lesson> existingLessons = lessonExists(updatedLesson);
+        existingLessons.removeIf(lesson -> lesson.getId().equals(updatedLesson.getId()));
+        validateLessonAvailability(existingLessons, updatedLesson);
+    }
+
+    private boolean audienceIsFree(List<Lesson> existingLessons, Lesson lesson) {
+        return existingLessons.isEmpty() || existingLessons.stream()
+                        .noneMatch(existingLesson -> existingLesson.getAudience().equals(lesson.getAudience()));
+    }
+
+    private boolean groupIsFree(List<Lesson> existingLessons, Lesson lesson) {
+        return existingLessons.isEmpty() || existingLessons.stream()
+                .noneMatch(existingLesson -> existingLesson.getGroup().equals(lesson.getGroup()));
+    }
+
+    private boolean teacherIsFree(List<Lesson> existingLessons, Lesson lesson) {
+        return existingLessons.isEmpty() || existingLessons.stream()
+                .noneMatch(existingLesson -> existingLesson.getTeacher().equals(lesson.getTeacher()));
+    }
+
+    private List<Lesson> lessonExists(Lesson lesson) {
+        return repository.findAllByExistence(
                 lesson.getAudience(),
-                lesson.getStartTime(),
-                lesson.getEndTime(),
-                lesson.getDayOfWeek()
-        );
-
-        return existingLessons.isEmpty() || isSameLesson(existingLessons, lesson);
-    }
-
-    private boolean groupIsFree(Lesson lesson) {
-        List<Lesson> existingLessons = repository.findAllByGroupAndStartTimeBetweenAndDayOfWeek(
                 lesson.getGroup(),
-                lesson.getStartTime(),
-                lesson.getEndTime(),
-                lesson.getDayOfWeek()
-        );
-
-        return existingLessons.isEmpty() || isSameLesson(existingLessons, lesson);
-    }
-
-    private boolean teacherIsFree(Lesson lesson) {
-        List<Lesson> existingLessons = repository.findAllByTeacherAndStartTimeBetweenAndDayOfWeek(
                 lesson.getTeacher(),
                 lesson.getStartTime(),
                 lesson.getEndTime(),
                 lesson.getDayOfWeek()
         );
-
-        return existingLessons.isEmpty() || isSameLesson(existingLessons, lesson);
-    }
-
-    private boolean isSameLesson(List<Lesson> existingLessons, Lesson updatedLesson) {
-
-        if (existingLessons.size() == 1) {
-            Lesson firstExistingLesson = existingLessons.get(0);
-
-            return firstExistingLesson.getId().equals(updatedLesson.getId());
-        }
-
-        return false;
     }
 }
