@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Lesson</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+</head>
+<body style="background-color: #252d36;">
+<div th:replace="~{layouts/header :: header}"></div>
+    <div class="container text-white">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h1 class="mt-5">Register Lesson</h1>
+
+                <form th:action="@{/lesson/register}" method="post">
+
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="audience">Audiences</label>
+                        <select class="form-control" id="audience" name="audience">
+                            <option th:each="audience : ${audiences}" th:value="${audience}" th:text="${audience}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dayOfWeek">Day Of Week</label>
+                        <select class="form-control" id="dayOfWeek" name="dayOfWeek">
+                            <option th:each="day : ${dayOfWeeks}" th:value="${day}" th:text="${day}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="startTime">Start Time</label>
+                        <input type="time" id="startTime" name="startTime" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="endTime">End Time</label>
+                        <input type="time" id="endTime" name="endTime" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="courseId">Course</label>
+                        <select class="form-control" id="courseId" name="courseId">
+                            <option th:each="course : ${courses}" th:value="${course.getId()}" th:text="${course.getName()}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="teacherId">Teacher</label>
+                        <select class="form-control" id="teacherId" name="teacherId">
+                            <option th:each="teacher : ${teachers}" th:value="${teacher.getId()}" th:text="${teacher.getName() + ' ' + teacher.getSurname()}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="groupId">Group</label>
+                        <select class="form-control" id="groupId" name="groupId">
+                            <option th:each="group : ${groups}" th:value="${group.getId()}" th:text="${group.getName()}"></option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3">Register</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

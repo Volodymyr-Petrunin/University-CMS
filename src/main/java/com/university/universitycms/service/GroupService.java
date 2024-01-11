@@ -8,14 +8,17 @@ import com.university.universitycms.repository.GroupRepository;
 import com.university.universitycms.filldata.DataFiller;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@Order(2)
 public class GroupService implements DataFiller {
     private final GroupRepository repository;
     private final GroupGenerationData groupGenerationData;
@@ -31,6 +34,10 @@ public class GroupService implements DataFiller {
 
     public List<Group> getAllGroups() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    }
+
+    public List<GroupDTO> getAllGroupsInDTO(){
+       return this.getAllGroups().stream().map(groupMapper::groupToGroupDTO).toList();
     }
 
     public Group getGroupById(long groupId){

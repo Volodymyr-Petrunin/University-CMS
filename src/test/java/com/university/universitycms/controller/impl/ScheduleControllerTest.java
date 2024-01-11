@@ -1,8 +1,6 @@
 package com.university.universitycms.controller.impl;
 
-import com.university.universitycms.domain.Course;
-import com.university.universitycms.domain.Group;
-import com.university.universitycms.domain.Lesson;
+import com.university.universitycms.domain.*;
 import com.university.universitycms.security.WebSecurityConfiguration;
 import com.university.universitycms.service.LessonService;
 import org.junit.jupiter.api.Test;
@@ -37,11 +35,16 @@ class ScheduleControllerTest {
 
     private final Course expectedCourse = new Course(1L, "IT", Collections.emptySet());
     private final Group expectedGroup = new Group(1L, "A12", Collections.emptySet());
+    private final Teacher expectedTeacher = new Teacher(1L, Role.TEACHER, "Oleg", "Tot", null,
+            Collections.singleton(expectedCourse), null);
 
     private final List<Lesson> lessons = List.of(
-            new Lesson(1L, "ENG group 1", "A105", DayOfWeek.WEDNESDAY, LocalTime.of(11, 0), LocalTime.of(12, 0), expectedCourse, expectedGroup),
-            new Lesson(2L, "ENG group 2", "A106", DayOfWeek.WEDNESDAY, LocalTime.of(9, 30), LocalTime.of(11, 30), expectedCourse, expectedGroup),
-            new Lesson(3L, "ENG group 3", "A107", DayOfWeek.WEDNESDAY, LocalTime.of(15, 0), LocalTime.of(17, 0), expectedCourse, expectedGroup)
+            new Lesson(1L, "ENG group 1", "A105", DayOfWeek.WEDNESDAY, LocalTime.of(11, 0),
+                    LocalTime.of(12, 0), expectedCourse, expectedGroup, expectedTeacher),
+            new Lesson(2L, "ENG group 2", "A106", DayOfWeek.WEDNESDAY, LocalTime.of(9, 30),
+                    LocalTime.of(11, 30), expectedCourse, expectedGroup, expectedTeacher),
+            new Lesson(3L, "ENG group 3", "A107", DayOfWeek.WEDNESDAY, LocalTime.of(15, 0),
+                    LocalTime.of(17, 0), expectedCourse, expectedGroup, expectedTeacher)
     );
 
     private final Map<String, List<Lesson>> expectedLesson = Map.of(

@@ -36,11 +36,16 @@ public class Lesson {
     @OneToOne
     @JoinColumn(name = "lesson_group_id")
     private Group group;
+    @OneToOne
+    @JoinColumn(name = "lesson_teacher_id")
+    private Teacher teacher;
+
     public Lesson() {
 
     }
 
-    public Lesson(Long id, String name, String audience, DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime, Course course, Group group) {
+    public Lesson(Long id, String name, String audience, DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime,
+                  Course course, Group group, Teacher teacher) {
         this.id = id;
         this.name = name;
         this.audience = audience;
@@ -49,6 +54,7 @@ public class Lesson {
         this.endTime = endTime;
         this.course = course;
         this.group = group;
+        this.teacher = teacher;
     }
 
     @Override
@@ -56,12 +62,14 @@ public class Lesson {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Lesson lesson = (Lesson) o;
-        return Objects.equals(id, lesson.id) && Objects.equals(name, lesson.name) && Objects.equals(audience, lesson.audience) && dayOfWeek == lesson.dayOfWeek && Objects.equals(startTime, lesson.startTime) && Objects.equals(endTime, lesson.endTime) && Objects.equals(course, lesson.course) && Objects.equals(group, lesson.group);
+        return Objects.equals(id, lesson.id) && Objects.equals(name, lesson.name) && Objects.equals(audience, lesson.audience)
+                && dayOfWeek == lesson.dayOfWeek && Objects.equals(startTime, lesson.startTime)
+                && Objects.equals(endTime, lesson.endTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, audience, dayOfWeek, startTime, endTime, course, group);
+        return Objects.hash(id, name, audience, dayOfWeek, startTime, endTime);
     }
 
     @Override
@@ -72,9 +80,6 @@ public class Lesson {
                 ", audience='" + audience + '\'' +
                 ", dayOfWeek=" + dayOfWeek +
                 ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", course=" + course +
-                ", group=" + group +
-                '}';
+                ", endTime=" + endTime + '}';
     }
 }

@@ -6,6 +6,7 @@ import com.university.universitycms.repository.DepartmentRepository;
 import com.university.universitycms.filldata.DataFiller;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@Order(3)
 public class DepartmentService implements DataFiller {
 
     private final DepartmentRepository repository;
