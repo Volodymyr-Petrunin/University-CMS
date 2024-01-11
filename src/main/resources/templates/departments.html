@@ -8,6 +8,8 @@
 <div th:replace="~{layouts/header :: header}"></div>
 
 <div class="container mt-5">
+    <a href="/departments/register" class="link-warning">Register new department</a>
+
     <h2>Departments</h2>
     <table class="table table-bordered">
         <thead>
@@ -19,7 +21,7 @@
         </thead>
         <tbody>
             <tr th:each="department : ${departments}">
-                <td th:text="${department.getId()}"></td>
+                <td><a th:href="@{'/departments/show/' + ${department.getId()}}" th:text="${department.getId()}"></a></td>
                 <td th:text="${department.getName()}"></td>
                 <td th:text="${department.getCourses()}"></td>
             </tr>

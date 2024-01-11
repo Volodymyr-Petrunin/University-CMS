@@ -240,18 +240,15 @@ public class LessonService implements DataFiller {
     }
 
     private boolean audienceIsFree(List<Lesson> existingLessons, Lesson lesson) {
-        return existingLessons.isEmpty() || existingLessons.stream()
-                        .noneMatch(existingLesson -> existingLesson.getAudience().equals(lesson.getAudience()));
+        return existingLessons.stream().noneMatch(existingLesson -> existingLesson.getAudience().equals(lesson.getAudience()));
     }
 
     private boolean groupIsFree(List<Lesson> existingLessons, Lesson lesson) {
-        return existingLessons.isEmpty() || existingLessons.stream()
-                .noneMatch(existingLesson -> existingLesson.getGroup().equals(lesson.getGroup()));
+        return existingLessons.stream().noneMatch(existingLesson -> existingLesson.getGroup().equals(lesson.getGroup()));
     }
 
     private boolean teacherIsFree(List<Lesson> existingLessons, Lesson lesson) {
-        return existingLessons.isEmpty() || existingLessons.stream()
-                .noneMatch(existingLesson -> existingLesson.getTeacher().equals(lesson.getTeacher()));
+        return existingLessons.stream().noneMatch(existingLesson -> existingLesson.getTeacher().equals(lesson.getTeacher()));
     }
 
     private List<Lesson> lessonExists(Lesson lesson) {
