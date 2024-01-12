@@ -19,7 +19,7 @@ public class Department {
     @Column(name = "department_name")
     private String name;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "department_course",
             joinColumns = @JoinColumn(name = "department_id"),
@@ -59,7 +59,6 @@ public class Department {
         return "Department{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", courses=" + courses +
                 '}';
     }
 }

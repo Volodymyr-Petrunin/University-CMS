@@ -1,6 +1,8 @@
 package com.university.universitycms.service;
 
 import com.university.universitycms.domain.Department;
+import com.university.universitycms.domain.dto.DepartmentDTO;
+import com.university.universitycms.domain.mapper.DepartmentMapper;
 import com.university.universitycms.generation.impl.DepartmentGenerationData;
 import com.university.universitycms.repository.DepartmentRepository;
 import com.university.universitycms.filldata.DataFiller;
@@ -11,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -20,19 +21,23 @@ public class DepartmentService implements DataFiller {
 
     private final DepartmentRepository repository;
     private final DepartmentGenerationData departmentGenerationData;
+    private final DepartmentMapper departmentMapper;
 
     @Autowired
-    public DepartmentService(DepartmentRepository repository, DepartmentGenerationData departmentGenerationData) {
+    public DepartmentService(DepartmentRepository repository, DepartmentGenerationData departmentGenerationData,
+                             DepartmentMapper departmentMapper) {
         this.repository = repository;
         this.departmentGenerationData = departmentGenerationData;
+        this.departmentMapper = departmentMapper;
     }
 
     public List<Department> getAllDepartments(){
         return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
-    public Optional<Department> getDepartmentById(long departmentId){
-        return repository.findById(departmentId);
+    public Department getDepartmentById(long departmentId){
+        return repository.findById(departmentId)
+                .orElseThrow(() -> new IllegalArgumentException("Can't find department with id: " + departmentId));
     }
 
     public void createDepartment(Department department){
@@ -43,12 +48,20 @@ public class DepartmentService implements DataFiller {
         repository.saveAll(departments);
     }
 
-    public void updateDepartment(Department department){
-        repository.save(department);
+    public void registerDepartment(DepartmentDTO departmentDTO){
+        this.createDepartment(departmentMapper.departmentDTOToDepartment(departmentDTO));
+    }
+
+    public void updateDepartment(DepartmentDTO departmentDTO){
+        repository.save(departmentMapper.departmentDTOToDepartment(departmentDTO));
     }
 
     public void deleteDepartment(Department department){
         repository.delete(department);
+    }
+
+    public void deleteDepartmentById(long id) {
+        repository.deleteById(id);
     }
 
     @Override
