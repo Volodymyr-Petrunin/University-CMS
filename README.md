@@ -5,7 +5,9 @@ This project is about the university class schedule.
 Here we use 
 + Spring Boot 
 + Spring MVC
-+ Spring Web Security
++ Spring Data
++ Spring Security 6
++ Thymeleaf
 + PostgresSQL
 + Flyway
 + WebJars
