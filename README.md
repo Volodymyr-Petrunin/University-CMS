@@ -1,6 +1,6 @@
 # University-CMS
 
-This project is about the university class schedule.
+This project is about the university class schedule. You can look UML-diagram in directory `docs.`
 
 All data for the database is generated from resources. For example, lessons, students and teachers.
 
