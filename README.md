@@ -22,4 +22,4 @@ In this project I use:
 + Bootstrap
 + Lombock
 + Mapstract
-+ GreenMail (for send fake email massage)
++ GreenMail (for sending simulated email messages)
